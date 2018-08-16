@@ -1,0 +1,22 @@
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/artifacts/
+.idea/inspectionProfiles/
+
+# jars
+out/
+
+# Antlr-generated source
+gen/
+
+# visualvm files
+.attach_pid*
+
+# target files
+target/
+
+# testing file
+src/main/java/naipmoro/mmx/Example.java
+
