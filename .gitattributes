@@ -1,0 +1,3 @@
+# remove test files from language statistics determination
+src/test/resources/** linguist-vendored
+
