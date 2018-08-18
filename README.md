@@ -36,7 +36,7 @@ copyright details and restrictions.
 domain, with the exception of `peano-fixed.mm`, which is distributed under the
 [GPL License]. See each file for details.
 
-[MM.g4]: ./blob/master/src/main/antlr4/naipmoro/gramm/MM.g4
-[MIT License]: ./blob/master/LICENSE
-[source code]: ./blob/master/src/main/java/naipmoro/gramm/MMBailErrorStrategy.java
+[MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
+[MIT License]: ./LICENSE
+[source code]: ./src/main/java/naipmoro/gramm/MMBailErrorStrategy.java
 [GPL License]: https://opensource.org/licenses/gpl-license
