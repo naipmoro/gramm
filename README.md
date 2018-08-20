@@ -1,8 +1,8 @@
-## gramm
+## Gramm
 
 An Antlr4-based Metamath proof verifier. Antlr4 creates a parser from the
-supplied grammar, [MM.g4], and provides facilities for walking the generated
-parse tree(s).
+grammar [MM.g4] and it provides facilities for walking the generated parse
+tree(s).
 
 ## Maven build
 
