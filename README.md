@@ -30,13 +30,17 @@ time: 16.16 sec
 
 * The source code for `MMBailErrorStrategy.java` is taken verbatim from Terence
 Parr's _The Definitive ANTLR 4 Reference_. See that file's [source code] for
-copyright details and restrictions.
+the author's copyright notice and usage restrictions.
+
+* Although `Gramm` does not bundle any third party libraries, it depends on the
+`Antlr4` runtime, which is available under the [BSD 3-Clause License].
 
 * All the metamath files in the `test/resources` directory are in the public
 domain, with the exception of `peano-fixed.mm`, which is distributed under the
-[GPL License]. See each file for details.
+[GPL License]. See each file for full details.
 
 [MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
 [MIT License]: ./LICENSE
 [source code]: ./src/main/java/naipmoro/gramm/MMBailErrorStrategy.java
+[BSD 3-Clause License]: https://github.com/antlr/antlr4/blob/master/LICENSE.txt
 [GPL License]: https://opensource.org/licenses/gpl-license
