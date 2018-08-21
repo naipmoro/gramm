@@ -33,14 +33,15 @@ Parr's _The Definitive ANTLR 4 Reference_. See that file's [source code] for
 the author's copyright notice and usage restrictions.
 
 * Although Gramm does not bundle any third party libraries, it depends on the
-Antlr4 runtime, and the `gramm.jar` executable will contain Antlr class files.
-Antlr4 is distributed under the [BSD 3-Clause License].
+Antlr4 runtime, and the `gramm.jar` executable (if you choose to build it) will
+contain Antlr class files. Antlr4 is distributed under the [BSD 3-Clause
+License].
 
 * The metamath files in the `test/resources` directory are in the public domain
 or available under the [CC0 1.0 Universal License], with the exception of
 `peano-fixed.mm`, which is distributed under the [GPL License]. See each file
-for full details. Many of these files were found at David Wheeler's github
-project: https://github.com/david-a-wheeler/metamath-test .
+for full details. Many of these files were copied from David Wheeler's github
+project: <https://github.com/david-a-wheeler/metamath-test>.
 
 [MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
 [MIT License]: ./LICENSE
