@@ -34,12 +34,13 @@ public class Verifier {
     }
 
     public static void main(String[] args) {
-        try (InputStream is = new FileInputStream(args[0])) {
+        String filename = args[0];
+        try (InputStream is = new FileInputStream(filename)) {
             mmVerify(is);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("file not found error: " + filename);
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+            System.out.println("file input error: " + filename);
         }
     }
 }
