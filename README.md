@@ -1,8 +1,8 @@
 ## Gramm
 
-An Antlr4-based Metamath proof verifier. Antlr4 creates a parser from the
-grammar [MM.g4] and it provides facilities for walking the generated parse
-tree(s).
+An Antlr4-based Metamath proof verifier. Antlr4 creates a parser and lexer from
+the bnf-style grammar file [MM.g4] and provides support for walking the
+generated parse tree(s).
 
 ## Maven build
 
@@ -21,12 +21,12 @@ reading the database...
 ***************
 0 errors
 0 warnings
-30674 of 30674 proofs were verified
-time: 16.16 sec
+30786 of 30786 proofs were verified
+time: 14.95 sec
 ```
 ## License
 
-* Original source code is distributed under the [MIT License].
+* `Gramm` is distributed under the [MIT License].
 
 * The source code for `MMBailErrorStrategy.java` is taken verbatim from Terence
 Parr's _The Definitive ANTLR 4 Reference_. See that file's [source code] for
@@ -35,12 +35,14 @@ the author's copyright notice and usage restrictions.
 * Although `Gramm` does not bundle any third party libraries, it depends on the
 `Antlr4` runtime, which is available under the [BSD 3-Clause License].
 
-* All the metamath files in the `test/resources` directory are in the public
-domain, with the exception of `peano-fixed.mm`, which is distributed under the
-[GPL License]. See each file for full details.
+* The metamath files in the `test/resources` directory are in the public domain
+or available under the [CC0 1.0 Universal License], with the exception of
+`peano-fixed.mm`, which is distributed under the [GPL License]. See each file
+for full details.
 
 [MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
 [MIT License]: ./LICENSE
 [source code]: ./src/main/java/naipmoro/gramm/MMBailErrorStrategy.java
 [BSD 3-Clause License]: https://github.com/antlr/antlr4/blob/master/LICENSE.txt
+[CC0 1.0 Universal License]: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 [GPL License]: https://opensource.org/licenses/gpl-license
