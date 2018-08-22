@@ -4,17 +4,20 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 //import static naipmoro.mmx.MMParseTreeListener.*;
 
-public class ScopeStack extends ArrayDeque<Scope> {
+public class ScopeStack implements MMStack<Scope> {
 
     private static final long serialVersionUID = 1L;
+
+    private Deque<Scope> scopeStack = new ArrayDeque<>();
 
     private int hypCount = 0;
     private int errors = 0;
@@ -31,6 +34,26 @@ public class ScopeStack extends ArrayDeque<Scope> {
     // public int incHypCount() {
     // return this.hypCount++;
     // }
+
+    public void push(Scope scope) {
+        scopeStack.push(scope);
+    }
+
+    public Scope pop() {
+        return scopeStack.pop();
+    }
+
+    public Scope peek() {
+        return scopeStack.peek();
+    }
+
+    public Scope peekLast() {
+        return scopeStack.peekLast();
+    }
+
+    public Iterator<Scope> iterator() {
+        return scopeStack.iterator();
+    }
 
     /**
      * Returns the set of global constants.
