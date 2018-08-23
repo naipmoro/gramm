@@ -13,7 +13,7 @@ import java.util.Set;
 
 //import static naipmoro.mmx.MMParseTreeListener.*;
 
-public class ScopeStack implements MMStack<Scope> {
+public class ScopeStack implements MMScopeStack<Scope> {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,9 +24,9 @@ public class ScopeStack implements MMStack<Scope> {
     private int warnings = 0;
     private int attemptedProofs = 0;
     private int verifiedProofs = 0;
-    private Set<String> constants = new HashSet<String>();
-    private Set<String> allVars = new HashSet<String>();
-    private Set<String> labels = new HashSet<String>();
+    private Set<String> constants = new HashSet<>();
+    private Set<String> allVars = new HashSet<>();
+    private Set<String> labels = new HashSet<>();
     // private ArrayList<String> varHypLabels = new ArrayList<>();
     // private ArrayList<String> logicalHypLabels = new ArrayList<>();
     // private Map<String, Assertion> labelAssertionMap = new HashMap<>();
@@ -39,8 +39,8 @@ public class ScopeStack implements MMStack<Scope> {
         scopeStack.push(scope);
     }
 
-    public Scope pop() {
-        return scopeStack.pop();
+    public void remove() {
+        scopeStack.remove();
     }
 
     public Scope peek() {
@@ -78,7 +78,7 @@ public class ScopeStack implements MMStack<Scope> {
      *
      * @return the errors
      */
-    public int getErrors() {
+    int getErrors() {
         return errors;
     }
 
@@ -87,7 +87,7 @@ public class ScopeStack implements MMStack<Scope> {
      *
      * @return the warnings
      */
-    public int getWarnings() {
+    int getWarnings() {
         return warnings;
     }
 
@@ -96,7 +96,7 @@ public class ScopeStack implements MMStack<Scope> {
      *
      * @return the attemptedProofs
      */
-    public int getAttemptedProofs() {
+    int getAttemptedProofs() {
         return attemptedProofs;
     }
 
@@ -105,54 +105,53 @@ public class ScopeStack implements MMStack<Scope> {
      *
      * @return the verifiedProofs
      */
-    public int getVerifiedProofs() {
+    int getVerifiedProofs() {
         return verifiedProofs;
     }
 
     /**
      * Increases the number of errors by one.
      */
-    public void incErrors() {
+    void incErrors() {
         this.errors++;
     }
 
     /**
      * Increases the number of warnings by one.
      */
-    public void incWarnings() {
+    void incWarnings() {
         this.warnings++;
     }
 
     /**
      * Increases the number of attempted proofs by one.
      */
-    public void incAttemptedProofs() {
+    void incAttemptedProofs() {
         this.attemptedProofs++;
     }
 
     /**
      * Increases the number of verified proofs by one.
      */
-    public void incVerifiedProofs() {
+    void incVerifiedProofs() {
         this.verifiedProofs++;
     }
 
-    public String endMessage() {
+    String endMessage() {
         int errs = getErrors();
         int warns = getWarnings();
         int attempted = getAttemptedProofs();
         int verified = getVerifiedProofs();
-        String msg = String.format(
+        return String.format(
                 "%n%d errors%n" + "%d warnings%n" + "%d of %d proofs were verified", errs, warns,
                 verified, attempted);
-        return msg;
     }
 
-    public Scope getToplevel() {
+    private Scope getToplevel() {
         return this.peekLast();
     }
 
-    public Map<String, Statement> getToplevelStmtsByLabel() {
+    Map<String, Statement> getToplevelStmtsByLabel() {
         return getToplevel().getStmtsByLabel();
     }
 
@@ -165,7 +164,7 @@ public class ScopeStack implements MMStack<Scope> {
      * @throws MMException if a symbol being added to constants was previously used as a
      *                     variable
      */
-    public void addConstants(String[] cns) throws MMException {
+    void addConstants(String[] cns) throws MMException {
         for (String cn : cns) {
             if (this.allVars.contains(cn)) {
                 throw new MMException("constant " + cn + " is already declared as a var");
@@ -182,7 +181,7 @@ public class ScopeStack implements MMStack<Scope> {
         }
     }
 
-    public void addVars(String[] vars) throws MMException {
+    void addVars(String[] vars) throws MMException {
         Scope scope = this.peek();
         for (String var : vars) {
             if (this.constants.contains(var)) {
@@ -201,7 +200,7 @@ public class ScopeStack implements MMStack<Scope> {
         }
     }
 
-    public void addVarHyp(String label, String type, String var) throws MMException {
+    void addVarHyp(String label, String type, String var) throws MMException {
         checkVarHyp(label, type, var);
         Scope scope = this.peek();
         Hypothesis hyp = new Hypothesis(label, "$f", type, new String[]{var}, ++hypCount);
@@ -213,7 +212,7 @@ public class ScopeStack implements MMStack<Scope> {
         this.labels.add(label);
     }
 
-    public void addLogHyp(String label, String type, String[] stmt) throws MMException {
+    void addLogHyp(String label, String type, String[] stmt) throws MMException {
         checkLabelAndType(label, type);
         Scope scope = this.peek();
         for (String sym : stmt) {
@@ -254,7 +253,7 @@ public class ScopeStack implements MMStack<Scope> {
      * @throws MMException by way of {@link #checkDisjVars} if the uniqueness
      *                     check fails
      */
-    public void addDisjVars(String[] vars) throws MMException {
+    void addDisjVars(String[] vars) throws MMException {
         // Set<String> varSet = new HashSet<>(Arrays.asList(vars));
         checkDisjVars(vars);
         Scope scope = this.peek();
@@ -273,7 +272,7 @@ public class ScopeStack implements MMStack<Scope> {
         }
     }
 
-    public void addTheorem(String label, String type, String[] stmt, String[] proofList)
+    void addTheorem(String label, String type, String[] stmt, String[] proofList)
             throws MMException {
         checkLabelAndType(label, type);
         //String stmtStr = String.join(" ", stmt);
@@ -287,7 +286,7 @@ public class ScopeStack implements MMStack<Scope> {
 
     }
 
-    public void addAxiom(String label, String type, String[] stmt) throws MMException {
+    void addAxiom(String label, String type, String[] stmt) throws MMException {
         checkLabelAndType(label, type);
         //String stmtStr = String.join(" ", stmt);
         Mandatory mand = getActiveMandatory(stmt);
@@ -302,7 +301,7 @@ public class ScopeStack implements MMStack<Scope> {
      * @return
      * @throws MMException
      */
-    public Mandatory getActiveMandatory(String[] stmt) throws MMException {
+    private Mandatory getActiveMandatory(String[] stmt) throws MMException {
         Set<Hypothesis> logHypSet = getActiveMandLogHyps();
         Set<Hypothesis> varHypSet = getActiveMandVarHyps();
         Set<String> varsSet = getActiveMandVars();
@@ -324,7 +323,7 @@ public class ScopeStack implements MMStack<Scope> {
         }
         // combine the varHyps with the logHyps into a list...
         logHypSet.addAll(varHypSet);
-        List<Hypothesis> hypList = new ArrayList<Hypothesis>(logHypSet);
+        List<Hypothesis> hypList = new ArrayList<>(logHypSet);
         // ...and sort the hypotheses according to their order of appearance in the
         // database
         Collections.sort(hypList);
@@ -339,8 +338,8 @@ public class ScopeStack implements MMStack<Scope> {
      * @param stmt  the statement of the assertion expressed as an array of
      *              symbols
      */
-    public void addAssertion(String label, String kind, String type, String[] stmt,
-                             Mandatory mand) throws MMException {
+    private void addAssertion(String label, String kind, String type, String[] stmt,
+                             Mandatory mand) {
         // // Set<Hypothesis> hypSet = new HashSet<>();
         // // Set<String> varSet = new HashSet<>();
         // Set<Hypothesis> logHypSet = getActiveMandLogHyps();
@@ -421,7 +420,7 @@ public class ScopeStack implements MMStack<Scope> {
     //        }
     //    }
 
-    public void checkVarHyp(String label, String type, String var) throws MMException {
+    private void checkVarHyp(String label, String type, String var) throws MMException {
         checkLabelAndType(label, type);
         if (!isActiveVar(var)) {
             throw new MMException("variable " + var + " is not declared in the active scope");
@@ -448,10 +447,10 @@ public class ScopeStack implements MMStack<Scope> {
      * @param vars a string array of variables
      * @throws MMException
      */
-    public void checkDisjVars(String[] vars) throws MMException {
-        Set<String> set = new HashSet<String>();
+    private void checkDisjVars(String[] vars) throws MMException {
+        Set<String> set = new HashSet<>();
         for (String var : vars) {
-            if (set.add(var) == false) {
+            if (!set.add(var)) {
                 throw new MMException(
                         "variable " + var + " is repeated in $d statement " + Arrays.toString(vars)
                         + "; all variables in a $d statement must be unique");
@@ -459,7 +458,7 @@ public class ScopeStack implements MMStack<Scope> {
         }
     }
 
-    public void checkLabelAndType(String label, String type) throws MMException {
+    private void checkLabelAndType(String label, String type) throws MMException {
         if (this.labels.contains(label)) {
             throw new MMException("label " + label + " is defined more than once");
         }
@@ -471,7 +470,7 @@ public class ScopeStack implements MMStack<Scope> {
         }
     }
 
-    public Boolean isActiveVar(String var) {
+    private Boolean isActiveVar(String var) {
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
             Scope scope = iter.next();
@@ -482,22 +481,22 @@ public class ScopeStack implements MMStack<Scope> {
         return false;
     }
 
-    public Boolean isActiveVarHyp(String var) {
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
-            if (scope.getLabelsByVar().containsKey(var)) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public Boolean isActiveVarHyp(String var) {
+//        Iterator<Scope> iter = this.iterator();
+//        while (iter.hasNext()) {
+//            Scope scope = iter.next();
+//            if (scope.getLabelsByVar().containsKey(var)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-    public Boolean isVarTypeHyp(Hypothesis hyp) {
+    Boolean isVarTypeHyp(Hypothesis hyp) {
         return hyp.getKind().equals("$f");
     }
 
-    public Boolean isHypothesis(Statement stmt) {
+    Boolean isHypothesis(Statement stmt) {
         String kind = stmt.getKind();
         return (kind.equals("$f") || kind.equals("$e"));
     }
@@ -512,7 +511,7 @@ public class ScopeStack implements MMStack<Scope> {
     // return EMPTY;
     // }
 
-    public Hypothesis getActiveVarHypByVar(String var) {
+    private Hypothesis getActiveVarHypByVar(String var) {
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
             Scope scope = iter.next();
@@ -524,8 +523,8 @@ public class ScopeStack implements MMStack<Scope> {
         return null;
     }
 
-    public Set<DisjPair> getActiveDisjVarPairs() {
-        Set<DisjPair> disjPairs = new HashSet<DisjPair>();
+    private Set<DisjPair> getActiveDisjVarPairs() {
+        Set<DisjPair> disjPairs = new HashSet<>();
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
             Scope scope = iter.next();
@@ -534,8 +533,8 @@ public class ScopeStack implements MMStack<Scope> {
         return disjPairs;
     }
 
-    public Set<Hypothesis> getActiveMandLogHyps() {
-        Set<Hypothesis> logHyps = new HashSet<Hypothesis>();
+    private Set<Hypothesis> getActiveMandLogHyps() {
+        Set<Hypothesis> logHyps = new HashSet<>();
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
             Scope scope = iter.next();
@@ -544,8 +543,8 @@ public class ScopeStack implements MMStack<Scope> {
         return logHyps;
     }
 
-    public Set<Hypothesis> getActiveMandVarHyps() {
-        Set<Hypothesis> varHyps = new HashSet<Hypothesis>();
+    private Set<Hypothesis> getActiveMandVarHyps() {
+        Set<Hypothesis> varHyps = new HashSet<>();
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
             Scope scope = iter.next();
@@ -554,8 +553,8 @@ public class ScopeStack implements MMStack<Scope> {
         return varHyps;
     }
 
-    public Set<String> getActiveMandVars() {
-        Set<String> vars = new HashSet<String>();
+    private Set<String> getActiveMandVars() {
+        Set<String> vars = new HashSet<>();
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
             Scope scope = iter.next();
@@ -583,9 +582,7 @@ public class ScopeStack implements MMStack<Scope> {
         while (iter.hasNext()) {
             Scope scope = iter.next();
             Hypothesis hyp = scope.getHypsByLabel().get(label);
-            if (hyp == null) {
-                continue;
-            } else {
+            if (hyp != null) {
                 return hyp;
             }
         }
@@ -594,14 +591,12 @@ public class ScopeStack implements MMStack<Scope> {
         // statement", label));
     }
 
-    public Statement getActiveStmtByLabel(String label) {
+    Statement getActiveStmtByLabel(String label) {
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
             Scope scope = iter.next();
             Statement stmt = scope.getStmtsByLabel().get(label);
-            if (stmt == null) {
-                continue;
-            } else {
+            if (stmt != null) {
                 return stmt;
             }
         }
@@ -641,8 +636,8 @@ public class ScopeStack implements MMStack<Scope> {
         return true;
     }
 
-    public Set<DisjPair> generateVarProduct(Set<String> vars1, Set<String> vars2) {
-        Set<DisjPair> product = new HashSet<DisjPair>();
+    private Set<DisjPair> generateVarProduct(Set<String> vars1, Set<String> vars2) {
+        Set<DisjPair> product = new HashSet<>();
         for (String var1 : vars1) {
             for (String var2 : vars2) {
                 product.add(new DisjPair(var1, var2));
@@ -652,7 +647,7 @@ public class ScopeStack implements MMStack<Scope> {
     }
 
     public boolean isCommonVars(String[] arr1, String[] arr2) {
-        Set<String> vars = new HashSet<String>();
+        Set<String> vars = new HashSet<>();
         for (String elem : arr1) {
             if (!this.constants.contains(elem)) {
                 vars.add(elem);

@@ -6,9 +6,9 @@ import java.util.Iterator;
  * An interface intended to be implemented by {@link ScopeStack}, the main
  * scope environment. It is a minimal representation of a stack of scopes.
  *
- * @param <Scope> a stack of scopes
+ * @param <Scope> the elements are scopes
  */
-public interface MMStack<Scope> {
+public interface MMScopeStack<Scope> {
 
     /**
      * Adds a scope to the top of the stack.
@@ -30,14 +30,15 @@ public interface MMStack<Scope> {
     Scope peek();
 
     /**
-     * Returns the first scope that was pushed to the scope stack.
+     * Returns the first scope that was pushed to the scope stack. This is
+     * considered the top-level scope.
      *
      * @return a scope
      */
     Scope peekLast();
 
     /**
-     * Returns an iterator over a stack of scopes.
+     * Returns an iterator over the stack of scopes.
      *
      * @return an iterator
      */

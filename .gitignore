@@ -5,6 +5,7 @@
 .idea/artifacts/
 .idea/inspectionProfiles/
 .idea/**/vcs.xml
+.idea/**/uiDesigner.xml
 
 # jars
 out/

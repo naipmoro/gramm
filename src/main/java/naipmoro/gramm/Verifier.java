@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
+//import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 public class Verifier {
 
-    public static void mmVerify(InputStream is) {
+    static void mmVerify(InputStream is) {
         try {
             CharStream input = CharStreams.fromStream(is);
             MMParseTreeListener.MMBailLexer lexer = new MMParseTreeListener.MMBailLexer(input);
@@ -33,6 +33,13 @@ public class Verifier {
         }
     }
 
+    /**
+     * This main method is the entry point for the application. Given the file
+     * name of a metamath database, it passes the file as an input stream to a
+     * parser/verifier. Exits in case of a file error.
+     *
+     * @param args a file name
+     */
     public static void main(String[] args) {
         String filename = args[0];
         try (InputStream is = new FileInputStream(filename)) {
