@@ -3,8 +3,7 @@ package naipmoro.gramm;
 import java.util.Arrays;
 
 /**
- * A class to represent metamath hypotheses, either variable type hypotheses
- * ($f) or logical hypotheses ($e).
+ * A class to represent metamath hypotheses, either variable-type or logical.
  */
 public class Hypothesis implements Statement, Comparable<Hypothesis> {
     private final String label;
@@ -14,13 +13,16 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     private final int order;
 
     /**
-     * A Hypothesis constructor.
+     * Hypothesis constructor.
      *
-     * @param label
-     * @param kind
-     * @param type
-     * @param body
-     * @param order
+     * @param label the name of the hypothesis
+     * @param kind  the kind of hypothesis, either "$f" for variable-type
+     *              hypotheses or "$e" for logical hypotheses
+     * @param type  a string constant
+     * @param body  a string array
+     * @param order an integer N specifying that the hypothesis was the Nth
+     *              hypothesis in the metamath database, using 1-indexing.
+     *              Typically this is calculated by method.
      */
     public Hypothesis(String label, String kind, String type, String[] body, int order) {
         this.label = label;
@@ -31,34 +33,42 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     }
 
     /**
-     * @return the name of the hypothesis
+     * {@inheritDoc}
      */
     public String getLabel() {
         return this.label;
     }
 
     /**
-     * @return the kind of hypothesis: either '$f' for a variable-type
-     * hypothesis or '$e' for a logical hypothesis
+     * @return the kind of hypothesis, either "$f" for a variable-type
+     * hypothesis or "$e" for a logical hypothesis
      */
     public String getKind() {
         return this.kind;
     }
 
     /**
-     * @return the type of hypothesis: type could be any metamath string
-     * constant
+     * {@inheritDoc}
      */
     public String getType() {
         return this.type;
     }
 
+    /**
+     * Returns the body of the hypothesis as a string array. In the case of a
+     * logical hypothesis, a (possibly empty) string array of metamath
+     * constants and variables is returned. In the case of a variable-type
+     * hypothesis, a string array with exactly one variable is returned.
+     *
+     * @return the body of the hypothesis as a string array
+     */
     public String[] getBody() {
         return this.body;
     }
 
     /**
-     * Hypotheses lack a {@link Mandatory} field.
+     * An empty implementation of this method. Hypotheses lack a
+     * {@link Mandatory} field.
      *
      * @return null
      */
@@ -66,6 +76,9 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public StatementCore getStmtCore() {
         return new StatementCore(this.type, this.body);
     }
@@ -75,6 +88,9 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     //        return Integer.valueOf(this.order).compareTo(Integer.valueOf(o.order));
     //    }
 
+    /**
+     * {@inheritDoc}
+     */
     public int compareTo(Hypothesis o) {
         if (this.order < o.order) {
             return -1;
@@ -86,36 +102,8 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
         }
     }
 
-
-    //    @Override
-    //    public boolean equals(Object obj) {
-    //        if (this == obj) {
-    //            return true;
-    //        }
-    //        if (obj == null) {
-    //            return false;
-    //        }
-    //        if (!(obj instanceof Hypothesis)) {
-    //            return false;
-    //        }
-    //        Hypothesis hyp = (Hypothesis) obj;
-    //        return this.label.equals(hyp.label) && this.kind.equals(hyp.kind)
-    //                && this.type.equals(hyp.type) && this.body.equals(hyp.body);
-    //    }
-
-    //    @Override
-    //    public int hashCode() {
-    //        int result = 17;
-    //        result = 31 * result + label.hashCode();
-    //        result = 31 * result + kind.hashCode();
-    //        result = 31 * result + type.hashCode();
-    //        result = 31 * result + body.hashCode();
-    //        return result;
-    //    }
-
-
     /**
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public int hashCode() {
@@ -129,8 +117,7 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     }
 
     /**
-     * @param obj
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public boolean equals(Object obj) {
@@ -175,6 +162,9 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

@@ -11,7 +11,7 @@ import java.util.Iterator;
 public interface MMScopeStack<Scope> {
 
     /**
-     * Adds a scope to the top of the stack.
+     * Adds a scope to the top of the scope stack.
      *
      * @param scope a scope
      */

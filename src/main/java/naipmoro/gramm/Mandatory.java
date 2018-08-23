@@ -15,7 +15,7 @@ public class Mandatory {
     private final Set<DisjPair> disj;
 
     /**
-     * Constructs the mandatory elements.
+     * Mandatory constructor.
      *
      * @param vars the set of mandatory variables
      * @param hyps the list of mandatory hypotheses, assumed to be ordered
@@ -23,29 +23,35 @@ public class Mandatory {
      * @param disj the set of mandatory disjoint variable pairs
      */
 
-    public Mandatory(Set<String> vars, List<Hypothesis> hyps, Set<DisjPair> disj) {
+    Mandatory(Set<String> vars, List<Hypothesis> hyps, Set<DisjPair> disj) {
         this.vars = vars;
         this.hyps = hyps;
         this.disj = disj;
     }
 
     /**
-     * @return the vars
+     * Returns a set of mandatory variables.
+     *
+     * @return a set of variables
      */
-    public Set<String> getVars() {
-        return this.vars;
-    }
+//    public Set<String> getVars() {
+//        return this.vars;
+//    }
 
     /**
-     * @return the hyps, which are expected to be sorted according to their
-     * order field
+     * Returns a list of mandatory hypotheses, which are expected to be sorted
+     * according to their order field.
+     *
+     * @return a list of hypotheses
      */
-    public List<Hypothesis> getHyps() {
+    List<Hypothesis> getHyps() {
         return this.hyps;
     }
 
     /**
-     * @return the disj
+     * Returns Mandatory's set of disjoint variable pairs
+     *
+     * @return a set of disjoint variable pairs
      */
     public Set<DisjPair> getDisj() {
         return this.disj;

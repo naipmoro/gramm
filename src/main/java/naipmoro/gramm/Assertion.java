@@ -1,10 +1,9 @@
 package naipmoro.gramm;
 
 /**
- * A class to represent axioms and theorems.
+ * A class to represent metamath assertions, either axioms or theorems.
  */
 public class Assertion implements Statement {
-
     private final String label;
     private final String kind;
     private final String type;
@@ -15,12 +14,13 @@ public class Assertion implements Statement {
      * Assertion constructor.
      *
      * @param label the name of the assertion
-     * @param kind the kind of assertion; in this case either "$a" (axiom) or
-     *             "$p" (theorem)
-     * @param type a string constant
-     * @param stmt a string array containing the assertion
-     * @param mand a {@link Mandatory} object, containing the assertion's
-     *             mandatory hypotheses
+     * @param kind  the kind of assertion, either "$a" for axioms or "$p" for
+     *              theorems
+     * @param type  a string constant
+     * @param stmt  a (possibly empty) string array containing the assertion's
+     *              body
+     * @param mand  a {@link Mandatory} object containing the assertion's
+     *              mandatory hypotheses
      */
     public Assertion(String label, String kind, String type, String[] stmt, Mandatory mand) {
         this.label = label;
@@ -31,16 +31,15 @@ public class Assertion implements Statement {
     }
 
     /**
-     * Returns the name of the assertion.
-     *
-     * @return name as a string
+     * {@inheritDoc}
      */
     public String getLabel() {
         return this.label;
     }
 
     /**
-     * Returns the kind of assertion.
+     * Returns the kind of assertion, either "$a" for axioms or "$p" for
+     * theorems.
      *
      * @return either "$a" (for axiom) or "$p" (for theorem)
      */
@@ -49,20 +48,14 @@ public class Assertion implements Statement {
     }
 
     /**
-     * Returns the type of assertion. This could be any metamath constant
-     * string, but in practice it is usually either "wff" to represent
-     * syntactic assertions or "|-" to represent assertions.
-     *
-     * @return the type of assertion as a string
+     * {@inheritDoc}
      */
     public String getType() {
         return this.type;
     }
 
     /**
-     * Returns the body of the assertion as a string array.
-     *
-     * @return the body of the assertion as a string array
+     * {@inheritDoc}
      */
     public String[] getBody() {
         return this.body;
@@ -78,18 +71,14 @@ public class Assertion implements Statement {
     }
 
     /**
-     * Returns the assertion's statement core, namely its type and its body.
-     *
-     * @return the assertion's {@link StatementCore}
+     * {@inheritDoc}
      */
     public StatementCore getStmtCore() {
         return new StatementCore(this.type, this.body);
     }
 
     /**
-     * Returns a string representation of the assertion.
-     *
-     * @return the assertion as a string
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
