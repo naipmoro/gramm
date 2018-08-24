@@ -40,8 +40,11 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     }
 
     /**
-     * @return the kind of hypothesis, either "$f" for a variable-type
-     * hypothesis or "$e" for a logical hypothesis
+     * Returns the kind of hypothesis, either "$f" for variable-type hypotheses
+     * or "$e" for logical hypotheses.
+     *
+     * @return the kind of hypothesis, either "$f" (variable-type hypothsis) or
+     * "$e" (logical hypothesis)
      */
     public String getKind() {
         return this.kind;

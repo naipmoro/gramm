@@ -13,13 +13,13 @@ import java.util.Set;
 public class Scope {
     private List<String> variables = new ArrayList<String>();
     private Set<DisjPair> disjVarPairs = new HashSet<DisjPair>();
-    private Set<String> mandVars = new HashSet<String>();
+    //private Set<String> mandVars = new HashSet<String>();
     private Set<Hypothesis> mandVarHyps = new HashSet<Hypothesis>();
     private Set<Hypothesis> mandLogHyps = new HashSet<Hypothesis>();
     private Map<String, String> labelsByVar = new HashMap<String, String>();
     private Map<String, Statement> stmtsByLabel = new HashMap<String, Statement>();
-    private Map<String, Assertion> assertsByLabel = new HashMap<String, Assertion>();
-    private Map<String, Hypothesis> hypsByLabel = new HashMap<String, Hypothesis>();
+    //private Map<String, Assertion> assertsByLabel = new HashMap<String, Assertion>();
+    //private Map<String, Hypothesis> hypsByLabel = new HashMap<String, Hypothesis>();
     private Map<String, Hypothesis> varHypsByVar = new HashMap<String, Hypothesis>();
 
     public List<String> getVariables() {
@@ -38,13 +38,13 @@ public class Scope {
         this.disjVarPairs.add(dp);
     }
 
-    public Set<String> getMandVars() {
-        return mandVars;
-    }
+//    public Set<String> getMandVars() {
+//        return mandVars;
+//    }
 
-    public void addToMandVars(String var) {
-        this.mandVars.add(var);
-    }
+//    public void addToMandVars(String var) {
+//        this.mandVars.add(var);
+//    }
 
     public Set<Hypothesis> getMandVarHyps() {
         return mandVarHyps;
@@ -78,13 +78,13 @@ public class Scope {
         this.stmtsByLabel.put(label, stmt);
     }
 
-    public Map<String, Hypothesis> getHypsByLabel() {
-        return hypsByLabel;
-    }
+//    public Map<String, Hypothesis> getHypsByLabel() {
+//        return hypsByLabel;
+//    }
 
-    public void addToHypsByLabel(String label, Hypothesis hyp) {
-        this.hypsByLabel.put(label, hyp);
-    }
+//    public void addToHypsByLabel(String label, Hypothesis hyp) {
+//        this.hypsByLabel.put(label, hyp);
+//    }
 
     public Map<String, Hypothesis> getVarHypsByVar() {
         return varHypsByVar;

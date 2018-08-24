@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-//import static naipmoro.mmx.MMParseTreeListener.*;
-
 public class ScopeStack implements MMScopeStack<Scope> {
 
     private static final long serialVersionUID = 1L;
@@ -27,30 +25,38 @@ public class ScopeStack implements MMScopeStack<Scope> {
     private Set<String> constants = new HashSet<>();
     private Set<String> allVars = new HashSet<>();
     private Set<String> labels = new HashSet<>();
-    // private ArrayList<String> varHypLabels = new ArrayList<>();
-    // private ArrayList<String> logicalHypLabels = new ArrayList<>();
-    // private Map<String, Assertion> labelAssertionMap = new HashMap<>();
 
-    // public int incHypCount() {
-    // return this.hypCount++;
-    // }
-
+    /**
+     * {@inheritDoc}
+     */
     public void push(Scope scope) {
         scopeStack.push(scope);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void remove() {
         scopeStack.remove();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Scope peek() {
         return scopeStack.peek();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Scope peekLast() {
         return scopeStack.peekLast();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<Scope> iterator() {
         return scopeStack.iterator();
     }
@@ -137,6 +143,11 @@ public class ScopeStack implements MMScopeStack<Scope> {
         this.verifiedProofs++;
     }
 
+    /**
+     * The message string displayed at the end of database verification.
+     *
+     * @return a string to be displayed at the end of database verification.
+     */
     String endMessage() {
         int errs = getErrors();
         int warns = getWarnings();
@@ -147,10 +158,20 @@ public class ScopeStack implements MMScopeStack<Scope> {
                 verified, attempted);
     }
 
+    /**
+     * Returns the toplevel scope.
+     *
+     * @return a {@link Scope}
+     */
     private Scope getToplevel() {
         return this.peekLast();
     }
 
+    /**
+     * Returns the label->statement hashmap at the toplevel scope.
+     *
+     * @return the toplevel's {@link Scope#stmtsByLabel} hashmap
+     */
     Map<String, Statement> getToplevelStmtsByLabel() {
         return getToplevel().getStmtsByLabel();
     }
@@ -181,6 +202,15 @@ public class ScopeStack implements MMScopeStack<Scope> {
         }
     }
 
+    /**
+     * Adds a string array of variables to the active scope's list of
+     * variables. Throws an exception if a variable is already declared as a
+     * constant. Issues a warning, but does not abort the operation, if any
+     * variable is already active in the scope or in use as a statement label.
+     *
+     * @param vars
+     * @throws MMException
+     */
     void addVars(String[] vars) throws MMException {
         Scope scope = this.peek();
         for (String var : vars) {
@@ -205,8 +235,6 @@ public class ScopeStack implements MMScopeStack<Scope> {
         Scope scope = this.peek();
         Hypothesis hyp = new Hypothesis(label, "$f", type, new String[]{var}, ++hypCount);
         scope.addToLabelsByVar(var, label);
-        // scope.labelStatMap.put(label, hyp); // needed?
-        scope.addToHypsByLabel(label, hyp); // FIXME
         scope.addToStmtsByLabel(label, hyp);
         scope.addToVarHypsByVar(var, hyp);
         this.labels.add(label);
@@ -227,16 +255,10 @@ public class ScopeStack implements MMScopeStack<Scope> {
                 throw new MMException(
                         "variable " + sym + " is not assigned a type in the active scope");
             }
-            // Hypothesis mandVarHyp = getActiveLabelHyp(varLabel);
             // varHyps in logicalHyps are ALWAYS mandatory
             scope.addToMandVarHyps(varHyp);
-            // vars in logicalHyps are ALWAYS mandatory
-            scope.addToMandVars(sym);
         }
-        //String stmtStr = String.join(" ", stmt);
         Hypothesis logHyp = new Hypothesis(label, "$e", type, stmt, ++hypCount);
-        // scope.labelStmtMap.put(label, hyp); // needed?
-        scope.addToHypsByLabel(label, logHyp); // FIXME
         scope.addToStmtsByLabel(label, logHyp);
         scope.addToMandLogHyps(logHyp); // logicalHyps are ALWAYS mandatory
         this.labels.add(label);
@@ -254,14 +276,12 @@ public class ScopeStack implements MMScopeStack<Scope> {
      *                     check fails
      */
     void addDisjVars(String[] vars) throws MMException {
-        // Set<String> varSet = new HashSet<>(Arrays.asList(vars));
         checkDisjVars(vars);
         Scope scope = this.peek();
         int vsize = vars.length;
         if (vsize == 2) {
             scope.addToDisjVarPairs(new DisjPair(vars[0], vars[1]));
         } else {
-            // Arrays.sort(vars);
             for (int i = 0; i < vsize - 1; ++i) {
                 String s1 = vars[i];
                 for (int j = i + 1; j < vsize; ++j) {
@@ -275,20 +295,23 @@ public class ScopeStack implements MMScopeStack<Scope> {
     void addTheorem(String label, String type, String[] stmt, String[] proofList)
             throws MMException {
         checkLabelAndType(label, type);
-        //String stmtStr = String.join(" ", stmt);
         Mandatory mand = getActiveMandatory(stmt);
         Proof proof = new Proof(this, label, type, stmt, proofList, mand);
         if (proof.verify()) {
             addAssertion(label, "$p", type, stmt, mand);
-            // if (verifyProof(label, type, stmtStr, proofList)) {
-            // addAssertion(label, type, stmt, stmtStr);
         }
 
     }
 
+    /**
+     * Passes the elements of an axiom to the {@link #addAssertion} method.
+     * @param label
+     * @param type
+     * @param stmt
+     * @throws MMException
+     */
     void addAxiom(String label, String type, String[] stmt) throws MMException {
         checkLabelAndType(label, type);
-        //String stmtStr = String.join(" ", stmt);
         Mandatory mand = getActiveMandatory(stmt);
         addAssertion(label, "$a", type, stmt, mand);
     }
@@ -297,14 +320,13 @@ public class ScopeStack implements MMScopeStack<Scope> {
      * Given a string array representing the body of a theorem or axiom, returns
      * the {@link Mandatory} object associated with the statement.
      *
-     * @param stmt
-     * @return
-     * @throws MMException
+     * @param stmt a string array representing the body of the assertion
+     * @return the assertion's associated {@link Mandatory} o bject.
+     * @throws MMException if stmt is not a valid assertion body
      */
     private Mandatory getActiveMandatory(String[] stmt) throws MMException {
         Set<Hypothesis> logHypSet = getActiveMandLogHyps();
         Set<Hypothesis> varHypSet = getActiveMandVarHyps();
-        Set<String> varsSet = getActiveMandVars();
         // checking the semantics of the stmt
         for (String sym : stmt) {
             if (this.constants.contains(sym)) {
@@ -319,7 +341,6 @@ public class ScopeStack implements MMScopeStack<Scope> {
                         "variable " + sym + " has not been assigned a type in the active scope");
             }
             varHypSet.add(varHyp);
-            varsSet.add(sym); // is this needed?
         }
         // combine the varHyps with the logHyps into a list...
         logHypSet.addAll(varHypSet);
@@ -329,97 +350,55 @@ public class ScopeStack implements MMScopeStack<Scope> {
         Collections.sort(hypList);
         //System.out.println(hypList); // TESTING
         Set<DisjPair> disjPairs = getActiveDisjVarPairs();
-        return new Mandatory(varsSet, hypList, disjPairs);
+        return new Mandatory(hypList, disjPairs);
     }
 
     /**
+     * Adds the constructed assertion to the toplevel scope, ensuring that it
+     * is always active.
+     *
      * @param label the name of the assertion
-     * @param type  the type of the assertion
-     * @param stmt  the statement of the assertion expressed as an array of
-     *              symbols
+     * @param kind  the kind of assertion, either "$a" for axioms or "$p" for
+     *              theorems
+     * @param type  a metamath string constant
+     * @param stmt  a string array conatining the body of the assertion
+     * @param mand  the {@link Mandatory} object associated with the assertion
      */
     private void addAssertion(String label, String kind, String type, String[] stmt,
-                             Mandatory mand) {
-        // // Set<Hypothesis> hypSet = new HashSet<>();
-        // // Set<String> varSet = new HashSet<>();
-        // Set<Hypothesis> logHypSet = getActiveMandLogHyps();
-        // Set<Hypothesis> varHypSet = getActiveMandVarHyps();
-        // Set<String> varsSet = getActiveMandVars();
-        // for (String sym : stmt) {
-        // if (this.constants.contains(sym)) {
-        // continue;
-        // }
-        // if (!isActiveVar(sym)) {
-        // throw new MMException(sym + " is not a constant or active variable");
-        // }
-        // Hypothesis varHyp = getActiveVarHypByVar(sym);
-        // if (varHyp == null) {
-        // throw new MMException(
-        // "variable " + sym + " has not been assigned a type in the active
-        // scope");
-        // }
-        // // Hypothesis hyp = getActiveLabelHyp(varLabel);
-        // varHypSet.add(varHyp);
-        // varsSet.add(sym); // is this needed?
-        // }
-        // // combine the varHyps with the logHyps into a list
-        // logHypSet.addAll(varHypSet);
-        // // Set<Hypothesis> logHypSet = getActiveMandLogHyps();
-        // // hypSet.addAll(logHypSet);
-        // // Set<Hypothesis> varHypSet = getActiveMandVarHyps();
-        // // hypSet.addAll(varHypSet);
-        // // sort the list according to the hyps order of appearance in the
-        // // database
-        // List<Hypothesis> hypList = new ArrayList<Hypothesis>(logHypSet);
-        // // hypList.addAll(hypSet);
-        // Collections.sort(hypList);
-        // System.out.println(hypList); // TESTING
-        // Set<DisjPair> disjPairs = getActiveDisjVarPairs();
-        // // the disjPairs have to be filtered to those where both members are
-        // in
-        // // varList
-        // List<DisjPair> mandDisjPairs = new ArrayList<>();
-        // for (DisjPair disjPair : disjPairs) {
-        // if (varsSet.contains(disjPair.getLeft()) &&
-        // varsSet.contains(disjPair.getRight())) {
-        // mandDisjPairs.add(disjPair);
-        // }
-        // }
-        // // Set<String> varList = new HashSet<>();
-        // // varList.addAll(varSet);
-        // Mandatory mand = new Mandatory(varsSet, hypList, mandDisjPairs);
-
-        // Map<String, Assertion> TopAssertsByLabel =
-        // getToplevelAssertsByLabel(); // FIXME
+                              Mandatory mand) {
         Map<String, Statement> TopStmtsByLabel = getToplevelStmtsByLabel();
-        // assertions are placed in the top level scope to ensure that they're
-        // always active
         TopStmtsByLabel.put(label, new Assertion(label, kind, type, stmt, mand));
-        // TopAssertsByLabel.put(label, new Assertion(label, "$a", type,
-        // stmtStr,
-        // mand)); // FIXME
         this.labels.add(label);
     }
 
-    public void checkConst(String cn) throws MMException {
-        if (this.constants.contains(cn)) {
-            throw new MMException("constant " + cn + " is already declared");
-        }
-        if (this.allVars.contains(cn)) {
-            throw new MMException("constant " + cn + " is already declared as a var");
-        }
-    }
-
+    //    public void checkConst(String cn) throws MMException {
+    //        if (this.constants.contains(cn)) {
+    //            throw new MMException("constant " + cn + " is already declared");
+    //        }
+    //        if (this.allVars.contains(cn)) {
+    //            throw new MMException("constant " + cn + " is already declared as a var");
+    //        }
+    //    }
+    //
     //    public void checkVar(String var) throws MMException {
     //        if (isActiveVar(var)) {
     //            throw new MMException("variable " + var + " is already declared in the active
-    // scope");
+    //                    scope");
     //        }
     //        if (this.constants.contains(var)) {
     //            throw new MMException("variable " + var + " is already declared as a constant");
     //        }
     //    }
 
+    /**
+     * Given the name, type, and variable of a variable-type hypothesis, checks
+     * that the hypothesis is valid. If not, throws an exception.
+     *
+     * @param label the name of the hypothesis as a string
+     * @param type a metamath string constant
+     * @param var a sring variable
+     * @throws MMException
+     */
     private void checkVarHyp(String label, String type, String var) throws MMException {
         checkLabelAndType(label, type);
         if (!isActiveVar(var)) {
@@ -445,7 +424,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
      * Checks that the variables in string array vars are unique.
      *
      * @param vars a string array of variables
-     * @throws MMException
+     * @throws MMException if the variables are not unique
      */
     private void checkDisjVars(String[] vars) throws MMException {
         Set<String> set = new HashSet<>();
@@ -458,6 +437,14 @@ public class ScopeStack implements MMScopeStack<Scope> {
         }
     }
 
+    /**
+     * Checks the validity of a name and type.
+     *
+     * @param label a statement name
+     * @param type  a statement type
+     * @throws MMException if the name is already in use, if the type is not
+     *                     active, or if the type is already declared as a variable
+     */
     private void checkLabelAndType(String label, String type) throws MMException {
         if (this.labels.contains(label)) {
             throw new MMException("label " + label + " is defined more than once");
@@ -470,6 +457,12 @@ public class ScopeStack implements MMScopeStack<Scope> {
         }
     }
 
+    /**
+     * Checks if a variable is in the active scope.
+     *
+     * @param var a variable
+     * @return true if var is in the active scope, false otherwise
+     */
     private Boolean isActiveVar(String var) {
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
@@ -481,36 +474,35 @@ public class ScopeStack implements MMScopeStack<Scope> {
         return false;
     }
 
-//    public Boolean isActiveVarHyp(String var) {
-//        Iterator<Scope> iter = this.iterator();
-//        while (iter.hasNext()) {
-//            Scope scope = iter.next();
-//            if (scope.getLabelsByVar().containsKey(var)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
+    /**
+     * Checks if a hypothesis is a variable-type hypothesis.
+     *
+     * @param hyp a hypothesis
+     * @return true if the kind of the hypothesis is "$f", false otherwise.
+     */
     Boolean isVarTypeHyp(Hypothesis hyp) {
         return hyp.getKind().equals("$f");
     }
 
+    /**
+     * Checks if a statement is a hypothesis.
+     *
+     * @param stmt a statement
+     * @return true if the kind of the statement is either "$f" or "$e", false
+     * otherwise.
+     */
     Boolean isHypothesis(Statement stmt) {
         String kind = stmt.getKind();
         return (kind.equals("$f") || kind.equals("$e"));
     }
 
-    // public String getActiveLabelByVar(String var) {
-    // for (int i = this.size() - 1; i >= 0; i--) {
-    // Scope frame = this.elementAt(i);
-    // if (!(frame.labelsByVar.get(var) == null)) {
-    // return frame.labelsByVar.get(var);
-    // }
-    // }
-    // return EMPTY;
-    // }
-
+    /**
+     * Returns the active scope's variable-type hypothesis that is referenced
+     * by the given variable. Returns null if no such hypothesis is found.
+     *
+     * @param var a variable
+     * @return a variable-type hypothesis  or null
+     */
     private Hypothesis getActiveVarHypByVar(String var) {
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
@@ -553,44 +545,6 @@ public class ScopeStack implements MMScopeStack<Scope> {
         return varHyps;
     }
 
-    private Set<String> getActiveMandVars() {
-        Set<String> vars = new HashSet<>();
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
-            vars.addAll(scope.getMandVars());
-        }
-        return vars;
-    }
-
-    // public Statement getActiveLabelStmt(String label) {
-    // for (int i = this.size() - 1; i >= 0; i--) {
-    // Scope frame = this.elementAt(i);
-    // Statement stmt = frame.labelStmtMap.get(label);
-    // if (stmt == null) {
-    // continue;
-    // } else {
-    // return stmt;
-    // }
-    // }
-    // throw new MMException(String.format("label %s is not defined as a
-    // statement", label));
-    // }
-
-    public Hypothesis getActiveHypByLabel(String label) {
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
-            Hypothesis hyp = scope.getHypsByLabel().get(label);
-            if (hyp != null) {
-                return hyp;
-            }
-        }
-        return null;
-        // throw new MMException(String.format("label %s is not defined as a
-        // statement", label));
-    }
-
     Statement getActiveStmtByLabel(String label) {
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
@@ -603,65 +557,14 @@ public class ScopeStack implements MMScopeStack<Scope> {
         return null;
     }
 
-    public boolean validateSubstitutions(String[] sub1, String[] sub2, Set<DisjPair> thmDisj) {
-        Set<String> vars1 = new HashSet<String>();
-        Set<String> vars2 = new HashSet<String>();
-        for (String elem1 : sub1) {
-            if (!this.constants.contains(elem1)) {
-                vars1.add(elem1);
-            }
-        }
-        for (String elem2 : sub2) {
-            if (!this.constants.contains(elem2)) {
-                vars2.add(elem2);
-            }
-        }
-        boolean isCommon = vars1.retainAll(vars2);
-        if (isCommon) {
-            //            System.out.format(
-            //                    "error: proof of %s failed due to a violation of the
-            // assertion's disjoint "
-            //                    + "variable restriction: substitutions %s and %s "
-            //                            + "have common variable(s) %s%n"
-            //                    this.label, , rightVar);
-            //            this.incErrors();
-            return false;
-        }
-        Set<DisjPair> varProduct = this.generateVarProduct(vars1, vars2);
-        for (DisjPair disj : varProduct) {
-            if (!thmDisj.contains(disj)) {
-                return false;
-            }
-        }
-        return true;
-    }
+    //    private Set<DisjPair> generateVarProduct(Set<String> vars1, Set<String> vars2) {
+    //        Set<DisjPair> product = new HashSet<>();
+    //        for (String var1 : vars1) {
+    //            for (String var2 : vars2) {
+    //                product.add(new DisjPair(var1, var2));
+    //            }
+    //        }
+    //        return product;
+    //    }
 
-    private Set<DisjPair> generateVarProduct(Set<String> vars1, Set<String> vars2) {
-        Set<DisjPair> product = new HashSet<>();
-        for (String var1 : vars1) {
-            for (String var2 : vars2) {
-                product.add(new DisjPair(var1, var2));
-            }
-        }
-        return product;
-    }
-
-    public boolean isCommonVars(String[] arr1, String[] arr2) {
-        Set<String> vars = new HashSet<>();
-        for (String elem : arr1) {
-            if (!this.constants.contains(elem)) {
-                vars.add(elem);
-            }
-        }
-        for (String elem : arr2) {
-            if (vars.contains(elem)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // public Boolean checkAssertion(String sym) {
-    // return true;
-    // }
 }

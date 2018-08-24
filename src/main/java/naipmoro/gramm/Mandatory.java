@@ -10,21 +10,20 @@ import java.util.Set;
  * separate structure, whereas here we include them in Mandatory.
  */
 public class Mandatory {
-    private final Set<String> vars;
+    //private final Set<String> vars;
     private final List<Hypothesis> hyps;
     private final Set<DisjPair> disj;
 
     /**
      * Mandatory constructor.
      *
-     * @param vars the set of mandatory variables
      * @param hyps the list of mandatory hypotheses, assumed to be ordered
      *             according to the hypotheses' order field
      * @param disj the set of mandatory disjoint variable pairs
      */
 
-    Mandatory(Set<String> vars, List<Hypothesis> hyps, Set<DisjPair> disj) {
-        this.vars = vars;
+    Mandatory(List<Hypothesis> hyps, Set<DisjPair> disj) {
+        //this.vars = vars;
         this.hyps = hyps;
         this.disj = disj;
     }

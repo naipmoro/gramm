@@ -20,7 +20,7 @@ public class Assertion implements Statement {
      * @param stmt  a (possibly empty) string array containing the assertion's
      *              body
      * @param mand  a {@link Mandatory} object containing the assertion's
-     *              mandatory hypotheses
+     *              mandatory hypotheses and disjoint variable pairs
      */
     public Assertion(String label, String kind, String type, String[] stmt, Mandatory mand) {
         this.label = label;
