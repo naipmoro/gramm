@@ -18,11 +18,32 @@ import java.util.Stack;
  */
 public class Proof {
 
+    /**
+     * The scope stack environment in which the proof takes place.
+     */
     private final ScopeStack ss;
+    /**
+     * The identifying label of the theorem being verified.
+     */
     private final String label;
+    /**
+     * The metamath constant representing the type of theorem.
+     */
     private final String type;
+    /**
+     * The body of the theorem as a string array of metamath constants and
+     * variables.
+     */
     private final String[] stmt;
+    /**
+     * The proof of the theorem as a string array of i) labels, in the case of
+     * a normal proof, or ii) labels followed by uppercase letters, in the case
+     * of a compressed proof.
+     */
     private final String[] proof;
+    /**
+     * The theorem's associated {@link Mandatory} object.
+     */
     private final Mandatory mand;
 
     /**
@@ -509,9 +530,10 @@ public class Proof {
                         normalProof.add(labels.get(num - 1));
                     } else {
                         String[] tags = tagged.get(offset - 1);
-                        for (String tag : tags) {
-                            normalProof.add(tag);
-                        }
+                        normalProof.addAll(Arrays.asList(tags));
+                        //for (String tag : tags) {
+                        //    normalProof.add(tag);
+                        //}
                     }
                     charStack.clear();
                     continue;

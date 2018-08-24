@@ -11,83 +11,140 @@ import java.util.Set;
  * A class to represent a metamath scope.
  */
 public class Scope {
-    private List<String> variables = new ArrayList<String>();
-    private Set<DisjPair> disjVarPairs = new HashSet<DisjPair>();
-    private Set<Hypothesis> mandVarHyps = new HashSet<Hypothesis>();
-    private Set<Hypothesis> mandLogHyps = new HashSet<Hypothesis>();
-    //private Map<String, String> labelsByVar = new HashMap<String, String>();
-    private Map<String, Statement> stmtsByLabel = new HashMap<String, Statement>();
-    private Map<String, Hypothesis> varHypsByVar = new HashMap<String, Hypothesis>();
+    /**
+     * The scope's list of variables.
+     */
+    private List<String> variables = new ArrayList<>();
+    /**
+     * The scope's set of disjoint variable pairs.
+     */
+    private Set<DisjPair> disjVarPairs = new HashSet<>();
+    /**
+     * The scope's set of mandatory variable-type hypotheses.
+     */
+    private Set<Hypothesis> mandVarHyps = new HashSet<>();
+    /**
+     * The scope's set of mandatory logical hypotheses.
+     */
+    private Set<Hypothesis> mandLogHyps = new HashSet<>();
+    /**
+     * The scope's label->statement hashmap.
+     */
+    private Map<String, Statement> stmtsByLabel = new HashMap<>();
+    /**
+     * The scope's variable->var-type-hypothesis hashmap.
+     */
+    private Map<String, Hypothesis> varHypsByVar = new HashMap<>();
 
+    /**
+     * Returns the scope's list of variables.
+     *
+     * @return a list of variables
+     */
     public List<String> getVariables() {
         return variables;
     }
 
+    /**
+     * Adds a variable to the scope's variables list.
+     *
+     * @param var a variable
+     */
     void addToVariables(String var) {
         this.variables.add(var);
     }
 
+    /**
+     * Return's the scope's set of disjoint variable pairs.
+     *
+     * @return a set of {@link DisjPair}
+     */
     Set<DisjPair> getDisjVarPairs() {
         return disjVarPairs;
     }
 
+    /**
+     * Adds a disjoint variable pair to the scope's set of DisjPairs.
+     *
+     * @param dp a {@link DisjPair}
+     */
     void addToDisjVarPairs(DisjPair dp) {
         this.disjVarPairs.add(dp);
     }
 
-//    public Set<String> getMandVars() {
-//        return mandVars;
-//    }
-
-//    public void addToMandVars(String var) {
-//        this.mandVars.add(var);
-//    }
-
+    /**
+     * Returns the scope's set of mandatory variable-type hypotheses.
+     *
+     * @return a set of hypotheses.
+     */
     Set<Hypothesis> getMandVarHyps() {
         return mandVarHyps;
     }
 
+    /**
+     * Adds a mandatory variable-type hypothesis to the scope's set of such
+     * hypotheses.
+     *
+     * @param hyp a {@link Hypothesis}
+     */
     void addToMandVarHyps(Hypothesis hyp) {
         this.mandVarHyps.add(hyp);
     }
 
+    /**
+     * Returns the scope's set of mandatory logical hypotheses.
+     *
+     * @return a set of hypotheses.
+     */
     Set<Hypothesis> getMandLogHyps() {
         return mandLogHyps;
     }
 
+    /**
+     * Adds a mandatory logical hypothesis to the scope's set of such
+     * hypotheses.
+     *
+     * @param hyp a {@link Hypothesis}
+     */
     void addToMandLogHyps(Hypothesis hyp) {
         this.mandLogHyps.add(hyp);
     }
 
-//    public Map<String, String> getLabelsByVar() {
-//        return labelsByVar;
-//    }
-
-//    public void addToLabelsByVar(String var, String label) {
-//        this.labelsByVar.put(var, label);
-//    }
-
-    public Map<String, Statement> getStmtsByLabel() {
+    /**
+     * Return's the scope's label->statement hashmap.
+     *
+     * @return a hashmap
+     */
+    Map<String, Statement> getStmtsByLabel() {
         return stmtsByLabel;
     }
 
-    public void addToStmtsByLabel(String label, Statement stmt) {
+    /**
+     * Adds an entry to the scope's label->statement hashmap.
+     *
+     * @param label an identifying label as the hashmap's key
+     * @param stmt  a {@link Statement} as the hashmap's value
+     */
+    void addToStmtsByLabel(String label, Statement stmt) {
         this.stmtsByLabel.put(label, stmt);
     }
 
-//    public Map<String, Hypothesis> getHypsByLabel() {
-//        return hypsByLabel;
-//    }
-
-//    public void addToHypsByLabel(String label, Hypothesis hyp) {
-//        this.hypsByLabel.put(label, hyp);
-//    }
-
-    public Map<String, Hypothesis> getVarHypsByVar() {
+    /**
+     * Return's the scope's variable->var-type-hypothesis hashmap.
+     *
+     * @return a hashmap
+     */
+    Map<String, Hypothesis> getVarHypsByVar() {
         return varHypsByVar;
     }
 
-    public void addToVarHypsByVar(String var, Hypothesis hyp) {
+    /**
+     * Adds an entry to the scope's variable->hypothesis hashmap.
+     *
+     * @param var a variable as the hashmap's key
+     * @param hyp a {@link Hypothesis} as the hashmap's value
+     */
+    void addToVarHypsByVar(String var, Hypothesis hyp) {
         this.varHypsByVar.put(var, hyp);
     }
 
