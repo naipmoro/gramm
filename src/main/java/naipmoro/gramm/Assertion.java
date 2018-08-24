@@ -13,7 +13,7 @@ public class Assertion implements Statement {
     /**
      * Assertion constructor.
      *
-     * @param label the name of the assertion
+     * @param label the identifying label of the assertion
      * @param kind  the kind of assertion, either "$a" for axioms or "$p" for
      *              theorems
      * @param type  a string constant

@@ -7,9 +7,9 @@ package naipmoro.gramm;
 public interface Statement {
 
     /**
-     * Returns the name of the statement.
+     * Returns the identifying label of the statement.
      *
-     * @return the name of the statement as a string
+     * @return the label of the statement
      */
     String getLabel();
 
@@ -17,7 +17,7 @@ public interface Statement {
      * Returns the kind of statement: "$a" for axioms, "$p" for theorems, "$f"
      * for variable-type hypotheses, or "$e" for logical hypotheses.
      *
-     * @return the kind of statement as a string
+     * @return the kind of statement
      */
     String getKind();
 
@@ -26,15 +26,16 @@ public interface Statement {
      * string, but in practice it is usually either "wff" to represent
      * syntactic statements or "|-" to represent assertions.
      *
-     * @return the type of statement as a string
+     * @return a metamath constant representing the type of statement
      */
     String getType();
 
     /**
      * Returns the body of the statement as a (possibly empty) string array of
-     * metamath constants and variables.
+     * metamath constants and variables. If the statement is a variable-type
+     * hypothesis, an array of exactly one variable is returned.
      *
-     * @return the body of the statement as a string array
+     * @return the body of the statement
      */
     String[] getBody();
 
@@ -49,7 +50,7 @@ public interface Statement {
     /**
      * Returns the core elements of a statement, namely its type and its body.
      *
-     * @return the statement's {@link StatementCore}
+     * @return the statement's statement core
      */
     StatementCore getStmtCore();
 

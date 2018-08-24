@@ -10,14 +10,8 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.LexerNoViableAltException;
-//import org.antlr.v4.runtime.RuleContext;
-//import org.antlr.v4.runtime.Token;
-//import org.antlr.v4.runtime.TokenStreamRewriter;
-//import org.antlr.v4.runtime.tree.ErrorNode;
-// import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-// import org.antlr.v4.runtime.tree.RuleNode;
 
 /**
  * A class that walks the parse tree of a metamath file and produces effects at
@@ -88,8 +82,8 @@ public class MMParseTreeListener extends MMBaseListener {
      * included file. After checking that the file conforms to the spec, a
      * specialized listener {@link MMIncludeParseTreeListener} is deployed to
      * walk the file's parse tree. It is important to note that the original
-     * scope stack is passed to this listener so as to maintain (and augment)
-     * the existing database.
+     * scope stack is passed to this listener so as to maintain a consistent
+     * database.
      *
      * @param ctx an {@code includeStat} parse tree node
      */
@@ -322,23 +316,4 @@ public class MMParseTreeListener extends MMBaseListener {
     // %d", tok, line, pos));
     // }
 
-
-    //    public static void main(String[] args) {
-    //        try {
-    //            CharStream input = CharStreams.fromFileName(args[0]);
-    //            MMBailLexer lexer = new MMBailLexer(input);
-    //            CommonTokenStream tokens = new CommonTokenStream(lexer);
-    //            MMParser parser = new MMParser(tokens);
-    //            MMParseTreeListener listener = new MMParseTreeListener();
-    //            ScopeStack ss = new ScopeStack();
-    //            listener.setScopeStack(ss);
-    //            parser.setErrorHandler(new BailErrorStrategy());
-    //            parser.addParseListener(listener);
-    //            ParseTree tree = parser.db();
-    //            //ParseTreeWalker walker = new ParseTreeWalker();
-    //            //walker.walk(listener, tree);
-    //        } catch (IOException e) {
-    //            e.printStackTrace();
-    //        }
-    //    }
 }

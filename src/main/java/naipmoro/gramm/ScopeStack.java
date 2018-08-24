@@ -11,20 +11,41 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * The main scope stack and scope environment.
+ */
 public class ScopeStack implements MMScopeStack<Scope> {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * This implementation uses a deque for the scope stack.
+     */
     private Deque<Scope> scopeStack = new ArrayDeque<>();
+    /**
+     * The global set of constants.
+     */
+    private Set<String> constants = new HashSet<>();
+    /**
+     * The global set of both active and inactive variables.
+     */
+    private Set<String> allVars = new HashSet<>();
+    /**
+     * The global set of statement id labels.
+     */
+    private Set<String> labels = new HashSet<>();
 
+    /**
+     * The total number of hypotheses. Incremented and added to each new
+     * hypothesis as a construction parameter. Used to sort hypotheses by order
+     * of appearance.
+     */
     private int hypCount = 0;
     private int errors = 0;
     private int warnings = 0;
     private int attemptedProofs = 0;
     private int verifiedProofs = 0;
-    private Set<String> constants = new HashSet<>();
-    private Set<String> allVars = new HashSet<>();
-    private Set<String> labels = new HashSet<>();
+
 
     /**
      * {@inheritDoc}
@@ -70,21 +91,21 @@ public class ScopeStack implements MMScopeStack<Scope> {
         return this.constants;
     }
 
-    /**
-     * Returns the number of hypotheses.
-     *
-     * @return the hypCount
-     */
-    public int getHypCount() {
-        return hypCount;
-    }
+//    /**
+//     * Returns the number of hypotheses.
+//     *
+//     * @return the hypCount
+//     */
+//    public int getHypCount() {
+//        return hypCount;
+//    }
 
     /**
      * Returns the number of errors.
      *
      * @return the errors
      */
-    int getErrors() {
+    private int getErrors() {
         return errors;
     }
 
@@ -93,7 +114,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
      *
      * @return the warnings
      */
-    int getWarnings() {
+    private int getWarnings() {
         return warnings;
     }
 
@@ -111,7 +132,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
      *
      * @return the verifiedProofs
      */
-    int getVerifiedProofs() {
+    private int getVerifiedProofs() {
         return verifiedProofs;
     }
 
@@ -125,7 +146,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
     /**
      * Increases the number of warnings by one.
      */
-    void incWarnings() {
+    private void incWarnings() {
         this.warnings++;
     }
 
@@ -170,19 +191,19 @@ public class ScopeStack implements MMScopeStack<Scope> {
     /**
      * Returns the label->statement hashmap at the toplevel scope.
      *
-     * @return the toplevel's {@link Scope#stmtsByLabel} hashmap
+     * @return the toplevel scope's {@link Scope#stmtsByLabel} hashmap
      */
     Map<String, Statement> getToplevelStmtsByLabel() {
         return getToplevel().getStmtsByLabel();
     }
 
     /**
-     * Adds a string array of symbols to the set of database constants. Issues a
+     * Adds a string array of symbols to the global set of constants. Issues a
      * warning, but does not abort the operation, if any of the symbols is
      * already either a constant or a statement label.
      *
-     * @param cns the string array of symbols
-     * @throws MMException if a symbol being added to constants was previously used as a
+     * @param cns a string array of symbols
+     * @throws MMException if a symbol being added is already declared as a
      *                     variable
      */
     void addConstants(String[] cns) throws MMException {
@@ -205,11 +226,11 @@ public class ScopeStack implements MMScopeStack<Scope> {
     /**
      * Adds a string array of variables to the active scope's list of
      * variables. Throws an exception if a variable is already declared as a
-     * constant. Issues a warning, but does not abort the operation, if any
+     * constant. Issues a warning, but does not abort the operation, if a
      * variable is already active in the scope or in use as a statement label.
      *
-     * @param vars
-     * @throws MMException
+     * @param vars a string array of variables
+     * @throws MMException if a variable is already declared as a constant
      */
     void addVars(String[] vars) throws MMException {
         Scope scope = this.peek();
@@ -230,16 +251,36 @@ public class ScopeStack implements MMScopeStack<Scope> {
         }
     }
 
+    /**
+     * Given the elements of a proposed variable-type hypothesis, checks that
+     * the hypothesis is valid and then adds it to the active scope.
+     *
+     * @param label the identifying label of the variable-type hypothesis
+     * @param type  a metamath constant
+     * @param var   a variable
+     * @throws MMException if the hypothesis fails the validity check
+     */
     void addVarHyp(String label, String type, String var) throws MMException {
         checkVarHyp(label, type, var);
         Scope scope = this.peek();
         Hypothesis hyp = new Hypothesis(label, "$f", type, new String[]{var}, ++hypCount);
-        scope.addToLabelsByVar(var, label);
+        //scope.addToLabelsByVar(var, label);
         scope.addToStmtsByLabel(label, hyp);
         scope.addToVarHypsByVar(var, hyp);
         this.labels.add(label);
     }
 
+    /**
+     * Given the elements of a proposed logical hypothesis, checks that the
+     * hypothesis is valid and then adds it to the active scope.
+     *
+     * @param label the identifying label of the logical hypothesis
+     * @param type  a metamath constant
+     * @param stmt  a string array containing the body of the hypothesis
+     * @throws MMException if an element of stmt is not active or, in case it
+     *                     is a variable, if that variable is not assigned a
+     *                     type in the active scope
+     */
     void addLogHyp(String label, String type, String[] stmt) throws MMException {
         checkLabelAndType(label, type);
         Scope scope = this.peek();
@@ -265,15 +306,13 @@ public class ScopeStack implements MMScopeStack<Scope> {
     }
 
     /**
-     * Takes an array of at least two variables (guaranteed by the parser),
-     * checks that the variables are unique, creates all possible disjoint
-     * variable pairs (DVPs) from the array, and adds each pair to the local
-     * scope's DVP list.
+     * Given an array of variables, checks that the variables are unique,
+     * creates all possible disjoint variable pairs (DisjPairs) from the array,
+     * and adds each pair to the local scope's DisjPair list. The parser
+     * guarantees that the array will contain at least two variables.
      *
-     * @param vars a string array of variables generated by
-     *             {@link MMParseTreeListener#exitDisjointVars}
-     * @throws MMException by way of {@link #checkDisjVars} if the uniqueness
-     *                     check fails
+     * @param vars a string array of variables
+     * @throws MMException if the uniqueness check fails
      */
     void addDisjVars(String[] vars) throws MMException {
         checkDisjVars(vars);
@@ -292,6 +331,17 @@ public class ScopeStack implements MMScopeStack<Scope> {
         }
     }
 
+    /**
+     * The elements of a proposed theorem are checked and passed to the
+     * {@link #addAssertion} method.
+     *
+     * @param label     the identifying label of the theorem
+     * @param type      a metatamath constant
+     * @param stmt      a string array containing the theorem body
+     * @param proofList a string array containing the proof of the theorem
+     * @throws MMException if the theorem is an improperly constructed
+     *                     statement
+     */
     void addTheorem(String label, String type, String[] stmt, String[] proofList)
             throws MMException {
         checkLabelAndType(label, type);
@@ -304,11 +354,13 @@ public class ScopeStack implements MMScopeStack<Scope> {
     }
 
     /**
-     * Passes the elements of an axiom to the {@link #addAssertion} method.
-     * @param label
-     * @param type
-     * @param stmt
-     * @throws MMException
+     * The elements of a proposed axiom are checked and passed to the
+     * {@link #addAssertion} method.
+     *
+     * @param label the identifying label of the axiom
+     * @param type  a metatamath constant
+     * @param stmt  a string array containing the axiom body
+     * @throws MMException if the axiom is an improperly constructed statement
      */
     void addAxiom(String label, String type, String[] stmt) throws MMException {
         checkLabelAndType(label, type);
@@ -321,7 +373,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
      * the {@link Mandatory} object associated with the statement.
      *
      * @param stmt a string array representing the body of the assertion
-     * @return the assertion's associated {@link Mandatory} o bject.
+     * @return the assertion's associated {@link Mandatory} object
      * @throws MMException if stmt is not a valid assertion body
      */
     private Mandatory getActiveMandatory(String[] stmt) throws MMException {
@@ -357,10 +409,10 @@ public class ScopeStack implements MMScopeStack<Scope> {
      * Adds the constructed assertion to the toplevel scope, ensuring that it
      * is always active.
      *
-     * @param label the name of the assertion
+     * @param label the identifying label of the assertion
      * @param kind  the kind of assertion, either "$a" for axioms or "$p" for
      *              theorems
-     * @param type  a metamath string constant
+     * @param type  a metamath constant
      * @param stmt  a string array conatining the body of the assertion
      * @param mand  the {@link Mandatory} object associated with the assertion
      */
@@ -391,13 +443,15 @@ public class ScopeStack implements MMScopeStack<Scope> {
     //    }
 
     /**
-     * Given the name, type, and variable of a variable-type hypothesis, checks
-     * that the hypothesis is valid. If not, throws an exception.
+     * Given the label, type, and variable of a variable-type hypothesis,
+     * checks that the hypothesis is valid. If not, throws an exception.
      *
-     * @param label the name of the hypothesis as a string
-     * @param type a metamath string constant
-     * @param var a sring variable
-     * @throws MMException
+     * @param label the identifying label of the hypothesis
+     * @param type a metamath constant
+     * @param var a variable
+     * @throws MMException if the variable is already defined as a different or
+     * is not in the active scope
+     * type.
      */
     private void checkVarHyp(String label, String type, String var) throws MMException {
         checkLabelAndType(label, type);
@@ -438,11 +492,11 @@ public class ScopeStack implements MMScopeStack<Scope> {
     }
 
     /**
-     * Checks the validity of a name and type.
+     * Checks the validity of a label and type.
      *
-     * @param label a statement name
+     * @param label a statement's identifying label
      * @param type  a statement type
-     * @throws MMException if the name is already in use, if the type is not
+     * @throws MMException if the label is already in use, if the type is not
      *                     active, or if the type is already declared as a variable
      */
     private void checkLabelAndType(String label, String type) throws MMException {
@@ -497,11 +551,11 @@ public class ScopeStack implements MMScopeStack<Scope> {
     }
 
     /**
-     * Returns the active scope's variable-type hypothesis that is referenced
-     * by the given variable. Returns null if no such hypothesis is found.
+     * Given the variable of a variable-type hypothesis, returns that
+     * hypothesis if it is in the active scope, otherwise returns null.
      *
      * @param var a variable
-     * @return a variable-type hypothesis  or null
+     * @return an active variable-type hypothesis or null
      */
     private Hypothesis getActiveVarHypByVar(String var) {
         Iterator<Scope> iter = this.iterator();
@@ -515,6 +569,11 @@ public class ScopeStack implements MMScopeStack<Scope> {
         return null;
     }
 
+    /**
+     * Returns the set of all disjoint variable pairs in the active scope.
+     *
+     * @return a set of disjoint variable pairs
+     */
     private Set<DisjPair> getActiveDisjVarPairs() {
         Set<DisjPair> disjPairs = new HashSet<>();
         Iterator<Scope> iter = this.iterator();
@@ -525,6 +584,11 @@ public class ScopeStack implements MMScopeStack<Scope> {
         return disjPairs;
     }
 
+    /**
+     * Returns the set of all mandatory logical hypotheses in the active scope.
+     *
+     * @return a set of hypotheses
+     */
     private Set<Hypothesis> getActiveMandLogHyps() {
         Set<Hypothesis> logHyps = new HashSet<>();
         Iterator<Scope> iter = this.iterator();
@@ -535,6 +599,12 @@ public class ScopeStack implements MMScopeStack<Scope> {
         return logHyps;
     }
 
+    /**
+     * Returns the set of all mandatory variable-type hypotheses in the active
+     * scope.
+     *
+     * @return a set of hypotheses
+     */
     private Set<Hypothesis> getActiveMandVarHyps() {
         Set<Hypothesis> varHyps = new HashSet<>();
         Iterator<Scope> iter = this.iterator();
@@ -545,6 +615,13 @@ public class ScopeStack implements MMScopeStack<Scope> {
         return varHyps;
     }
 
+    /**
+     * Given the label of a statement, returns that statement if it is in the
+     * active scope, otherwise returns null.
+     *
+     * @param label the identifying label of a statement
+     * @return an active statement or null
+     */
     Statement getActiveStmtByLabel(String label) {
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {

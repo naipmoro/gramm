@@ -35,8 +35,8 @@ public class Verifier {
 
     /**
      * This main method is the entry point for the application. Given the file
-     * name of a metamath database, it passes the file as an input stream to a
-     * parser/verifier. Exits in case of a file error.
+     * name of a metamath database, it passes the file (as an input stream) to
+     * a parser and verifier. Exits in case of a file error.
      *
      * @param args a file name
      */
@@ -46,8 +46,10 @@ public class Verifier {
             mmVerify(is);
         } catch (FileNotFoundException e) {
             System.out.println("file not found error: " + filename);
+            System.exit(1);
         } catch (IOException ioe) {
             System.out.println("file input error: " + filename);
+            System.exit(1);
         }
     }
 }
