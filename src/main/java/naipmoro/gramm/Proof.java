@@ -127,9 +127,19 @@ public class Proof {
      *
      * @return true if the proof is verified, otherwise false
      */
-    boolean verify() {
+//    boolean verify() {
+//        if (isCompressedProof()) {
+//            return verifyCompressed();
+//        } else {
+//            return verifyNormal();
+//        }
+//    }
+
+    boolean verify() throws MMException {
         if (isCompressedProof()) {
-            return verifyCompressed();
+            Proof newProof = new Proof(this.ss, this.label, this.type, this.stmt,
+                    decompress(this.proof), this.mand);
+            return newProof.verifyNormal();
         } else {
             return verifyNormal();
         }
@@ -505,7 +515,7 @@ public class Proof {
             labels.add(hyp.getLabel());
         }
         //int hypsLength = hyps.size();
-        int alphaStart = 0;
+        int alphaStart = -1;
         for (int i = 1; i < compressedProof.length; ++i) {
             String lbl = compressedProof[i];
             if (!lbl.equals(")")) {
