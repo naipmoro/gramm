@@ -15,14 +15,14 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     /**
      * Hypothesis constructor.
      *
-     * @param label the name of the hypothesis
-     * @param kind  the kind of hypothesis, either "$f" for variable-type
-     *              hypotheses or "$e" for logical hypotheses
-     * @param type  a string constant
-     * @param body  a string array
+     * @param label the identifying label of the hypothesis
+     * @param kind  the kind of hypothesis, either "$f" for a variable-type
+     *              hypothesis or "$e" for a logical hypothesis
+     * @param type  a metamath constant
+     * @param body  a string array containing the body of the hypothesis
      * @param order an integer N specifying that the hypothesis was the Nth
      *              hypothesis in the metamath database, using 1-indexing.
-     *              Typically this is calculated by method.
+     *              Typically this is calculated by a method.
      */
     public Hypothesis(String label, String kind, String type, String[] body, int order) {
         this.label = label;
@@ -40,8 +40,8 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     }
 
     /**
-     * Returns the kind of hypothesis, either "$f" for variable-type hypotheses
-     * or "$e" for logical hypotheses.
+     * Returns the kind of hypothesis, either "$f" for a variable-type
+     * hypothesis or "$e" for a logical hypothesis.
      *
      * @return the kind of hypothesis, either "$f" (variable-type hypothsis) or
      * "$e" (logical hypothesis)

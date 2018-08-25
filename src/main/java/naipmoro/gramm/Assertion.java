@@ -14,11 +14,11 @@ public class Assertion implements Statement {
      * Assertion constructor.
      *
      * @param label the identifying label of the assertion
-     * @param kind  the kind of assertion, either "$a" for axioms or "$p" for
-     *              theorems
-     * @param type  a string constant
-     * @param stmt  a (possibly empty) string array containing the assertion's
-     *              body
+     * @param kind  the kind of assertion, either "$a" for an axiom or "$p" for
+     *              a theorem
+     * @param type  a metamath constant
+     * @param stmt  a (possibly empty) string array containing the body of the
+     *              assertion
      * @param mand  a {@link Mandatory} object containing the assertion's
      *              mandatory hypotheses and disjoint variable pairs
      */
