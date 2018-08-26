@@ -37,8 +37,8 @@ public class Proof {
     private final String[] stmt;
     /**
      * The proof of the theorem as a string array of i) labels, in the case of
-     * a normal proof, or ii) labels followed by uppercase letters, in the case
-     * of a compressed proof.
+     * a normal proof, or ii) labels in parentheses followed by uppercase
+     * letters, in the case of a compressed proof.
      */
     private final String[] proof;
     /**
@@ -294,63 +294,79 @@ public class Proof {
      * @throws MMException if the compressed proof is invalidly structured
      */
     String[] decompress(String[] compressedProof) throws MMException {
-        List<String> labels = new ArrayList<>();
+        List<String> reference = new ArrayList<>();
         List<String[]> tagged = new ArrayList<>();
         //List<Hypothesis> hyps = this.mand.getHyps();
         List<String> normalProof = new ArrayList<>();
         for (Hypothesis hyp : this.mand.getHyps()) {
-            labels.add(hyp.getLabel());
+            reference.add(hyp.getLabel());
         }
         //int hypsLength = hyps.size();
-        int alphaStart = 0;
+        int alphaStart = -1;
         for (int i = 1; i < compressedProof.length; ++i) {
             String lbl = compressedProof[i];
             if (!lbl.equals(")")) {
-                labels.add(lbl);
+                reference.add(lbl);
             } else {
                 alphaStart = i + 1;
                 break;
             }
         }
-        int labelsSize = labels.size();
+        int refSize = reference.size();
         for (int j = alphaStart; j < compressedProof.length; ++j) {
             String alphas = compressedProof[j];
             Deque<Character> charStack = new ArrayDeque<>();
             //ArrayDeque<Integer> nums = new ArrayDeque<>();
             CharacterIterator charIter = new StringCharacterIterator(alphas);
             for (char c = charIter.first(); c != CharacterIterator.DONE; c = charIter.next()) {
-                Integer n = base20.get(c);
-                if (n != null) {
-                    int num = charsToNum(charStack, n);
-                    int offset = num - labelsSize;
-                    if (offset <= 0) {
-                        normalProof.add(labels.get(num - 1));
-                    } else {
+                Integer refNum = base20.get(c);
+                if (refNum != null) {
+                    int num = charsToNum(charStack, refNum);
+                    int offset = num - refSize;
+                    if (num > refSize) {
                         String[] tags = tagged.get(offset - 1);
                         normalProof.addAll(Arrays.asList(tags));
-                        //for (String tag : tags) {
-                        //    normalProof.add(tag);
-                        //}
+                        charStack.clear();
+                        continue;
                     }
-                    charStack.clear();
-                    continue;
+                    String statLabel = reference.get(num - 1);
+                    if (statLabel != null) {
+                        normalProof.add(statLabel);
+                        charStack.clear();
+                        continue;
+                    } else {
+                        throw new MMException("decompression error");
+                    }
                 }
-                n = base5.get(c);
-                if (n != null) {
+                refNum = base5.get(c);
+                if (refNum != null) {
                     charStack.push(c);
                     continue;
                 }
                 if (c == 'Z') {
                     int normalProofSize = normalProof.size();
                     String stmtLabel = normalProof.get(normalProofSize - 1);
-                    Statement lastStmt = ss.getToplevelStmtsByLabel().get(stmtLabel);
+                    Statement lastStmt = ss.getActiveStmtByLabel(stmtLabel);
+                    if (ss.isHypothesis(lastStmt)) {
+                        normalProof.add(stmtLabel);
+                        continue;
+                    }
                     List<Hypothesis> stmtHyps = lastStmt.getMandatory().getHyps();
                     int hypsSize = stmtHyps.size();
-                    int startHypIndx = normalProofSize - hypsSize - 1;
-                    String[] tagList = new String[hypsSize + 1];
-                    for (int i = 0; i < hypsSize + 1; ++i) {
-                        tagList[i] = normalProof.get(i + startHypIndx);
+                    int endIndx = normalProofSize - hypsSize - 1;
+                    //String[] tagList = new String[hypsSize + 1];
+                    for (int i = normalProofSize - 2; i >= endIndx; --i) {
+                        String statLbl = normalProof.get(i);
+                        Statement stat = ss.getActiveStmtByLabel(statLbl);
+                        if (!ss.isHypothesis(stat)) {
+                            int moreHyps = stat.getMandatory().getHyps().size();
+                            endIndx = endIndx - moreHyps;
+                        }
                     }
+
+                    List<String> sublist = normalProof.subList(endIndx, normalProofSize);
+                    //String[] tagList = new String[normalProofSize - endIndx];
+                    String[] tagList = sublist.toArray(new String[0]);
                     tagged.add(tagList);
                     continue;
                 }
@@ -361,6 +377,17 @@ public class Proof {
         uncompressed = normalProof.toArray(uncompressed);
         return uncompressed;
     }
+
+//    String[] decompressHelp(List normal, Deque countStack, int ptr, int startIdx) {
+//        outList List<String> = new ArrayList<>();
+//        int normalSize = normal.size();
+//        String statLabel = normal.get(startIdx);
+//        Statement stat = this.ss.getActiveStmtByLabel(statLabel);
+//        if (this.ss.isHypothesis()) {
+//            return decompressHelp(normal.add(statLabel), countStack,)
+//        }
+//        int hypsSize = stat.getMandatory().getHyps().size();
+//    }
 
     /**
      * Given a stack of characters from a compressed proof and a starting
