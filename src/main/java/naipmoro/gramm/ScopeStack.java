@@ -447,11 +447,10 @@ public class ScopeStack implements MMScopeStack<Scope> {
      * checks that the hypothesis is valid. If not, throws an exception.
      *
      * @param label the identifying label of the hypothesis
-     * @param type a metamath constant
-     * @param var a variable
-     * @throws MMException if the variable is already defined as a different or
-     * is not in the active scope
-     * type.
+     * @param type  a metamath constant
+     * @param var   a variable
+     * @throws MMException if the variable is not in the active scope or is
+     *                     already defined as a different type.
      */
     private void checkVarHyp(String label, String type, String var) throws MMException {
         checkLabelAndType(label, type);
@@ -543,7 +542,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
      *
      * @param stmt a statement
      * @return true if the kind of the statement is either "$f" or "$e", false
-     * otherwise.
+     *         otherwise.
      */
     Boolean isHypothesis(Statement stmt) {
         String kind = stmt.getKind();
