@@ -131,19 +131,9 @@ public class Proof {
      *
      * @return true if the proof is verified, otherwise false
      */
-//    boolean verify() {
-//        if (isCompressedProof()) {
-//            return verifyCompressed();
-//        } else {
-//            return verifyNormal();
-//        }
-//    }
-
-    boolean verify() throws MMException {
+    boolean verify() {
         if (isCompressedProof()) {
-            Proof newProof = new Proof(this.ss, this.label, this.type, this.stmt,
-                    decompress(this.proof), this.mand);
-            return newProof.verifyNormal();
+            return verifyCompressed();
         } else {
             return verifyNormal();
         }
@@ -294,98 +284,6 @@ public class Proof {
         }
         //System.out.format("verified: %d  %s%n", ss.getVerifiedProofs(), this.label); //TESTING
         return true;
-    }
-
-    /**
-     * Given a proof in compressed format, returns the proof in normal format.
-     *
-     * @param compressedProof a string array containing the compressed proof
-     * @return a string array containing the proof in normal format
-     * @throws MMException if the compressed proof is invalidly structured
-     */
-    String[] decompress(String[] compressedProof) throws MMException {
-        List<String> reference = new ArrayList<>();
-        List<String[]> tagged = new ArrayList<>();
-        //List<Hypothesis> hyps = this.mand.getHyps();
-        List<String> normalProof = new ArrayList<>();
-        for (Hypothesis hyp : this.mand.getHyps()) {
-            reference.add(hyp.getLabel());
-        }
-        //int hypsLength = hyps.size();
-        int alphaStart = -1;
-        for (int i = 1; i < compressedProof.length; ++i) {
-            String lbl = compressedProof[i];
-            if (!lbl.equals(")")) {
-                reference.add(lbl);
-            } else {
-                alphaStart = i + 1;
-                break;
-            }
-        }
-        int refSize = reference.size();
-        for (int j = alphaStart; j < compressedProof.length; ++j) {
-            String alphas = compressedProof[j];
-            Deque<Character> charStack = new ArrayDeque<>();
-            //ArrayDeque<Integer> nums = new ArrayDeque<>();
-            CharacterIterator charIter = new StringCharacterIterator(alphas);
-            for (char c = charIter.first(); c != CharacterIterator.DONE; c = charIter.next()) {
-                Integer refNum = base20.get(c);
-                if (refNum != null) {
-                    int num = charsToNum(charStack, refNum);
-                    int offset = num - refSize;
-                    if (num > refSize) {
-                        String[] tags = tagged.get(offset - 1);
-                        normalProof.addAll(Arrays.asList(tags));
-                        charStack.clear();
-                        continue;
-                    }
-                    String statLabel = reference.get(num - 1);
-                    if (statLabel != null) {
-                        normalProof.add(statLabel);
-                        charStack.clear();
-                        continue;
-                    } else {
-                        throw new MMException("decompression error");
-                    }
-                }
-                refNum = base5.get(c);
-                if (refNum != null) {
-                    charStack.push(c);
-                    continue;
-                }
-                if (c == 'Z') {
-                    int normalProofSize = normalProof.size();
-                    String stmtLabel = normalProof.get(normalProofSize - 1);
-                    Statement lastStmt = ss.getActiveStmtByLabel(stmtLabel);
-                    if (ss.isHypothesis(lastStmt)) {
-                        normalProof.add(stmtLabel);
-                        continue;
-                    }
-                    List<Hypothesis> stmtHyps = lastStmt.getMandatory().getHyps();
-                    int hypsSize = stmtHyps.size();
-                    int endIndx = normalProofSize - hypsSize - 1;
-                    //String[] tagList = new String[hypsSize + 1];
-                    for (int i = normalProofSize - 2; i >= endIndx; --i) {
-                        String statLbl = normalProof.get(i);
-                        Statement stat = ss.getActiveStmtByLabel(statLbl);
-                        if (!ss.isHypothesis(stat)) {
-                            int moreHyps = stat.getMandatory().getHyps().size();
-                            endIndx = endIndx - moreHyps;
-                        }
-                    }
-
-                    List<String> sublist = normalProof.subList(endIndx, normalProofSize);
-                    //String[] tagList = new String[normalProofSize - endIndx];
-                    String[] tagList = sublist.toArray(new String[0]);
-                    tagged.add(tagList);
-                    continue;
-                }
-                throw new MMException("tag error");
-            }
-        }
-        String[] uncompressed = new String[normalProof.size()];
-        uncompressed = normalProof.toArray(uncompressed);
-        return uncompressed;
     }
 
 //    String[] decompressHelp(List normal, Deque countStack, int ptr, int startIdx) {
@@ -604,6 +502,107 @@ public class Proof {
                     + "but the assertion to be proved is %s%n",
                     this.label, Arrays.toString(provedBody), Arrays.toString(this.stmt)));
 
+        }
+    }
+
+    /**
+     * Given a proof in compressed format, returns the proof in normal format.
+     *
+     * @param compressedProof a string array containing the compressed proof
+     * @return a string array containing the proof in normal format
+     * @throws MMException if the compressed proof is invalidly structured
+     */
+    private String[] decompress(String[] compressedProof) throws MMException {
+        List<String> reference = new ArrayList<>();
+        List<String[]> tagged = new ArrayList<>();
+        List<String> normalProof = new ArrayList<>();
+        for (Hypothesis hyp : this.mand.getHyps()) {
+            reference.add(hyp.getLabel());
+        }
+        int alphaStart = -1;
+        for (int i = 1; i < compressedProof.length; ++i) {
+            String lbl = compressedProof[i];
+            if (!lbl.equals(")")) {
+                reference.add(lbl);
+            } else {
+                alphaStart = i + 1;
+                break;
+            }
+        }
+        int refSize = reference.size();
+        Deque<Character> charStack = new ArrayDeque<>();
+        for (int j = alphaStart; j < compressedProof.length; ++j) {
+            String alphas = compressedProof[j];
+            CharacterIterator charIter = new StringCharacterIterator(alphas);
+            for (char c = charIter.first(); c != CharacterIterator.DONE; c = charIter.next()) {
+                Integer refNum = base20.get(c);
+                if (refNum != null) {
+                    int num = charsToNum(charStack, refNum);
+                    int offset = num - refSize;
+                    if (num > refSize) {
+                        String[] tags = tagged.get(offset - 1);
+                        normalProof.addAll(Arrays.asList(tags));
+                        charStack.clear();
+                        continue;
+                    }
+                    String statLabel = reference.get(num - 1);
+                    if (statLabel != null) {
+                        normalProof.add(statLabel);
+                        charStack.clear();
+                        continue;
+                    } else {
+                        throw new MMException("decompression error");
+                    }
+                }
+                refNum = base5.get(c);
+                if (refNum != null) {
+                    charStack.push(c);
+                    continue;
+                }
+                if (c == 'Z') {
+                    int normalProofSize = normalProof.size();
+                    String stmtLabel = normalProof.get(normalProofSize - 1);
+                    Statement lastStmt = ss.getActiveStmtByLabel(stmtLabel);
+                    if (ss.isHypothesis(lastStmt)) {
+                        tagged.add(new String[]{stmtLabel});
+                        continue;
+                    }
+                    List<Hypothesis> stmtHyps = lastStmt.getMandatory().getHyps();
+                    int hypsSize = stmtHyps.size();
+                    int endIndx = normalProofSize - hypsSize - 1;
+                    for (int i = normalProofSize - 2; i >= endIndx; --i) {
+                        String statLbl = normalProof.get(i);
+                        Statement stat = ss.getActiveStmtByLabel(statLbl);
+                        if (!ss.isHypothesis(stat)) {
+                            int moreHyps = stat.getMandatory().getHyps().size();
+                            endIndx = endIndx - moreHyps;
+                        }
+                    }
+                    List<String> sublist = normalProof.subList(endIndx, normalProofSize);
+                    String[] tagList = sublist.toArray(new String[0]);
+                    tagged.add(tagList);
+                    continue;
+                }
+                throw new MMException("tag error");
+            }
+        }
+        //String[] uncompressed = new String[normalProof.size()];
+        //uncompressed = normalProof.toArray(uncompressed);
+        return normalProof.toArray(new String[0]);
+        //return uncompressed;
+    }
+
+    /**
+     * To test the decompress() method, rename verify() to verifyOLD() and this
+     * method to verify().
+     */
+    boolean decompressTester() throws MMException {
+        if (isCompressedProof()) {
+            Proof newProof = new Proof(this.ss, this.label, this.type, this.stmt,
+                    decompress(this.proof), this.mand);
+            return newProof.verifyNormal();
+        } else {
+            return verifyNormal();
         }
     }
 
