@@ -506,7 +506,10 @@ public class Proof {
     }
 
     /**
-     * Given a proof in compressed format, returns the proof in normal format.
+     * Given a proof in compressed form, returns the proof in normal form.
+     * Compressed proofs are verified directly, so this method is never used.
+     * But in principle we could decompress them with this method and apply
+     * {@code verifyNormal()} to the results (see {@link #decompressTester}).
      *
      * @param compressedProof a string array containing the compressed proof
      * @return a string array containing the proof in normal format
@@ -586,10 +589,7 @@ public class Proof {
                 throw new MMException("tag error");
             }
         }
-        //String[] uncompressed = new String[normalProof.size()];
-        //uncompressed = normalProof.toArray(uncompressed);
         return normalProof.toArray(new String[0]);
-        //return uncompressed;
     }
 
     /**
