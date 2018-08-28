@@ -6,69 +6,65 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A class to represent substitution maps used in metamath proof verification.
+ */
 public class SubstitutionMap {
-    //public List<String> vars;
-    //public List<String> replacements;
     private Map<String, String[]> substsByVar;
-    //private List<DisjPair> thmDisjPairs;
-    //private List<DisjPair> hypDisjPairs;
 
-
-    public SubstitutionMap() {
-        //this.vars = new ArrayList<String>();
-        //this.replacements = new ArrayList<String>();
-        this.substsByVar = new HashMap<String, String[]>();
+    /**
+     * A SubstitutionMap constructor.
+     */
+    SubstitutionMap() {
+        this.substsByVar = new HashMap<>();
     }
 
-    //  public SubstitutionMap(final List<DisjPair> hypDisjPairs, final List<DisjPair> thmDisjPairs) {
-    //      //this.vars = new ArrayList<String>();
-    //      //this.replacements = new ArrayList<String>();
-    //      this.substsByVar = new HashMap<String, String[]>();
-    //      this.hypDisjPairs = hypDisjPairs;
-    //      this.thmDisjPairs = thmDisjPairs;
-    //  }
-
-    //  public SubstitutionMap(List<String> vars, List<String> replacements) {
-    //    this.vars = vars;
-    //    this.replacements = replacements;
-    //  }
-
-    public SubstitutionMap addSubstitution(String var, String[] replacement) {
-        //this.vars.add(var);
-        //this.replacements.add(replacement);
+    /**
+     * Adds a new substitution to the substitution map.
+     *
+     * @param var         as variable as the key
+     * @param replacement a string array as he value
+     */
+    void addSubstitution(String var, String[] replacement) {
         this.substsByVar.put(var, replacement);
-        return this;
     }
 
-    public String[] getSubst(String var) {
+    /**
+     * Given a variable, returns the substitution map's replacement value for
+     * that variable, or returns null if the variable is not a key of the map.
+     *
+     * @param var a variable
+     * @return the string array that is the map's value for the given variable,
+     *         or null if the variable is not a key.
+     */
+    String[] getSubst(String var) {
         return this.substsByVar.get(var);
     }
 
-    //  public String[] getSubstEntry(int i) {
-    //    String[] subEntry = new String[2];
-    //    subEntry[0] = vars.get(i);
-    //    subEntry[1] = replacements.get(i);
-    //    return subEntry;
-    //  }
-
-    //  public String applySubst(String orig) {
-    //    int arraySize = this.source.size();
-    //    String[] src = new String[arraySize];
-    //    String[] repl = new String[arraySize];
-    //    src = this.source.toArray(src);
-    //    repl = this.replacement.toArray(repl);
-    //    return StringUtils.replaceEach(orig, src, repl);
-    //  }
-
-    public List<String> applySubstitution(String[] orig) {
-        List<String> replacement = this.replaceList(orig);
-        return replacement;
+    /**
+     * Applies a substitution map to a string array representing a metamath
+     * statement. The substitutions are applied simultaneously to the elements
+     * of the array. Elements that are not keys of the map remain unchanged.
+     *
+     * @param orig a string array
+     * @return the result of applying the substitution map to the array
+     */
+    List<String> applySubstitution(String[] orig) {
+        return this.replaceList(orig);
     }
 
-    public List<String> replaceList(String[] list) {
-        List<String> result = new ArrayList<String>();
-        for (int i = 0; i < list.length; ++i) {
-            String sym = list[i];
+    /**
+     * Given a string array, treats every element as a key of the substitution
+     * map and replaces it with the corresponding value, or leaves it unchanged
+     * if it isn't a key.
+     *
+     * @param list a string array
+     * @return the string array resulting from applying the substitution map to
+     *         each element of the original array
+     */
+    private List<String> replaceList(String[] list) {
+        List<String> result = new ArrayList<>();
+        for (String sym : list) {
             String[] val = this.getSubst(sym);
             if (val == null) {
                 result.add(sym);
@@ -79,6 +75,10 @@ public class SubstitutionMap {
         return result;
     }
 
+    /**
+     * Returns the size of the substitution map.
+     * @return the size of the hashmap
+     */
     public int size() {
         return this.substsByVar.size();
     }

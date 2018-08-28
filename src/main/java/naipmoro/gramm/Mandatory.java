@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A class to represent the mandatory elements of an assertion. This is not
+ * A class to represent the 'mandatory' elements of an assertion. This is not
  * quite the same as metamath's mandatory elements. According to the metamath
  * specification, an assertion's disjoint variable pairs are considered a
  * separate structure, whereas here we include them in Mandatory.
  */
 public class Mandatory {
-    //private final Set<String> vars;
     private final List<Hypothesis> hyps;
     private final Set<DisjPair> disj;
 
@@ -23,25 +22,15 @@ public class Mandatory {
      */
 
     Mandatory(List<Hypothesis> hyps, Set<DisjPair> disj) {
-        //this.vars = vars;
         this.hyps = hyps;
         this.disj = disj;
     }
 
     /**
-     * Returns a set of mandatory variables.
-     *
-     * @return a set of variables
-     */
-//    public Set<String> getVars() {
-//        return this.vars;
-//    }
-
-    /**
      * Returns a list of mandatory hypotheses, which are expected to be sorted
      * according to their order field.
      *
-     * @return a list of hypotheses
+     * @return a list of ordered hypotheses
      */
     List<Hypothesis> getHyps() {
         return this.hyps;
