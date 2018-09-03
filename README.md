@@ -1,8 +1,8 @@
 ## Gramm
 
-Gramm is an Antlr4-based Metamath proof verifier. Antlr4 creates a parser and
-lexer from the supplied grammar ([MM.g4]) and provides support code for walking
-the generated parse tree(s).
+Gramm is an Antlr4-based Metamath proof verifier. From the supplied Metamath
+grammar ([MM.g4]), Antlr4 creates a parser and a lexer and provides support
+code for walking the generated parse tree.
 
 ## Maven build
 
@@ -24,6 +24,7 @@ reading the database...
 30786 of 30786 proofs were verified
 time: 14.95 sec
 ```
+
 ## License
 
 * Gramm is distributed under the [MIT License].
