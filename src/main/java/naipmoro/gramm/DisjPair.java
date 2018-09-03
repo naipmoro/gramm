@@ -35,7 +35,7 @@ public class DisjPair {
     }
 
     /**
-     * Returns the righ, or second, side of the DisjPair.
+     * Returns the right, or second, side of the DisjPair.
      *
      * @return the right side of the DisjPair.
      */
