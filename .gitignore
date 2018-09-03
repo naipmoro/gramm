@@ -20,5 +20,5 @@ gen/
 target/
 
 # testing file
-src/main/java/naipmoro/mmx/Example.java
+src/main/java/naipmoro/gramm/Example.java
 
