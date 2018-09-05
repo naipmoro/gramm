@@ -1,5 +1,9 @@
 package naipmoro.gramm;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +50,20 @@ public class ScopeStack implements MMScopeStack<Scope> {
     private int attemptedProofs = 0;
     private int verifiedProofs = 0;
 
+    String getJarPath() {
+        File jarFile = null;
+        try {
+            jarFile = new File(Verifier.class
+                    .getProtectionDomain()
+                    .getCodeSource()
+                    .getLocation()
+                    .toURI()
+                    .getPath());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return Paths.get(jarFile.toString()).toAbsolutePath().toString();
+    }
 
     /**
      * {@inheritDoc}
@@ -146,7 +164,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
     /**
      * Increases the number of warnings by one.
      */
-    private void incWarnings() {
+    void incWarnings() {
         this.warnings++;
     }
 
@@ -516,7 +534,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
      * @param var a variable
      * @return true if var is in the active scope, false otherwise
      */
-    private Boolean isActiveVar(String var) {
+    private boolean isActiveVar(String var) {
         Iterator<Scope> iter = this.iterator();
         while (iter.hasNext()) {
             Scope scope = iter.next();
@@ -533,7 +551,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
      * @param hyp a hypothesis
      * @return true if the kind of the hypothesis is "$f", false otherwise.
      */
-    Boolean isVarTypeHyp(Hypothesis hyp) {
+    boolean isVarTypeHyp(Hypothesis hyp) {
         return hyp.getKind().equals("$f");
     }
 
@@ -544,10 +562,12 @@ public class ScopeStack implements MMScopeStack<Scope> {
      * @return true if the kind of the statement is either "$f" or "$e", false
      *         otherwise.
      */
-    Boolean isHypothesis(Statement stmt) {
+    boolean isHypothesis(Statement stmt) {
         String kind = stmt.getKind();
         return (kind.equals("$f") || kind.equals("$e"));
     }
+
+
 
     /**
      * Given the variable of a variable-type hypothesis, returns that

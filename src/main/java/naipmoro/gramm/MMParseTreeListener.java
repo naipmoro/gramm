@@ -1,5 +1,6 @@
 package naipmoro.gramm;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -88,8 +89,21 @@ public class MMParseTreeListener extends MMBaseListener {
      * @param ctx an {@code includeStat} parse tree node
      */
     public void exitIncludeFile(MMParser.IncludeFileContext ctx) {
-        String includeFile = ctx.getChild(0).getText();
-        try (InputStream is = new FileInputStream(includeFile)) {
+        String includePath = ctx.getChild(0).getText();
+        try (InputStream is = new FileInputStream(includePath)) {
+            File includeFile = (new File(includePath)).getCanonicalFile();
+            if (includeFile.equals(MMFile.getDbFile())) {
+                System.out.format("warning: the original metamath file %s cannot be included%n",
+                        MMFile.getDbFile().getName());
+                ss.incWarnings();
+                return;
+            }
+            if (MMFile.containsInclude(includeFile)) {
+                System.out.format("warning: %s has already been included. This duplicate include "
+                                  + "will be ignored%n", includePath);
+                ss.incWarnings();
+                return;
+            }
             CharStream input = CharStreams.fromStream(is);
             MMBailLexer lexer = new MMBailLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -102,20 +116,23 @@ public class MMParseTreeListener extends MMBaseListener {
             // parser.setBuildParseTree(true); //is this needed?
             ParseTree tree = parser.db();
 
+            MMFile.pushInclude(includeFile);
+            MMFile.addInclude(includeFile);
             // Trees.inspect(tree, parser);
             // System.out.println(tree.toStringTree());
             //walker.walk(listener, tree);
             ParseTreeWalker.DEFAULT.walk(listener, tree);
+
+            MMFile.popInclude();
             // parser.addParseListener(listener);
             // parser.db();
         } catch (FileNotFoundException fnfe) {
-            System.out.println("FileNotFoundException: " + includeFile);
-            //System.out.println("exiting database...");
-            //System.exit(1);
+            System.out.format("warning: included file %s could not be found%n", includePath);
+            ss.incWarnings();
         } catch (IOException ioe) {
-            System.out.println("IOException: " + includeFile);
-            //System.out.println("exiting database...");
-            //System.exit(1);
+            System.out.format("warning: there was an i/o error when reading included file %s%n",
+                    includePath);
+            ss.incWarnings();
         }
     }
 
