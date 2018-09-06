@@ -1,26 +1,28 @@
 package naipmoro.gramm;
 
 /**
- * Basic stack.
+ * Basic stack interface.
  *
  * @param <T> stack item
  */
 public interface MMStack<T> {
+
     /**
      * Pushes an item onto the stack.
+     *
      * @param item item pushed to stack
      */
     void push(T item);
 
     /**
-     * Returns the item at the top of the stack and removes it from the stack.
+     * Pops the item from the stack and returns it.
      *
      * @return the item at the top of the stack
      */
     T pop();
 
     /**
-     * Removes item from the top of the stack.
+     * Removes the item from the top of the stack.
      */
     void remove();
 

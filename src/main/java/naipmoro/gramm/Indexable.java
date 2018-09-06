@@ -1,6 +1,7 @@
 package naipmoro.gramm;
 
-/** Interface for indexable collections.
+/**
+ * Interface for indexable collections.
  *
  * @param <T> the type of the collection
  */
