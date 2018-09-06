@@ -42,5 +42,5 @@ public interface MMScopeStack<Scope> {
      *
      * @return an iterator
      */
-    Iterator<Scope> iterator();
+    //Iterator<Scope> iterator();
 }

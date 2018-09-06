@@ -148,7 +148,7 @@ public class Proof {
 
         // the proof stack will hold the statements (more precisely,
         // the statement cores) referenced by the proof labels
-        Stack<StatementCore> proofStack = new Stack<>();
+        ProofStack proofStack = new ProofStack(proof.length);
         for (String lbl : this.proof) {
             if (lbl.equals("?")) {
                 System.out.format("info: the proof of %s is incomplete%n", this.label);
@@ -202,7 +202,7 @@ public class Proof {
      * @return true if the proof is verified, otherwise false
      */
     private boolean verifyCompressed() {
-        Stack<StatementCore> proofStack = new Stack<>();
+        ProofStack proofStack = new ProofStack(proof.length);
         List<StatementCore> tags = new ArrayList<>();
         List<Statement> reference = new ArrayList<Statement>(this.mand.getHyps());
         int alphaStart = -1;
@@ -330,7 +330,7 @@ public class Proof {
      * @param proofStack the current proof stack
      * @throws MMProofException if the proof fails
      */
-    private void processStatement(Statement stat, Stack<StatementCore> proofStack)
+    private void processStatement(Statement stat, ProofStack proofStack)
             throws MMProofException {
         StatementCore statCore = stat.getStmtCore();
         // continue to push hypotheses (actually the statement cores of
@@ -367,7 +367,7 @@ public class Proof {
         SubstitutionMap sm = new SubstitutionMap();
         // iterate through the hypotheses
         for (int i = 0; i < hypsSize; ++i) {
-            StatementCore stCore = proofStack.elementAt(i + offset);
+            StatementCore stCore = proofStack.getIndex(i + offset);
             Hypothesis hyp = assertMandHyps.get(i);
             String stType = stCore.getType();
             String hypType = hyp.getType();
@@ -478,7 +478,7 @@ public class Proof {
      * @param proofStack the current proof stack
      * @throws MMProofException if the theorem is not proved
      */
-    private void processProofEnd(Stack<StatementCore> proofStack) throws MMProofException {
+    private void processProofEnd(ProofStack proofStack) throws MMProofException {
         int stackSize = proofStack.size();
         if (stackSize != 1) {
             throw new MMProofException(String.format(

@@ -18,7 +18,7 @@ import java.util.Set;
 /**
  * The main scope stack and scope environment.
  */
-public class ScopeStack implements MMScopeStack<Scope> {
+public class ScopeStack implements MMStack<Scope>, Iterable<Scope> {
 
     private static final long serialVersionUID = 1L;
 
@@ -75,6 +75,13 @@ public class ScopeStack implements MMScopeStack<Scope> {
     /**
      * {@inheritDoc}
      */
+    public Scope pop() {
+        return scopeStack.pop();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void remove() {
         scopeStack.remove();
     }
@@ -91,6 +98,13 @@ public class ScopeStack implements MMScopeStack<Scope> {
      */
     public Scope peekLast() {
         return scopeStack.peekLast();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int size() {
+        return scopeStack.size();
     }
 
     /**
@@ -185,7 +199,7 @@ public class ScopeStack implements MMScopeStack<Scope> {
     /**
      * The message string displayed at the end of database verification.
      *
-     * @return a string to be displayed at the end of database verification.
+     * @return a string to be displayed at the end of database verification
      */
     String endMessage() {
         int errs = getErrors();
