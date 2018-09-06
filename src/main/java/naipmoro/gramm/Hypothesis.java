@@ -69,14 +69,14 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
         return this.body;
     }
 
+
     /**
-     * An empty implementation of this method. Hypotheses lack a
-     * {@link Mandatory} field.
+     * Hypotheses lack a {@link Mandatory} field.
      *
-     * @return null
+     * @throws UnsupportedOperationException
      */
     public Mandatory getMandatory() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     /**
