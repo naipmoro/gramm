@@ -7,9 +7,19 @@
     <groupId>naipmoro</groupId>
     <artifactId>gramm</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+    <name>Gramm</name>
+    <description>An Antlr-based Metamath proof verifier</description>
+    <url>https://github.com/naipmoro/gramm</url>
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+    </licenses>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -50,6 +60,14 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
                 </configuration>
             </plugin>
             <plugin>
