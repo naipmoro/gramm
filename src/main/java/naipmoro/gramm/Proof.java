@@ -101,8 +101,8 @@ public class Proof {
      * @param stmt  the string array of symbols constituting the assertion
      * @param proof the string array of labels constituting the proof
      * @param mand  an instance of {@link Mandatory} which conatins the
-     *              mandatory variables, mandatory hypotheses, and disjoint
-     *              variable pairs of the assertion
+     *              mandatory hypotheses and disjoint variable pairs of the
+     *              assertion
      */
     public Proof(
             ScopeStack ss, String label, String type, String[] stmt, String[] proof,
@@ -125,8 +125,8 @@ public class Proof {
     }
 
     /**
-     * Attempts to verify a proof by passing a compressed proof to
-     * {@link #verifyCompressed()} and a normal proof to
+     * Attempts to verify a proof. A compressed proof is passed to
+     * {@link #verifyCompressed()} while a normal proof is passed to
      * {@link #verifyNormal()}.
      *
      * @return true if the proof is verified, otherwise false

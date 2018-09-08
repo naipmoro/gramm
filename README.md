@@ -1,7 +1,7 @@
 ## Gramm
 
 Gramm is an Antlr4-based Metamath proof verifier. From the supplied Metamath
-grammar ([MM.g4]), Antlr4 creates a parser and a lexer and provides support
+grammar ([MM.g4]), Antlr4 creates a lexer and a parser and provides support
 code for walking the generated parse tree.
 
 ## Maven build
@@ -10,7 +10,12 @@ After cloning the project, navigate to its root and run:
 ```console
 $ mvn package
 ```
-The executable `gramm.jar` will be created in the `/target` directory.
+The executable `gramm.jar` will be created in the `/target` directory (the
+other created jar, `original-gramm.jar`, isn't a standalone executable and can
+be ignored). If you prefer to run tests prior to building the jar, run:
+```console
+$ mvn package -DskipTests=false
+```
 
 ## Usage
 
@@ -21,8 +26,8 @@ reading the database...
 ***************
 0 errors
 0 warnings
-30786 of 30786 proofs were verified
-time: 14.95 sec
+30838 of 30838 proofs were verified
+time: 10.17 sec
 ```
 
 ## License
