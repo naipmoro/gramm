@@ -2,16 +2,16 @@ package naipmoro.gramm;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.ArrayDeque;
+//import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Deque;
+//import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
+//import java.util.Stack;
 
 /**
  * This class represents a metamath proof.
@@ -202,7 +202,7 @@ public class Proof {
      * @return true if the proof is verified, otherwise false
      */
     private boolean verifyCompressed() {
-        ProofStack proofStack = new ProofStack(proof.length);
+        //ProofStack proofStack = new ProofStack(proof.length);
         List<StatementCore> tags = new ArrayList<>();
         List<Statement> reference = new ArrayList<Statement>(this.mand.getHyps());
         int alphaStart = -1;
@@ -215,8 +215,14 @@ public class Proof {
                 break;
             }
         }
+        int totalChars = 0;
+        for (int i = alphaStart; i < this.proof.length; ++i) {
+            totalChars = totalChars + proof[i].length();
+        }
+        ProofStack proofStack = new ProofStack(totalChars);
         int refSize = reference.size();
-        Deque<Character> charStack = new ArrayDeque<>();
+        //Deque<Character> charStack = new ArrayDeque<>();
+        CharStack charStack = new CharStack(5);
         for (int i = alphaStart; i < this.proof.length; ++i) {
             String alphas = this.proof[i];
             CharacterIterator charIter = new StringCharacterIterator(alphas);
@@ -299,25 +305,25 @@ public class Proof {
 
     /**
      * Given a stack of characters from a compressed proof and a starting
-     * value, calculates a numerical value for the stack. If the stack is
-     * empty, the starting value n is returned. Otherwise, let N_k ... N_0 be
-     * the numbers on the stack, with N_0 at the top of the stack. Then the
-     * final value returned is n + 20 * (N_0 * 5^0 + ... + N_k * 5^k).
+     * value n, calculates a numerical value for the stack. If the stack is
+     * empty, n is returned. Otherwise, let N_k ... N_0 be the numbers on the
+     * stack, with N_0 at the top of the stack. Then the final value returned
+     * is n + 20 * (N_0 * 5^0 + ... + N_k * 5^k).
      *
-     * @param deque a possibly empty stack of characters
+     * @param stack a possibly empty stack of characters
      * @param n     the starting integer value
      * @return the numerical value of the stack plus the starting integer
      */
-    static int charsToNum(Deque<Character> deque, int n) {
-        int dequeSize = deque.size();
-        if (dequeSize == 0) {
+    static int charsToNum(CharStack stack, int n) {
+        int stackSize = stack.size();
+        if (stackSize == 0) {
             return n;
         }
         int sum = 0;
-        for (int i = 0; i < dequeSize; ++i) {
-            char dequeChar = deque.pop();
-            int dequeNum = base5.get(dequeChar);
-            sum += dequeNum * 20 * Math.pow(5, i);
+        for (int i = 0; i < stackSize; ++i) {
+            char stackChar = stack.pop();
+            int stackNum = base5.get(stackChar);
+            sum += stackNum * 20 * Math.pow(5, i);
         }
         return (sum + n);
     }
@@ -533,7 +539,8 @@ public class Proof {
             }
         }
         int refSize = reference.size();
-        Deque<Character> charStack = new ArrayDeque<>();
+        //Deque<Character> charStack = new ArrayDeque<>();
+        CharStack charStack = new CharStack(5);
         for (int j = alphaStart; j < compressedProof.length; ++j) {
             String alphas = compressedProof[j];
             CharacterIterator charIter = new StringCharacterIterator(alphas);

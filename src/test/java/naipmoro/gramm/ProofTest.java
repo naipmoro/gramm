@@ -11,48 +11,49 @@ public class ProofTest {
 
     @Test
     public void charsToNum_ConvertDequeCharactersToInteger_Integer() {
-        Deque<Character> deque = new ArrayDeque<>();
+        //Deque<Character> charStack = new ArrayDeque<>();
+        CharStack charStack = new CharStack(5);
 
-        deque.push('U');
-        deque.push('V');
+        charStack.push('U');
+        charStack.push('V');
         char waitingChar = 'S';
         int waitingNum = Proof.base20.get(waitingChar);
         int expected = 159;
-        int actual = Proof.charsToNum(deque, waitingNum);
+        int actual = Proof.charsToNum(charStack, waitingNum);
         assertEquals(expected, actual);
 
-        deque.clear();
-        deque.push('W');
+        charStack.clear();
+        charStack.push('W');
         waitingChar = 'B';
         waitingNum = Proof.base20.get(waitingChar);
         expected = 62;
-        actual = Proof.charsToNum(deque, waitingNum);
+        actual = Proof.charsToNum(charStack, waitingNum);
         assertEquals(expected, actual);
 
-        deque.clear();
+        charStack.clear();
         waitingChar = 'R';
         waitingNum = Proof.base20.get(waitingChar);
         expected = 18;
-        actual = Proof.charsToNum(deque, waitingNum);
+        actual = Proof.charsToNum(charStack, waitingNum);
         assertEquals(expected, actual);
 
-        deque.clear();
-        deque.push('Y');
-        deque.push('Y');
+        charStack.clear();
+        charStack.push('Y');
+        charStack.push('Y');
         waitingChar = 'T';
         waitingNum = Proof.base20.get(waitingChar);
         expected = 620;
-        actual = Proof.charsToNum(deque, waitingNum);
+        actual = Proof.charsToNum(charStack, waitingNum);
         assertEquals(expected, actual);
 
-        deque.clear();
-        deque.push('U');
-        deque.push('U');
-        deque.push('U');
+        charStack.clear();
+        charStack.push('U');
+        charStack.push('U');
+        charStack.push('U');
         waitingChar = 'A';
         waitingNum = Proof.base20.get(waitingChar);
         expected = 621;
-        actual = Proof.charsToNum(deque, waitingNum);
+        actual = Proof.charsToNum(charStack, waitingNum);
         assertEquals(expected, actual);
     }
 }

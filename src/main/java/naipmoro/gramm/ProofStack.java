@@ -7,6 +7,11 @@ public class ProofStack implements MMStack<StatementCore>, Indexable<StatementCo
     private int ptr = -1;
     private int stackSize;
 
+    /**
+     * Initializes an empty stack of size {@code n}.
+     *
+     * @param n size of the stack
+     */
     ProofStack(int n) {
         statCores = new StatementCore[n];
         stackSize = n;
@@ -19,10 +24,10 @@ public class ProofStack implements MMStack<StatementCore>, Indexable<StatementCo
      * @param sc the {@code StatementCore} being pushed to the stack
      */
     public void push(StatementCore sc) {
-        if (ptr + 1 == stackSize) {
-            stackSize = 2 * stackSize;
-            statCores = Arrays.copyOf(statCores, stackSize);
-        }
+//        if (ptr + 1 == stackSize) {
+//            stackSize = 2 * stackSize;
+//            statCores = Arrays.copyOf(statCores, stackSize);
+//        }
         statCores[++ptr] = sc;
     }
 
