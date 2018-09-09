@@ -1,49 +1,64 @@
 package naipmoro.gramm;
 
 /**
- * Basic stack interface.
+ * An generic Metamath stack class.
  *
- * @param <T> stack item
+ * @param <T> type of item on the stack
  */
-public interface MMStack<T> {
+public class MMStack<T> {
+
+    T[] stack;
+    int ptr = -1;
 
     /**
      * Pushes an item onto the stack.
      *
      * @param item item pushed to stack
      */
-    void push(T item);
+    void push(T item) {
+        stack[++ptr] = item;
+    }
 
     /**
      * Pops the item from the stack and returns it.
      *
      * @return the item at the top of the stack
      */
-    T pop();
+    T pop() {
+        return stack[ptr--];
+    }
 
     /**
      * Removes the item from the top of the stack.
      */
-    void remove();
+    void remove() {
+        ptr--;
+    }
 
     /**
      * Returns the item at the top of the stack.
      *
      * @return the item at the top of the stack
      */
-    T peek();
+    T peek() {
+        return stack[ptr];
+    }
 
     /**
      * Returns the first item that was pushed to the stack.
      *
      * @return the first item that was pushed to the stack
      */
-    T peekLast();
+    T peekLast() {
+        return stack[0];
+    }
 
     /**
      * Returns the size of the stack.
      *
      * @return the size of the stack
      */
-    int size();
+    int size() {
+        return (ptr + 1);
+    }
 }

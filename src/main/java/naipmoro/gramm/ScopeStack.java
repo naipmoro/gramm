@@ -18,7 +18,7 @@ import java.util.Set;
 /**
  * The main scope stack and scope environment.
  */
-public class ScopeStack implements MMStack<Scope>, Iterable<Scope> {
+public class ScopeStack implements Iterable<Scope> {
 
     private static final long serialVersionUID = 1L;
 
@@ -164,7 +164,7 @@ public class ScopeStack implements MMStack<Scope>, Iterable<Scope> {
      *
      * @return the verifiedProofs
      */
-    private int getVerifiedProofs() {
+    int getVerifiedProofs() {
         return verifiedProofs;
     }
 
@@ -580,8 +580,6 @@ public class ScopeStack implements MMStack<Scope>, Iterable<Scope> {
         String kind = stmt.getKind();
         return (kind.equals("$f") || kind.equals("$e"));
     }
-
-
 
     /**
      * Given the variable of a variable-type hypothesis, returns that

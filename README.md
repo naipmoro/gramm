@@ -10,9 +10,10 @@ After cloning the project, navigate to its root and run:
 ```console
 $ mvn package
 ```
-The executable `gramm.jar` will be created in the `/target` directory (the
-other created jar, `original-gramm.jar`, isn't a standalone executable and can
-be ignored). If you prefer to run tests prior to building the jar, run:
+The executable `gramm-x.y.z.jar` will be created in the `/target` directory
+(ignore the second created jar, `original-gramm-x.y.z.jar`; it isn't a
+standalone executable). If you prefer to run tests prior to building the jar,
+run:
 ```console
 $ mvn package -DskipTests=false
 ```
@@ -21,7 +22,7 @@ $ mvn package -DskipTests=false
 
 Note: in place of `set.mm`, you can substitute any metamath database.
 ```console
-$ java -jar -Xmx1g gramm.jar set.mm
+$ java -jar -Xmx1g gramm-0.1.0.jar set.mm
 reading the database...
 ***************
 0 errors
@@ -39,9 +40,8 @@ Parr's _The Definitive ANTLR 4 Reference_. See that file's [source code] for
 the author's copyright notice and usage restrictions.
 
 * Although Gramm does not bundle any third party libraries, it depends on the
-Antlr4 runtime, and the `gramm.jar` executable (if you choose to build it) will
-contain Antlr class files. Antlr4 is distributed under the [BSD 3-Clause
-License].
+Antlr4 runtime, and the executable jar (if you choose to build it) will contain
+Antlr class files. Antlr4 is distributed under the [BSD 3-Clause License].
 
 * The metamath files in the `test/resources` directory are in the public domain
 or available under the [CC0 1.0 Universal License], with the exception of

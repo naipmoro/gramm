@@ -6,7 +6,7 @@
 
     <groupId>naipmoro</groupId>
     <artifactId>gramm</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>Gramm</name>
     <description>An Antlr-based Metamath proof verifier</description>
     <url>https://github.com/naipmoro/gramm</url>
@@ -38,7 +38,6 @@
     </dependencies>
 
     <build>
-        <finalName>gramm</finalName>
         <plugins>
             <plugin>
                 <groupId>org.antlr</groupId>
@@ -81,6 +80,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <finalName>${project.artifactId}-${project.version}</finalName>
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
