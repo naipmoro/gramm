@@ -42,7 +42,7 @@ public class Proof {
      */
     private final String[] proof;
     /**
-     * The theorem's associated {@link Mandatory} object.
+     * The theorem's associated {@code Mandatory} object.
      */
     private final Mandatory mand;
 
@@ -94,13 +94,13 @@ public class Proof {
     /**
      * Proof constructor.
      *
-     * @param ss    the {@link ScopeStack} holding the metamath scopes and
+     * @param ss    the {@code ScopeStack} holding the metamath scopes and
      *              within which the proof takes place
      * @param label the identifying label of the assertion being proved
      * @param type  the type of the assertion
      * @param stmt  the string array of symbols constituting the assertion
      * @param proof the string array of labels constituting the proof
-     * @param mand  an instance of {@link Mandatory} which conatins the
+     * @param mand  an instance of {@code Mandatory} which conatins the
      *              mandatory hypotheses and disjoint variable pairs of the
      *              assertion
      */

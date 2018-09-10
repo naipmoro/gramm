@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The main scope stack and scope environment.
+ * A class representing the global scope environment.
  */
 public class ScopeStack implements Iterable<Scope> {
 
@@ -214,7 +214,7 @@ public class ScopeStack implements Iterable<Scope> {
     /**
      * Returns the toplevel scope.
      *
-     * @return a {@link Scope}
+     * @return a {@code Scope}
      */
     private Scope getToplevel() {
         return this.peekLast();
@@ -223,7 +223,7 @@ public class ScopeStack implements Iterable<Scope> {
     /**
      * Returns the label->statement hashmap at the toplevel scope.
      *
-     * @return the toplevel scope's {@link Scope#stmtsByLabel} hashmap
+     * @return the toplevel scope's {@code Scope#stmtsByLabel} hashmap
      */
     Map<String, Statement> getToplevelStmtsByLabel() {
         return getToplevel().getStmtsByLabel();
@@ -402,10 +402,10 @@ public class ScopeStack implements Iterable<Scope> {
 
     /**
      * Given a string array representing the body of a theorem or axiom, returns
-     * the {@link Mandatory} object associated with the statement.
+     * the {@code Mandatory} object associated with the statement.
      *
      * @param stmt a string array representing the body of the assertion
-     * @return the assertion's associated {@link Mandatory} object
+     * @return the assertion's associated {@code Mandatory} object
      * @throws MMException if stmt is not a valid assertion body
      */
     private Mandatory getActiveMandatory(String[] stmt) throws MMException {
@@ -446,7 +446,7 @@ public class ScopeStack implements Iterable<Scope> {
      *              theorems
      * @param type  a metamath constant
      * @param stmt  a string array conatining the body of the assertion
-     * @param mand  the {@link Mandatory} object associated with the assertion
+     * @param mand  the {@code Mandatory} object associated with the assertion
      */
     private void addAssertion(String label, String kind, String type, String[] stmt,
                               Mandatory mand) {

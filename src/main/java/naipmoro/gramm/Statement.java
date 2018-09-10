@@ -40,10 +40,10 @@ public interface Statement {
     String[] getBody();
 
     /**
-     * Returns the {@link Mandatory} object associated with the statement. Only
+     * Returns the {@code Mandatory} object associated with the statement. Only
      * assertions (axioms and theorems) carry a mandatory object.
      *
-     * @return a {@link Mandatory} object
+     * @return a {@code Mandatory} object
      */
     Mandatory getMandatory();
 

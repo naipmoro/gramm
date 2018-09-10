@@ -15,7 +15,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 /**
- * A class that walks the parse tree of a metamath file and produces effects at
+ * A class that walks the parse tree of a Metamath file and produces effects at
  * specified nodes.
  */
 public class MMParseTreeListener extends MMBaseListener {
@@ -30,9 +30,10 @@ public class MMParseTreeListener extends MMBaseListener {
     private static final int PROOF = 5;
 
     /**
-     * Sets the scope stack of the parse tree listener.
+     * Sets the {@code ScopeStack} of the parse tree listener.
      *
-     * @param scopestack a {@link ScopeStack}
+     * @param scopestack the {@code ScopeStack} being set as the global scope
+     *                   environment
      */
     void setScopeStack(ScopeStack scopestack) {
         this.ss = scopestack;
@@ -56,7 +57,7 @@ public class MMParseTreeListener extends MMBaseListener {
 
     /**
      * On entering the {@code db} node, this method begins timekeeping and
-     * pushes the toplevel scope onto the scope stack.
+     * pushes the toplevel scope onto the {@code ScopeStack}.
      *
      * @param ctx a {@code db} parse tree node
      */
@@ -81,10 +82,9 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting an {@code includeStat} node, this method processes the
      * included file. After checking that the file conforms to the spec, a
-     * specialized listener {@link MMIncludeParseTreeListener} is deployed to
-     * walk the file's parse tree. It is important to note that the original
-     * scope stack is passed to this listener so as to maintain a consistent
-     * database.
+     * specialized listener, {@link MMIncludeParseTreeListener}, is deployed to
+     * walk the file's parse tree. To maintain a consistent database, the
+     * original {@code ScopeStack} is passed to this listener.
      *
      * @param ctx an {@code includeStat} parse tree node
      */
@@ -92,9 +92,9 @@ public class MMParseTreeListener extends MMBaseListener {
         String includePath = ctx.getChild(0).getText();
         try (InputStream is = new FileInputStream(includePath)) {
             File includeFile = (new File(includePath)).getCanonicalFile();
-            if (includeFile.equals(MMFile.getDbFile())) {
+            if (includeFile.equals(MMFile.dbFile)) {
                 System.out.format("warning: the original metamath file %s cannot be included%n",
-                        MMFile.getDbFile().getName());
+                        MMFile.dbFile.getName());
                 ss.incWarnings();
                 return;
             }
@@ -138,7 +138,7 @@ public class MMParseTreeListener extends MMBaseListener {
 
     /**
      * On entering a {@code scopeStat} node, this method pushes a new
-     * scope onto the scope stack.
+     * scope onto the {@code ScopeStack}.
      *
      * @param ctx a {@code scopeStat} parse tree node
      */
@@ -148,7 +148,7 @@ public class MMParseTreeListener extends MMBaseListener {
 
     /**
      * On exiting a {@code scopeStat} node, this method removes a scope from
-     * the top of the scope stack.
+     * the top of the {@code ScopeStack}.
      *
      * @param ctx a {@code scopeStat} parse tree node
      */
@@ -159,8 +159,8 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting a {@code constants} node (main child of a {@code constStat}
      * node), this method passes the constants as a string array to the
-     * scope stack for further processing. Our grammar guarantees that all
-     * constants are from the toplevel scope.
+     * {@code ScopeStack} for further processing. Our grammar guarantees that
+     * all constants are from the toplevel scope.
      *
      * @param ctx a {@code constants} parse tree node
      */
@@ -182,7 +182,7 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting a {@code vars} node (main child of a {@code varStat} node),
      * this method passes the variables as a string array to the
-     * scope stack for further processing.
+     * {@code ScopeStack} for further processing.
      *
      * @param ctx a {@code vars} parse tree node
      */
@@ -204,7 +204,7 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting a {@code disjointVars} node (main child of a
      * {@code disjointStat} node), this method passes the disjoint variables as
-     * a string array to the scope stack for further processing.
+     * a string array to the {@code ScopeStack} for further processing.
      *
      * @param ctx a {@code disjointVars} parse tree node
      */
@@ -226,7 +226,7 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting a {@code varTypeHyp} node, this method passes the node's
      * children (the label, type, and variable) as strings to the
-     * scope stack for further processing.
+     * {@code ScopeStack} for further processing.
      *
      * @param ctx a {@code varTypeHyp} parse tree node
      */
@@ -245,7 +245,7 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting a {@code logicalHyp} node, this method passes the node's
      * children (the label and type as strings, the statement as a string
-     * array) to the scope stack for further processing.
+     * array) to the {@code ScopeStack} for further processing.
      *
      * @param ctx a {@code logicalHyp} parse tree node
      */
@@ -270,7 +270,7 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting the {@code theorem} node, this method passes the theorem's
      * label and type (as strings) and its statement and proof (as string
-     * arrays) to the scope stack for further processing.
+     * arrays) to the {@code ScopeStack} for further processing.
      *
      * @param ctx a {@code theorem} parse tree node
      */
@@ -302,7 +302,7 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting an {@code axiom} node, this method passes the node's children
      * (the label and type as strings, the statement as a string array) to the
-     * scope stack for further processing.
+     * {@code ScopeStack} for further processing.
      *
      * @param ctx an {@code axiom} parse tree node
      */

@@ -57,7 +57,7 @@ public class Scope {
     /**
      * Return's the scope's set of disjoint variable pairs.
      *
-     * @return a set of {@link DisjPair}
+     * @return a set of {@code DisjPair}
      */
     Set<DisjPair> getDisjVarPairs() {
         return disjVarPairs;
@@ -66,7 +66,7 @@ public class Scope {
     /**
      * Adds a disjoint variable pair to the scope's set of DisjPairs.
      *
-     * @param dp a {@link DisjPair}
+     * @param dp a {@code DisjPair}
      */
     void addToDisjVarPairs(DisjPair dp) {
         this.disjVarPairs.add(dp);
@@ -85,7 +85,7 @@ public class Scope {
      * Adds a mandatory variable-type hypothesis to the scope's set of such
      * hypotheses.
      *
-     * @param hyp a {@link Hypothesis}
+     * @param hyp a {@code Hypothesis}
      */
     void addToMandVarHyps(Hypothesis hyp) {
         this.mandVarHyps.add(hyp);
@@ -104,7 +104,7 @@ public class Scope {
      * Adds a mandatory logical hypothesis to the scope's set of such
      * hypotheses.
      *
-     * @param hyp a {@link Hypothesis}
+     * @param hyp a {@code Hypothesis}
      */
     void addToMandLogHyps(Hypothesis hyp) {
         this.mandLogHyps.add(hyp);
@@ -123,7 +123,7 @@ public class Scope {
      * Adds an entry to the scope's label->statement hashmap.
      *
      * @param label an identifying label as the hashmap's key
-     * @param stmt  a {@link Statement} as the hashmap's value
+     * @param stmt  a {@code Statement} as the hashmap's value
      */
     void addToStmtsByLabel(String label, Statement stmt) {
         this.stmtsByLabel.put(label, stmt);
@@ -142,7 +142,7 @@ public class Scope {
      * Adds an entry to the scope's variable->hypothesis hashmap.
      *
      * @param var a variable as the hashmap's key
-     * @param hyp a {@link Hypothesis} as the hashmap's value
+     * @param hyp a {@code Hypothesis} as the hashmap's value
      */
     void addToVarHypsByVar(String var, Hypothesis hyp) {
         this.varHypsByVar.put(var, hyp);

@@ -71,7 +71,7 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
 
 
     /**
-     * Hypotheses lack a {@link Mandatory} field.
+     * Hypotheses lack a {@code Mandatory} field.
      *
      * @throws UnsupportedOperationException
      */

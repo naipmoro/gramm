@@ -19,7 +19,7 @@ public class Assertion implements Statement {
      * @param type  a metamath constant
      * @param stmt  a (possibly empty) string array containing the body of the
      *              assertion
-     * @param mand  a {@link Mandatory} object containing the assertion's
+     * @param mand  a {@code Mandatory} object containing the assertion's
      *              mandatory hypotheses and disjoint variable pairs
      */
     public Assertion(String label, String kind, String type, String[] stmt, Mandatory mand) {
@@ -62,9 +62,9 @@ public class Assertion implements Statement {
     }
 
     /**
-     * Returns the {@link Mandatory} object associated with the assertion.
+     * Returns the {@code Mandatory} object associated with the assertion.
      *
-     * @return a {@link Mandatory} object
+     * @return a {@code Mandatory} object
      */
     public Mandatory getMandatory() {
         return this.mand;

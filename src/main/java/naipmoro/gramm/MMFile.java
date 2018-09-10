@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+/** A class to keep track of the Metamath database file and subsequent included
+ * databases.
+ */
 class MMFile {
-    private static File dbFile;
+    static File dbFile;
     private static List<File> includeFiles = new ArrayList<>();
     private static Deque<File> includeStack = new ArrayDeque<>();
 
@@ -17,9 +20,6 @@ class MMFile {
 
     static void addInclude(File file) {
         includeFiles.add(file);
-    }
-    static File getDbFile() {
-        return MMFile.dbFile;
     }
 
     static void pushInclude(File file) {

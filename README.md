@@ -10,10 +10,9 @@ After cloning the project, navigate to its root and run:
 ```console
 $ mvn package
 ```
-The executable `gramm-x.y.z.jar` will be created in the `/target` directory
-(ignore the second created jar, `original-gramm-x.y.z.jar`; it isn't a
-standalone executable). If you prefer to run tests prior to building the jar,
-run:
+The executable `gramm-x.y.z.jar` will be created in the `target` directory
+(you can ignore the second created jar, `original-gramm-x.y.z.jar`). If you
+prefer to run tests prior to building the jar, run:
 ```console
 $ mvn package -DskipTests=false
 ```
@@ -23,7 +22,7 @@ $ mvn package -DskipTests=false
 Note: in place of `set.mm`, you can substitute any metamath database.
 ```console
 $ java -jar -Xmx1g gramm-0.1.0.jar set.mm
-reading the database...
+reading the set.mm database...
 ***************
 0 errors
 0 warnings
