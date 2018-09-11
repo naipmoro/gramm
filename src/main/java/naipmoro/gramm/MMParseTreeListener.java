@@ -62,7 +62,7 @@ public class MMParseTreeListener extends MMBaseListener {
      * @param ctx a {@code db} parse tree node
      */
     public void enterDb(MMParser.DbContext ctx) {
-        System.out.println("reading the database...");
+        System.out.format("reading the %s database...%n", MMFile.dbFile.getName());
         startTime = System.nanoTime();
         ss.push(new Scope());
     }
@@ -84,7 +84,7 @@ public class MMParseTreeListener extends MMBaseListener {
      * included file. After checking that the file conforms to the spec, a
      * specialized listener, {@link MMIncludeParseTreeListener}, is deployed to
      * walk the file's parse tree. To maintain a consistent database, the
-     * original {@code ScopeStack} is passed to this listener.
+     * original {@code ScopeStack} is passed to the listener.
      *
      * @param ctx an {@code includeStat} parse tree node
      */

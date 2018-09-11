@@ -16,9 +16,13 @@ import java.io.InputStream;
 
 public class Verifier {
 
-    static void mmVerify(InputStream is) throws IOException {
-       // try {
+    static void mmVerify(File dbFile) throws IOException {
+            dbFile = dbFile.getCanonicalFile();
+            InputStream is = new FileInputStream(dbFile);
             CharStream input = CharStreams.fromStream(is);
+            MMFile.setDbFile(dbFile);
+            MMFile.pushInclude(dbFile);
+            MMFile.addInclude(dbFile);
             MMParseTreeListener.MMBailLexer lexer = new MMParseTreeListener.MMBailLexer(input);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MMParser parser = new MMParser(tokens);
@@ -29,27 +33,20 @@ public class Verifier {
             //parser.addParseListener(listener);
             ParseTree tree = parser.db();
             ParseTreeWalker.DEFAULT.walk(listener, tree);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     /**
-     * This main method is the entry point for the application. Given the file
-     * name of a metamath database, it passes the file (as an input stream) to
-     * a parser and verifier. Exits in case of a file error.
+     * The entry point for the application. Given the file name of a metamath
+     * database, the file is passed for parsing and verifying. Exits in case of
+     * a file error.
      *
      * @param args a file name
      */
     public static void main(String[] args) {
         String filename = args[0];
         File dbFile = new File(filename);
-        try (InputStream is = new FileInputStream(filename)) {
-            dbFile = dbFile.getCanonicalFile();
-            MMFile.setDbFile(dbFile);
-            MMFile.pushInclude(dbFile);
-            MMFile.addInclude(dbFile);
-            mmVerify(is);
+        try {
+            mmVerify(dbFile);
         } catch (FileNotFoundException fnfe) {
             System.out.println("file not found error: " + filename);
             System.exit(1);
