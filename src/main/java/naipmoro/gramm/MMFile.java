@@ -7,7 +7,7 @@ import java.util.Deque;
 import java.util.List;
 
 /** A class to keep track of the Metamath database file and subsequent included
- * databases.
+ * files.
  */
 class MMFile {
     static File dbFile;

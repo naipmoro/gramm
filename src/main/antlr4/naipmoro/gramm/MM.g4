@@ -9,7 +9,7 @@ db : (axiom
    | varTypeHyp
    | logicalHyp
    | scopeStat
-   | includeStat)+ EOF ;
+   | includeStat)* EOF ;
 
 scopeStat :
    '${'

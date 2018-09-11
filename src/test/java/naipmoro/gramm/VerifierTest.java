@@ -1,18 +1,18 @@
 package naipmoro.gramm;
 
-//import org.hamcrest.Matcher;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.regex.Pattern;
 
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -56,9 +56,6 @@ public class VerifierTest {
                                                                      + "anatomy-bad1.mm")
                             .getFile());
             Verifier.mmVerify(file);
-
-            //assertThat(outContent.toString(), not(containsString("0 errors")));
-            //Matcher matcher = failRegex.matcher(outContent.toString());
             assertTrue(failRegex.matcher(outContent.toString()).matches());
         } catch (IOException e) {
             e.printStackTrace();
@@ -187,7 +184,6 @@ public class VerifierTest {
         }
     }
 
-
     @Test
     public void mmVerify_Demo0Includer() {
         try {
@@ -195,6 +191,19 @@ public class VerifierTest {
                     new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                      + "demo0-includer.mm")
                             .getFile());
+            Verifier.mmVerify(file);
+            assertSuccess(outContent.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mmVerify_Emptyline() {
+        try {
+            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
+                                                                         + "emptyline.mm")
+                    .getFile());
             Verifier.mmVerify(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -317,6 +326,19 @@ public class VerifierTest {
     public void mmVerify_Set02N() {
         try {
             File file = new File(getClass().getClassLoader().getResource("set02N.mm").getFile());
+            Verifier.mmVerify(file);
+            assertSuccess(outContent.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void mmVerify_SplitFile() {
+        try {
+            File file =
+                    new File(getClass().getClassLoader().getResource("split-file/"
+                                                                     + "set.mm").getFile());
             Verifier.mmVerify(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
