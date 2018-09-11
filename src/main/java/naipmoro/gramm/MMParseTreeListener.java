@@ -121,6 +121,7 @@ public class MMParseTreeListener extends MMBaseListener {
             // Trees.inspect(tree, parser);
             // System.out.println(tree.toStringTree());
             //walker.walk(listener, tree);
+            System.out.format("reading included file %s...%n", includeFile.getName());
             ParseTreeWalker.DEFAULT.walk(listener, tree);
 
             MMFile.popInclude();

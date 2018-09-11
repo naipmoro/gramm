@@ -206,6 +206,11 @@ public class ScopeStack implements Iterable<Scope> {
         int warns = getWarnings();
         int attempted = getAttemptedProofs();
         int verified = getVerifiedProofs();
+        if (attempted < 2000) {
+            return String.format(
+                    "%d errors%n" + "%d warnings%n" + "%d of %d proofs were verified", errs, warns,
+                    verified, attempted);
+        }
         return String.format(
                 "%n%d errors%n" + "%d warnings%n" + "%d of %d proofs were verified", errs, warns,
                 verified, attempted);
