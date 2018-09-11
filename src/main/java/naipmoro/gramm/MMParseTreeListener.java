@@ -62,7 +62,7 @@ public class MMParseTreeListener extends MMBaseListener {
      * @param ctx a {@code db} parse tree node
      */
     public void enterDb(MMParser.DbContext ctx) {
-        System.out.format("reading the %s database...%n", MMFile.dbFile.getName());
+        System.out.format("reading source file %s ...%n", MMFile.dbFile.getName());
         startTime = System.nanoTime();
         ss.push(new Scope());
     }
@@ -121,7 +121,7 @@ public class MMParseTreeListener extends MMBaseListener {
             // Trees.inspect(tree, parser);
             // System.out.println(tree.toStringTree());
             //walker.walk(listener, tree);
-            System.out.format("reading included file %s...%n", includeFile.getName());
+            System.out.format("reading included file %s ...%n", includeFile.getName());
             ParseTreeWalker.DEFAULT.walk(listener, tree);
 
             MMFile.popInclude();
