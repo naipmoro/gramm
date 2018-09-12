@@ -93,14 +93,14 @@ public class MMParseTreeListener extends MMBaseListener {
         try (InputStream is = new FileInputStream(includePath)) {
             File includeFile = (new File(includePath)).getCanonicalFile();
             if (includeFile.equals(MMFile.dbFile)) {
-                System.out.format("warning: the original metamath file %s cannot be included%n",
+                System.out.format("warning: the original source file %s cannot be included%n",
                         MMFile.dbFile.getName());
                 ss.incWarnings();
                 return;
             }
             if (MMFile.containsInclude(includeFile)) {
-                System.out.format("warning: %s has already been included. This duplicate include "
-                                  + "will be ignored%n", includePath);
+                System.out.format("warning: %s has already been included -- ignoring "
+                                  + "duplicate include%n", includeFile.getName());
                 ss.incWarnings();
                 return;
             }

@@ -50,21 +50,6 @@ public class ScopeStack implements Iterable<Scope> {
     private int attemptedProofs = 0;
     private int verifiedProofs = 0;
 
-    String getJarPath() {
-        File jarFile = null;
-        try {
-            jarFile = new File(Verifier.class
-                    .getProtectionDomain()
-                    .getCodeSource()
-                    .getLocation()
-                    .toURI()
-                    .getPath());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return Paths.get(jarFile.toString()).toAbsolutePath().toString();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -206,13 +191,8 @@ public class ScopeStack implements Iterable<Scope> {
         int warns = getWarnings();
         int attempted = getAttemptedProofs();
         int verified = getVerifiedProofs();
-        if (attempted < 2000) {
-            return String.format(
-                    "%d errors%n" + "%d warnings%n" + "%d of %d proofs were verified", errs, warns,
-                    verified, attempted);
-        }
         return String.format(
-                "%n%d errors%n" + "%d warnings%n" + "%d of %d proofs were verified", errs, warns,
+                "%d errors%n" + "%d warnings%n" + "%d of %d proofs were verified", errs, warns,
                 verified, attempted);
     }
 
