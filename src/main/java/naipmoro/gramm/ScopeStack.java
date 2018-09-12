@@ -1,6 +1,16 @@
 package naipmoro.gramm;
 
+import org.antlr.v4.runtime.BailErrorStrategy;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -214,6 +224,47 @@ public class ScopeStack implements Iterable<Scope> {
         return getToplevel().getStmtsByLabel();
     }
 
+    /**
+     * 
+     * @param includePath
+     * @throws IOException
+     */
+    void processInclude(String includePath) throws IOException {
+        InputStream is = new FileInputStream(includePath);
+        File includeFile = (new File(includePath)).getCanonicalFile();
+        if (includeFile.equals(MMFile.dbFile)) {
+            System.out.format("warning: the original source file %s cannot be included%n",
+                    MMFile.dbFile.getName());
+            this.incWarnings();
+            return;
+        }
+        if (MMFile.containsInclude(includeFile)) {
+            System.out.format("info: ignoring duplicate include of %s%n", includeFile.getName());
+            //this.incWarnings();
+            return;
+        }
+        CharStream input = CharStreams.fromStream(is);
+        MMParseTreeListener.MMBailLexer lexer = new MMParseTreeListener.MMBailLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        MMParser parser = new MMParser(tokens);
+        parser.setErrorHandler(new BailErrorStrategy());
+        // TokenStreamRewriter rewriter = new TokenStreamRewriter(tokens);
+        MMIncludeParseTreeListener listener = new MMIncludeParseTreeListener();
+        listener.setScopeStack(this);
+        //ParseTreeWalker walker = new ParseTreeWalker();
+        // parser.setBuildParseTree(true); //is this needed?
+        ParseTree tree = parser.db();
+
+        MMFile.pushInclude(includeFile);
+        MMFile.addInclude(includeFile);
+        // Trees.inspect(tree, parser);
+        // System.out.println(tree.toStringTree());
+        //walker.walk(listener, tree);
+        System.out.format("reading included file %s ...%n", includeFile.getName());
+        ParseTreeWalker.DEFAULT.walk(listener, tree);
+
+        MMFile.popInclude();
+    }
     /**
      * Adds a string array of symbols to the global set of constants. Issues a
      * warning, but does not abort the operation, if any of the symbols is

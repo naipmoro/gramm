@@ -6,11 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.antlr.v4.runtime.BailErrorStrategy;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.LexerNoViableAltException;
+import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -88,45 +85,67 @@ public class MMParseTreeListener extends MMBaseListener {
      *
      * @param ctx an {@code includeStat} parse tree node
      */
+//    public void exitIncludeFile(MMParser.IncludeFileContext ctx) {
+//        System.out.println(ctx.getParent().getStop().getLine()); //TESTING
+//        String includePath = ctx.getChild(0).getText();
+//        try (InputStream is = new FileInputStream(includePath)) {
+//            File includeFile = (new File(includePath)).getCanonicalFile();
+//            if (includeFile.equals(MMFile.dbFile)) {
+//                System.out.format("warning: the original source file %s cannot be included%n",
+//                        MMFile.dbFile.getName());
+//                ss.incWarnings();
+//                return;
+//            }
+//            if (MMFile.containsInclude(includeFile)) {
+//                System.out.format("warning: %s was already included -- ignoring "
+//                                  + "duplicate include%n", includeFile.getName());
+//                ss.incWarnings();
+//                return;
+//            }
+//            CharStream input = CharStreams.fromStream(is);
+//            MMBailLexer lexer = new MMBailLexer(input);
+//            CommonTokenStream tokens = new CommonTokenStream(lexer);
+//            MMParser parser = new MMParser(tokens);
+//            parser.setErrorHandler(new BailErrorStrategy());
+//            // TokenStreamRewriter rewriter = new TokenStreamRewriter(tokens);
+//            MMIncludeParseTreeListener listener = new MMIncludeParseTreeListener();
+//            listener.setScopeStack(ss);
+//            //ParseTreeWalker walker = new ParseTreeWalker();
+//            // parser.setBuildParseTree(true); //is this needed?
+//            ParseTree tree = parser.db();
+//
+//            MMFile.pushInclude(includeFile);
+//            MMFile.addInclude(includeFile);
+//            // Trees.inspect(tree, parser);
+//            // System.out.println(tree.toStringTree());
+//            //walker.walk(listener, tree);
+//            System.out.format("reading included file %s ...%n", includeFile.getName());
+//            ParseTreeWalker.DEFAULT.walk(listener, tree);
+//
+//            MMFile.popInclude();
+//            // parser.addParseListener(listener);
+//            // parser.db();
+//        } catch (FileNotFoundException fnfe) {
+//            System.out.format("warning: included file %s could not be found%n", includePath);
+//            ss.incWarnings();
+//        } catch (IOException ioe) {
+//            System.out.format("warning: there was an i/o error when reading included file %s%n",
+//                    includePath);
+//            ss.incWarnings();
+//        }
+//    }
+
+    /**
+     * On exiting an {@code includeStat} node, this method processes the path
+     * of the included file to the {@code ScopeStack} for further processing.
+     *
+     * @param ctx an {@code includeStat} parse tree node
+     */
     public void exitIncludeFile(MMParser.IncludeFileContext ctx) {
+        System.out.println(ctx.getParent().getStop().getLine()); //TESTING
         String includePath = ctx.getChild(0).getText();
-        try (InputStream is = new FileInputStream(includePath)) {
-            File includeFile = (new File(includePath)).getCanonicalFile();
-            if (includeFile.equals(MMFile.dbFile)) {
-                System.out.format("warning: the original source file %s cannot be included%n",
-                        MMFile.dbFile.getName());
-                ss.incWarnings();
-                return;
-            }
-            if (MMFile.containsInclude(includeFile)) {
-                System.out.format("warning: %s has already been included -- ignoring "
-                                  + "duplicate include%n", includeFile.getName());
-                ss.incWarnings();
-                return;
-            }
-            CharStream input = CharStreams.fromStream(is);
-            MMBailLexer lexer = new MMBailLexer(input);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            MMParser parser = new MMParser(tokens);
-            parser.setErrorHandler(new BailErrorStrategy());
-            // TokenStreamRewriter rewriter = new TokenStreamRewriter(tokens);
-            MMIncludeParseTreeListener listener = new MMIncludeParseTreeListener();
-            listener.setScopeStack(ss);
-            //ParseTreeWalker walker = new ParseTreeWalker();
-            // parser.setBuildParseTree(true); //is this needed?
-            ParseTree tree = parser.db();
-
-            MMFile.pushInclude(includeFile);
-            MMFile.addInclude(includeFile);
-            // Trees.inspect(tree, parser);
-            // System.out.println(tree.toStringTree());
-            //walker.walk(listener, tree);
-            System.out.format("reading included file %s ...%n", includeFile.getName());
-            ParseTreeWalker.DEFAULT.walk(listener, tree);
-
-            MMFile.popInclude();
-            // parser.addParseListener(listener);
-            // parser.db();
+        try {
+            ss.processInclude(includePath);
         } catch (FileNotFoundException fnfe) {
             System.out.format("warning: included file %s could not be found%n", includePath);
             ss.incWarnings();
@@ -136,7 +155,6 @@ public class MMParseTreeListener extends MMBaseListener {
             ss.incWarnings();
         }
     }
-
     /**
      * On entering a {@code scopeStat} node, this method pushes a new
      * scope onto the {@code ScopeStack}.

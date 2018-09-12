@@ -50,13 +50,13 @@ HTML code for accented names:
 $)
 
 $( (See 'help verify markup' for help with the markup syntax.) $)
-$( $[ src/test/resources/split-file/set-header.mm $] $)
+$[ src/test/resources/split-file/set-header.mm $]
 
 $[ src/test/resources/split-file/set-main.mm $]
 
 $[ src/test/resources/split-file/set-deprec.mm $]
 
-$( $[ src/test/resources/split-file/set-typeset.mm $] $)
+$[ src/test/resources/split-file/set-typeset.mm $]
 
 $[ src/test/resources/split-file/set-hilsp.mm $]
 
