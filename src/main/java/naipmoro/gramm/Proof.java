@@ -356,8 +356,8 @@ public class Proof {
         int offset = stackSize - hypsSize;
         if (offset < 0) {
             throw new MMProofException(String.format(
-                    "error: proof of %s failed; stack size (%d) is smaller "
-                    + "than the number (%d) of hypotheses%n",
+                    "error: proof of %s failed; stack size of %d is smaller "
+                    + "than the number %d of hypotheses",
                     this.label, stackSize, hypsSize));
         }
         // if the assertion has no mandatory hypotheses (meaning it's
@@ -381,13 +381,9 @@ public class Proof {
             // and stack statement are equal...
             if (!stType.equals(hypType)) {
                 throw new MMProofException(String.format(
-                        "error: proof of %s failed; the stack type %s "
-                        + "differs from the hypothesis type %s;%n"
-                        + "stack body = %s;%nhyp body = %s%n"
-                        + "hyp label = %s%n"
-                        + "statement = %s%n",
-                        this.label, stType, hypType, Arrays.toString(stCore.getBody()),
-                        Arrays.toString(hyp.getBody()), hyp.getLabel(), stat.getLabel()));
+                        "error: proof of %s failed; the stack type is %s "
+                         + "while the hypothesis type is %s",
+                        this.label, stType, hypType));
             }
             // ...then we begin populating a substitution map (SM);
             // only variable-type hypotheses are used for the SM
@@ -405,7 +401,7 @@ public class Proof {
             if (!hypReplace.equals(stBodyList)) {
                 throw new MMProofException(String.format(
                         "error: proof of %s failed; the result of substituting into "
-                        + "hypothesis %s is %s, which doesn't match the stack statement %s%n",
+                        + "hypothesis %s is %s, which doesn't match the stack statement %s",
                         this.label, hyp.getLabel(), hypReplace, Arrays.toString(stBody)));
             }
         }
@@ -452,7 +448,7 @@ public class Proof {
                             "error: proof of %s failed due to a violation of the "
                             + "assertion's disjoint variable restriction: "
                             + "substitutions %s and %s (into variables %s and %s, "
-                            + "respectively) have common variable(s) %s%n",
+                            + "respectively) have common variable(s) %s",
                             this.label, Arrays.toString(sub1), Arrays.toString(sub2),
                             leftVar, rightVar, vars1));
                 }
@@ -489,7 +485,7 @@ public class Proof {
         if (stackSize != 1) {
             throw new MMProofException(String.format(
                     "error: proof of %s failed; at the end of the proof, only one statement "
-                    + "must be left on the stack, but %d statements were left%n",
+                    + "must be left on the stack, but %d statements were left",
                     this.label, stackSize));
 
         }
@@ -497,7 +493,7 @@ public class Proof {
         if (!proved.getType().equals(this.type)) {
             throw new MMProofException(String.format(
                     "error: proof of %s failed; the type of the proved statement: %s "
-                    + "differs from the type of the assertion: %s%n",
+                    + "differs from the type of the assertion: %s",
                     this.label, proved.getType(), this.type));
 
         }
@@ -505,7 +501,7 @@ public class Proof {
         if (!Arrays.equals(provedBody, this.stmt)) {
             throw new MMProofException(String.format(
                     "error: proof of %s failed; the statement proved is %s "
-                    + "but the assertion to be proved is %s%n",
+                    + "but the assertion to be proved is %s",
                     this.label, Arrays.toString(provedBody), Arrays.toString(this.stmt)));
 
         }
