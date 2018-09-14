@@ -2,7 +2,7 @@
 
 Gramm is an Antlr4-based Metamath proof verifier. From the supplied Metamath
 grammar ([MM.g4]), Antlr4 creates a lexer and a parser and provides support
-code for walking the generated parse tree.
+code for walking the generated parse trees.
 
 ## Maven build
 
@@ -21,22 +21,17 @@ $ mvn package -DskipTests=false
 
 Note: in place of `set.mm`, you can substitute any metamath database.
 ```console
-$ java -jar -Xmx1g gramm-0.1.0.jar set.mm
-reading the set.mm database...
-***************
+$ java -jar -Xmx1g gramm-0.1.1.jar set.mm
+reading source file set.mm ...
 0 errors
 0 warnings
 30838 of 30838 proofs were verified
-time: 10.17 sec
+time: 10.45 sec
 ```
 
 ## License
 
 * Gramm is distributed under the [MIT License].
-
-* The source code for `MMBailErrorStrategy.java` is taken verbatim from Terence
-Parr's _The Definitive ANTLR 4 Reference_. See that file's [source code] for
-the author's copyright notice and usage restrictions.
 
 * Although Gramm does not bundle any third party libraries, it depends on the
 Antlr4 runtime, and the executable jar (if you choose to build it) will contain

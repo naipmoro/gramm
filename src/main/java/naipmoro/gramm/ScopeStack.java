@@ -22,86 +22,117 @@ public class ScopeStack implements Iterable<Scope> {
      * This implementation uses a deque for the scope stack.
      */
     private Deque<Scope> scopeStack = new ArrayDeque<>();
+
     /**
      * The global set of constants.
      */
-    private Set<String> constants = new HashSet<>();
+    private Set<String> globalConstants = new HashSet<>();
+
     /**
-     * The global set of both active and inactive variables.
+     * The global set of all variables, both active and inactive.
      */
-    private Set<String> allVars = new HashSet<>();
+    private Set<String> globalVars = new HashSet<>();
+
     /**
      * The global set of statement id labels.
      */
-    private Set<String> labels = new HashSet<>();
+    private Set<String> globalLabels = new HashSet<>();
 
     /**
-     * The total number of hypotheses. Incremented and added to each new
-     * hypothesis as a construction parameter. Used to sort hypotheses by order
-     * of appearance.
+     * The current total number of hypotheses. Incremented and added to each
+     * new hypothesis as a construction parameter. Used to sort hypotheses by
+     * order of appearance.
      */
     private int hypCount = 0;
+
+    /**
+     * The current total number of errors.
+     */
     private int errors = 0;
+
+    /**
+     * The current total number of warnings.
+     */
     private int warnings = 0;
+
+    /**
+     * The current total number of attempted proofs.
+     */
     private int attemptedProofs = 0;
+
+    /**
+     * The current total number of verified proofs.
+     */
     private int verifiedProofs = 0;
 
     /**
-     * {@inheritDoc}
+     * Pushes a {@code Scope} onto the stack.
+     *
+     * @param scope the {@code Scope} pushed to the stack
      */
     public void push(Scope scope) {
         scopeStack.push(scope);
     }
 
     /**
-     * {@inheritDoc}
+     * Pops the {@code Scope} from the stack and returns it.
+     *
+     * @return the {@code Scope} at the top of the stack
      */
     public Scope pop() {
         return scopeStack.pop();
     }
 
     /**
-     * {@inheritDoc}
+     * Removes the {@code Scope} from the top of the stack.
      */
     public void remove() {
         scopeStack.remove();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the {@code Scope} at the top of the stack.
+     *
+     * @return the {@code Scope} at the top of the stack
      */
     public Scope peek() {
         return scopeStack.peek();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the first {@code Scope} that was pushed to the stack.
+     *
+     * @return the first {@code Scope} that was pushed to the stack
      */
     public Scope peekLast() {
         return scopeStack.peekLast();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the size of the stack.
+     *
+     * @return the size of the stack
      */
     public int size() {
         return scopeStack.size();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the stack iterator.
+     *
+     * @return the stack iterator
      */
     public Iterator<Scope> iterator() {
         return scopeStack.iterator();
     }
 
     /**
-     * Returns the set of global constants.
+     * Returns the set of global globalConstants.
      *
-     * @return the constants
+     * @return the globalConstants
      */
     public Set<String> getConstants() {
-        return this.constants;
+        return this.globalConstants;
     }
 
 //    /**
@@ -221,14 +252,14 @@ public class ScopeStack implements Iterable<Scope> {
      */
     void addConstants(String[] cns) throws MMException {
         for (String cn : cns) {
-            if (this.allVars.contains(cn)) {
+            if (this.globalVars.contains(cn)) {
                 throw new MMException("constant " + cn + " is already declared as a var");
             }
-            if (this.labels.contains(cn)) {
+            if (this.globalLabels.contains(cn)) {
                 System.out.format("warning: %s is already declared as a statement label%n", cn);
                 this.incWarnings();
             }
-            boolean isUnique = this.constants.add(cn);
+            boolean isUnique = this.globalConstants.add(cn);
             if (!isUnique) {
                 System.out.format("warning: %s is already declared as a constant%n", cn);
                 this.incWarnings();
@@ -248,10 +279,10 @@ public class ScopeStack implements Iterable<Scope> {
     void addVars(String[] vars) throws MMException {
         Scope scope = this.peek();
         for (String var : vars) {
-            if (this.constants.contains(var)) {
+            if (this.globalConstants.contains(var)) {
                 throw new MMException("variable " + var + " is already declared as a constant");
             }
-            if (this.labels.contains(var)) {
+            if (this.globalLabels.contains(var)) {
                 System.out.format("warning: %s is already declared as a statement label%n", var);
                 this.incWarnings();
             }
@@ -260,7 +291,7 @@ public class ScopeStack implements Iterable<Scope> {
                 this.incWarnings();
             }
             scope.addToVariables(var);
-            this.allVars.add(var);
+            this.globalVars.add(var);
         }
     }
 
@@ -280,7 +311,7 @@ public class ScopeStack implements Iterable<Scope> {
         //scope.addToLabelsByVar(var, label);
         scope.addToStmtsByLabel(label, hyp);
         scope.addToVarHypsByVar(var, hyp);
-        this.labels.add(label);
+        this.globalLabels.add(label);
     }
 
     /**
@@ -298,7 +329,7 @@ public class ScopeStack implements Iterable<Scope> {
         checkLabelAndType(label, type);
         Scope scope = this.peek();
         for (String sym : stmt) {
-            if (this.constants.contains(sym)) {
+            if (this.globalConstants.contains(sym)) {
                 continue;
             }
             if (!isActiveVar(sym)) {
@@ -315,7 +346,7 @@ public class ScopeStack implements Iterable<Scope> {
         Hypothesis logHyp = new Hypothesis(label, "$e", type, stmt, ++hypCount);
         scope.addToStmtsByLabel(label, logHyp);
         scope.addToMandLogHyps(logHyp); // logicalHyps are ALWAYS mandatory
-        this.labels.add(label);
+        this.globalLabels.add(label);
     }
 
     /**
@@ -394,7 +425,7 @@ public class ScopeStack implements Iterable<Scope> {
         Set<Hypothesis> varHypSet = getActiveMandVarHyps();
         // checking the semantics of the stmt
         for (String sym : stmt) {
-            if (this.constants.contains(sym)) {
+            if (this.globalConstants.contains(sym)) {
                 continue;
             }
             if (!isActiveVar(sym)) {
@@ -433,27 +464,8 @@ public class ScopeStack implements Iterable<Scope> {
                               Mandatory mand) {
         Map<String, Statement> TopStmtsByLabel = getToplevelStmtsByLabel();
         TopStmtsByLabel.put(label, new Assertion(label, kind, type, stmt, mand));
-        this.labels.add(label);
+        this.globalLabels.add(label);
     }
-
-    //    public void checkConst(String cn) throws MMException {
-    //        if (this.constants.contains(cn)) {
-    //            throw new MMException("constant " + cn + " is already declared");
-    //        }
-    //        if (this.allVars.contains(cn)) {
-    //            throw new MMException("constant " + cn + " is already declared as a var");
-    //        }
-    //    }
-    //
-    //    public void checkVar(String var) throws MMException {
-    //        if (isActiveVar(var)) {
-    //            throw new MMException("variable " + var + " is already declared in the active
-    //                    scope");
-    //        }
-    //        if (this.constants.contains(var)) {
-    //            throw new MMException("variable " + var + " is already declared as a constant");
-    //        }
-    //    }
 
     /**
      * Given the label, type, and variable of a variable-type hypothesis,
@@ -470,20 +482,43 @@ public class ScopeStack implements Iterable<Scope> {
         if (!isActiveVar(var)) {
             throw new MMException("variable " + var + " is not declared in the active scope");
         }
-        Scope scope = this.peek();
-        Hypothesis hyp = scope.getVarHypsByVar().get(var);
-        if (hyp != null) {
-            String activeType = hyp.getType();
-            if (type.equals(activeType)) {
-                System.out.format(
-                        "warning: variable %s is already defined as type %s in the active scope",
-                        var, type);
-                this.incWarnings();
-            } else {
-                throw new MMException("variable " + var + " is defined as the different type "
-                                      + activeType + " in the active scope");
+        if (!this.globalConstants.contains(type)) {
+            throw new MMException("constant " + type + " has not been declared");
+        }
+        if (this.globalLabels.contains(label)) {
+            throw new MMException("label " + label + " is already declared");
+        }
+        Iterator<Scope> iter = this.iterator();
+        while (iter.hasNext()) {
+            Scope scope = iter.next();
+            Hypothesis hyp = scope.getVarHypsByVar().get(var);
+            if (hyp != null) {
+                String activeType = hyp.getType();
+                if (type.equals(activeType)) {
+                    System.out.format(
+                            "warning: variable %s is already defined as type %s in the active "
+                            + "scope%n", var, type);
+                    this.incWarnings();
+                } else {
+                    throw new MMException("variable " + var + " is defined as the different type "
+                                          + activeType + " in the active scope");
+                }
             }
         }
+        //Scope scope = this.peek();
+//        Hypothesis hyp = scope.getVarHypsByVar().get(var);
+//        if (hyp != null) {
+//            String activeType = hyp.getType();
+//            if (type.equals(activeType)) {
+//                System.out.format(
+//                        "warning: variable %s is already defined as type %s in the active scope%n",
+//                        var, type);
+//                this.incWarnings();
+//            } else {
+//                throw new MMException("variable " + var + " is defined as the different type "
+//                                      + activeType + " in the active scope");
+//            }
+//        }
     }
 
     /**
@@ -512,13 +547,13 @@ public class ScopeStack implements Iterable<Scope> {
      *                     active, or if the type is already declared as a variable
      */
     private void checkLabelAndType(String label, String type) throws MMException {
-        if (this.labels.contains(label)) {
+        if (this.globalLabels.contains(label)) {
             throw new MMException("label " + label + " is defined more than once");
         }
-        if (!this.constants.contains(type)) {
+        if (!this.globalConstants.contains(type)) {
             throw new MMException("constant " + type + " has not been declared");
         }
-        if (this.allVars.contains(type)) {
+        if (this.globalVars.contains(type)) {
             throw new MMException("constant " + type + " is already declared as a var");
         }
     }
@@ -645,15 +680,5 @@ public class ScopeStack implements Iterable<Scope> {
         }
         return null;
     }
-
-    //    private Set<DisjPair> generateVarProduct(Set<String> vars1, Set<String> vars2) {
-    //        Set<DisjPair> product = new HashSet<>();
-    //        for (String var1 : vars1) {
-    //            for (String var2 : vars2) {
-    //                product.add(new DisjPair(var1, var2));
-    //            }
-    //        }
-    //        return product;
-    //    }
 
 }

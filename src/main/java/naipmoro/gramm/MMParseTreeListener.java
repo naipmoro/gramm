@@ -4,16 +4,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.SyntaxTree;
 
 
 /**
  * A class that walks the parse tree of a Metamath file and produces effects at
- * specified nodes.
+ * specified nodes. Extends the Antlr-provided empty base listener.
  */
 public class MMParseTreeListener extends MMBaseListener {
 
     private ScopeStack ss;
+    private CommonTokenStream tokens;
 
     private long startTime;
     private static final int LABEL = 0;
@@ -32,9 +35,21 @@ public class MMParseTreeListener extends MMBaseListener {
         this.ss = scopestack;
     }
 
+    void setTokenStream(CommonTokenStream tokens) {
+        this.tokens = tokens;
+    }
+
+    void exceptionMessage(MMException e, SyntaxTree ctx) {
+        Token tok = tokens.get(ctx.getSourceInterval().a);
+        System.out.format("error: %s%n", e.getMessage());
+        System.out.format("line: %d, col: %d, token: %s%n",
+                tok.getLine(), tok.getCharPositionInLine(), tok.getText());
+        System.exit(1);
+    }
+
     /**
      * A lexer that bails out at the first lexical error. Used in conjunction
-     * with {@link MMBailErrorStrategy} to prevent recovery attempts from any
+     * with {@code BailErrorStrategy} to prevent recovery attempts from any
      * lexical or parsing errors. See Terence Parr's <emph>The Definitive
      * ANTLR 4 Reference</emph>, pp. 174-176, for details.
      */
@@ -85,12 +100,12 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             MMFile.walkInclude(includePath, ss);
         } catch (FileNotFoundException fnfe) {
-            System.out.format("warning: included file %s could not be found%n", includePath);
-            ss.incWarnings();
+            System.out.format("error: included file %s could not be found%n", includePath);
+            System.exit(1);
         } catch (IOException ioe) {
-            System.out.format("warning: there was an i/o error when reading included file %s%n",
+            System.out.format("error: there was an i/o error when reading included file %s%n",
                     includePath);
-            ss.incWarnings();
+            System.exit(1);
         }
     }
     /**
@@ -131,8 +146,7 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             ss.addConstants(constants);
         } catch (MMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            exceptionMessage(e, ctx);
         }
     }
 
@@ -153,8 +167,7 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             ss.addVars(variables);
         } catch (MMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            exceptionMessage(e, ctx);
         }
     }
 
@@ -175,8 +188,7 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             ss.addDisjVars(dvars);
         } catch (MMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            exceptionMessage(e, ctx);
         }
     }
 
@@ -194,8 +206,7 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             ss.addVarHyp(label, type, var);
         } catch (MMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            exceptionMessage(e, ctx);
         }
     }
 
@@ -219,8 +230,7 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             ss.addLogHyp(label, type, stmt);
         } catch (MMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            exceptionMessage(e, ctx);
         }
     }
 
@@ -251,8 +261,7 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             ss.addTheorem(label, type, stmt, proof);
         } catch (MMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            exceptionMessage(e, ctx);
         }
     }
 
@@ -276,8 +285,7 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             ss.addAxiom(label, type, stmt);
         } catch (MMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            exceptionMessage(e, ctx);
         }
     }
 

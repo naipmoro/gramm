@@ -13,7 +13,7 @@ public class MMStack<T> {
     /**
      * Pushes an item onto the stack.
      *
-     * @param item item pushed to stack
+     * @param item the item pushed to stack
      */
     void push(T item) {
         stack[++ptr] = item;

@@ -18,23 +18,27 @@ import java.util.List;
  * files.
  */
 class MMFile {
+
     /**
      * The Metamath source file.
      */
     static File dbFile;
+
     /**
      * The list of included files, including the source file.
      */
     private static List<File> includeFiles = new ArrayList<>();
+
     /**
      * A stack to keep track of the current file.
      */
     private static Deque<File> includeStack = new ArrayDeque<>();
 
+
     /**
      * Sets the Metamath source file.
      *
-     * @param file the Metamath source file
+     * @param file the Metamath source {@code File}
      */
     static void setDbFile(File file) {
         MMFile.dbFile = file;
@@ -43,7 +47,7 @@ class MMFile {
     /**
      * Adds a file to the list of included files.
      *
-     * @param file the file added to the list of included files
+     * @param file the {@code File} added to the list of included files
      */
     static void addInclude(File file) {
         includeFiles.add(file);
@@ -53,7 +57,7 @@ class MMFile {
      * Pushes a file onto the stack of included files, making it the current
      * Metamath file.
      *
-     * @param file a file pushed onto the included file stack
+     * @param file a {@code File} pushed onto the included file stack
      */
     static void pushInclude(File file) {
         includeStack.push(file);
@@ -62,7 +66,7 @@ class MMFile {
     /**
      * Returns the current Metamath file and removes it from the stack.
      *
-     * @return the current Metamath file
+     * @return the current Metamath {@code File}
      */
     static File popInclude() {
         return includeStack.pop();
@@ -71,7 +75,7 @@ class MMFile {
     /**
      * Returns the current Metamath file.
      *
-     * @return the current Metamath file
+     * @return the current Metamath {@code File}
      */
     static File getCurrentFile() {
         return includeStack.peek();
@@ -80,8 +84,8 @@ class MMFile {
     /**
      * Determines whether a file is in the list of included files.
      *
-     * @param file the file whose membership is being tested
-     * @return true if the file is in the list of included files; false
+     * @param file the {@code File} whose membership is being tested
+     * @return true if the file is in the list of included files, false
      * otherwise
      */
     static boolean containsInclude(File file) {
@@ -93,7 +97,7 @@ class MMFile {
      * global {@code ScopeStack}. Note that a special extended listener,
      * {@link MMIncludeParseTreeListener}, is deployed to walk the parse tree.
      *
-     * @param includePath the path of the included file
+     * @param includePath the {@code String} path of the included file
      * @param ss          the global {@code ScopeStack}
      * @throws IOException if the file doesn't exist or can't be properly
      *                     processed
@@ -118,17 +122,27 @@ class MMFile {
             parser.setErrorHandler(new BailErrorStrategy());
             MMIncludeParseTreeListener listener = new MMIncludeParseTreeListener();
             listener.setScopeStack(ss);
+            listener.setTokenStream(tokens);
             ParseTree tree = parser.db();
             MMFile.pushInclude(includeFile);
             MMFile.addInclude(includeFile);
             //System.out.format("reading included file %s ...%n", includeFile.getName());
             ParseTreeWalker.DEFAULT.walk(listener, tree);
-        } catch (RecognitionException | ParseCancellationException ae) {
-            System.out.format("syntax error in file %s: %s",
-                    MMFile.getCurrentFile().getName(), ae.getMessage());
+        } catch (ParseCancellationException pce) {
+            System.out.format("syntax error in file %s%n", MMFile.getCurrentFile().getName());
+            RecognitionException e = (RecognitionException)pce.getCause();
+            int col = e.getOffendingToken().getCharPositionInLine();
+            int line = e.getOffendingToken().getLine();
+            String token = e.getOffendingToken().getText();
+            System.out.format("line: %d, col: %d, token: %s%n", line, col, token);
+            System.exit(1);
+        } catch (RecognitionException re) {
+            System.out.format("syntax error in file %s%n", MMFile.getCurrentFile().getName());
+            int col = re.getOffendingToken().getCharPositionInLine();
+            int line = re.getOffendingToken().getLine();
+            String token = re.getOffendingToken().getText();
+            System.out.format("line: %d, col: %d, token: %s%n", line, col, token);
+            System.exit(1);
         }
-
-
-        //MMFile.popInclude();
     }
 }
