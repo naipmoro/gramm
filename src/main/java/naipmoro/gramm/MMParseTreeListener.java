@@ -35,15 +35,31 @@ public class MMParseTreeListener extends MMBaseListener {
         this.ss = scopestack;
     }
 
+    /**
+     * Sets the listener's token stream.
+     *
+     * @param tokens an Antlr token stream
+     */
     void setTokenStream(CommonTokenStream tokens) {
         this.tokens = tokens;
     }
 
+    /**
+     * Given an exception and a syntax node, prints a fatal error message and
+     * exits the application. The {@code MMException} provides the message,
+     * while the {@code SyntaxTree} provides the error location.
+     *
+     * @param e   a {@code MMException}
+     * @param ctx the syntax node in which the error occurred
+     */
     void exceptionMessage(MMException e, SyntaxTree ctx) {
+        long difference = System.nanoTime() - startTime;
         Token tok = tokens.get(ctx.getSourceInterval().a);
         System.out.format("error: %s%n", e.getMessage());
         System.out.format("line: %d, col: %d, token: %s%n",
                 tok.getLine(), tok.getCharPositionInLine(), tok.getText());
+        System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
+        System.out.println("exiting...");
         System.exit(1);
     }
 

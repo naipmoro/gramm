@@ -664,8 +664,8 @@ public class ScopeStack implements Iterable<Scope> {
                     String activeType = hyp.getType();
                     if (type.equals(activeType)) {
                         System.out.format(
-                                "warning: duplicate variable-type hypothesis in the active "
-                                + "scope; variable is %s, type is %s%n", var, type);
+                                "warning: duplicate active variable-type hypothesis $f %s %s $.",
+                                var, type);
                         incWarnings();
                     } else {
                         throw new MMException("variable " + var + " is defined as the different "
