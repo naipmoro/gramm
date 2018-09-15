@@ -7,7 +7,14 @@ package naipmoro.gramm;
  */
 public class MMStack<T> {
 
+    /**
+     * The stack is an array of items.
+     */
     T[] stack;
+
+    /**
+     * Stack pointer, points to the top of the stack.
+     */
     int ptr = -1;
 
     /**

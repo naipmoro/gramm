@@ -19,11 +19,6 @@ public class ScopeStack implements Iterable<Scope> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * This implementation uses a deque for the scope stack.
-     */
-    private Deque<Scope> scopeStack = new ArrayDeque<>();
-
-    /**
      * The global set of constants.
      */
     private Set<String> globalConstants = new HashSet<>();
@@ -38,6 +33,9 @@ public class ScopeStack implements Iterable<Scope> {
      */
     private Set<String> globalLabels = new HashSet<>();
 
+    /**
+     * An inner class of checking methods.
+     */
     private ScopeStack.Check checker = new Check();
 
     /**
@@ -68,6 +66,11 @@ public class ScopeStack implements Iterable<Scope> {
     private int verifiedProofs = 0;
 
     /**
+     * This implementation of the scope stack uses a deque.
+     */
+    private Deque<Scope> scopeStack = new ArrayDeque<>();
+
+    /**
      * Pushes a {@code Scope} onto the stack.
      *
      * @param scope the {@code Scope} pushed to the stack
@@ -77,7 +80,7 @@ public class ScopeStack implements Iterable<Scope> {
     }
 
     /**
-     * Pops the {@code Scope} from the stack and returns it.
+     * Removes the {@code Scope} at the top of the stack and returns it.
      *
      * @return the {@code Scope} at the top of the stack
      */
@@ -86,7 +89,7 @@ public class ScopeStack implements Iterable<Scope> {
     }
 
     /**
-     * Removes the {@code Scope} from the top of the stack.
+     * Removes the {@code Scope} at the top of the stack.
      */
     public void remove() {
         scopeStack.remove();
