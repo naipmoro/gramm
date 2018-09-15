@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A class representing the global scope environment.
+ * A class representing the global scope stack and scope environment.
  */
 public class ScopeStack implements Iterable<Scope> {
 
@@ -37,6 +37,8 @@ public class ScopeStack implements Iterable<Scope> {
      * The global set of statement id labels.
      */
     private Set<String> globalLabels = new HashSet<>();
+
+    private ScopeStack.Check checker = new Check();
 
     /**
      * The current total number of hypotheses. Incremented and added to each
@@ -70,7 +72,7 @@ public class ScopeStack implements Iterable<Scope> {
      *
      * @param scope the {@code Scope} pushed to the stack
      */
-    public void push(Scope scope) {
+    void push(Scope scope) {
         scopeStack.push(scope);
     }
 
@@ -95,7 +97,7 @@ public class ScopeStack implements Iterable<Scope> {
      *
      * @return the {@code Scope} at the top of the stack
      */
-    public Scope peek() {
+    Scope peek() {
         return scopeStack.peek();
     }
 
@@ -104,7 +106,7 @@ public class ScopeStack implements Iterable<Scope> {
      *
      * @return the first {@code Scope} that was pushed to the stack
      */
-    public Scope peekLast() {
+    Scope peekLast() {
         return scopeStack.peekLast();
     }
 
@@ -135,14 +137,14 @@ public class ScopeStack implements Iterable<Scope> {
         return this.globalConstants;
     }
 
-//    /**
-//     * Returns the number of hypotheses.
-//     *
-//     * @return the hypCount
-//     */
-//    public int getHypCount() {
-//        return hypCount;
-//    }
+    //    /**
+    //     * Returns the number of hypotheses.
+    //     *
+    //     * @return the hypCount
+    //     */
+    //    public int getHypCount() {
+    //        return hypCount;
+    //    }
 
     /**
      * Returns the number of errors.
@@ -241,6 +243,7 @@ public class ScopeStack implements Iterable<Scope> {
         return getToplevel().getStmtsByLabel();
     }
 
+
     /**
      * Adds a string array of symbols to the global set of constants. Issues a
      * warning, but does not abort the operation, if any of the symbols is
@@ -252,18 +255,8 @@ public class ScopeStack implements Iterable<Scope> {
      */
     void addConstants(String[] cns) throws MMException {
         for (String cn : cns) {
-            if (this.globalVars.contains(cn)) {
-                throw new MMException("constant " + cn + " is already declared as a var");
-            }
-            if (this.globalLabels.contains(cn)) {
-                System.out.format("warning: %s is already declared as a statement label%n", cn);
-                this.incWarnings();
-            }
-            boolean isUnique = this.globalConstants.add(cn);
-            if (!isUnique) {
-                System.out.format("warning: %s is already declared as a constant%n", cn);
-                this.incWarnings();
-            }
+            checker.checkNewConstant(cn);
+            globalConstants.add(cn);
         }
     }
 
@@ -279,17 +272,7 @@ public class ScopeStack implements Iterable<Scope> {
     void addVars(String[] vars) throws MMException {
         Scope scope = this.peek();
         for (String var : vars) {
-            if (this.globalConstants.contains(var)) {
-                throw new MMException("variable " + var + " is already declared as a constant");
-            }
-            if (this.globalLabels.contains(var)) {
-                System.out.format("warning: %s is already declared as a statement label%n", var);
-                this.incWarnings();
-            }
-            if (isActiveVar(var)) {
-                System.out.format("warning: %s is already a variable in the active scope%n", var);
-                this.incWarnings();
-            }
+            checker.checkNewVar(var);
             scope.addToVariables(var);
             this.globalVars.add(var);
         }
@@ -300,15 +283,14 @@ public class ScopeStack implements Iterable<Scope> {
      * the hypothesis is valid and then adds it to the active scope.
      *
      * @param label the identifying label of the variable-type hypothesis
-     * @param type  a metamath constant
-     * @param var   a variable
+     * @param type  a previously declared metamath constant
+     * @param var   an active variable
      * @throws MMException if the hypothesis fails the validity check
      */
     void addVarHyp(String label, String type, String var) throws MMException {
-        checkVarHyp(label, type, var);
-        Scope scope = this.peek();
+        checker.checkNewVarHyp(label, type, var);
         Hypothesis hyp = new Hypothesis(label, "$f", type, new String[]{var}, ++hypCount);
-        //scope.addToLabelsByVar(var, label);
+        Scope scope = this.peek();
         scope.addToStmtsByLabel(label, hyp);
         scope.addToVarHypsByVar(var, hyp);
         this.globalLabels.add(label);
@@ -326,13 +308,13 @@ public class ScopeStack implements Iterable<Scope> {
      *                     type in the active scope
      */
     void addLogHyp(String label, String type, String[] stmt) throws MMException {
-        checkLabelAndType(label, type);
+        checker.checkLabelAndType(label, type);
         Scope scope = this.peek();
         for (String sym : stmt) {
             if (this.globalConstants.contains(sym)) {
                 continue;
             }
-            if (!isActiveVar(sym)) {
+            if (!checker.isActiveVar(sym)) {
                 throw new MMException(sym + " is not a constant or active variable");
             }
             Hypothesis varHyp = getActiveVarHypByVar(sym);
@@ -359,7 +341,7 @@ public class ScopeStack implements Iterable<Scope> {
      * @throws MMException if the uniqueness check fails
      */
     void addDisjVars(String[] vars) throws MMException {
-        checkDisjVars(vars);
+        checker.checkDisjVars(vars);
         Scope scope = this.peek();
         int vsize = vars.length;
         if (vsize == 2) {
@@ -388,7 +370,7 @@ public class ScopeStack implements Iterable<Scope> {
      */
     void addTheorem(String label, String type, String[] stmt, String[] proofList)
             throws MMException {
-        checkLabelAndType(label, type);
+        checker.checkLabelAndType(label, type);
         Mandatory mand = getActiveMandatory(stmt);
         Proof proof = new Proof(this, label, type, stmt, proofList, mand);
         if (proof.verify()) {
@@ -407,7 +389,7 @@ public class ScopeStack implements Iterable<Scope> {
      * @throws MMException if the axiom is an improperly constructed statement
      */
     void addAxiom(String label, String type, String[] stmt) throws MMException {
-        checkLabelAndType(label, type);
+        checker.checkLabelAndType(label, type);
         Mandatory mand = getActiveMandatory(stmt);
         addAssertion(label, "$a", type, stmt, mand);
     }
@@ -428,7 +410,7 @@ public class ScopeStack implements Iterable<Scope> {
             if (this.globalConstants.contains(sym)) {
                 continue;
             }
-            if (!isActiveVar(sym)) {
+            if (!checker.isActiveVar(sym)) {
                 throw new MMException(sym + " is not a constant or active variable");
             }
             Hypothesis varHyp = getActiveVarHypByVar(sym);
@@ -468,114 +450,6 @@ public class ScopeStack implements Iterable<Scope> {
     }
 
     /**
-     * Given the label, type, and variable of a variable-type hypothesis,
-     * checks that the hypothesis is valid. If not, throws an exception.
-     *
-     * @param label the identifying label of the hypothesis
-     * @param type  a metamath constant
-     * @param var   a variable
-     * @throws MMException if the variable is not in the active scope or is
-     *                     already defined as a different type.
-     */
-    private void checkVarHyp(String label, String type, String var) throws MMException {
-        checkLabelAndType(label, type);
-        if (!isActiveVar(var)) {
-            throw new MMException("variable " + var + " is not declared in the active scope");
-        }
-        if (!this.globalConstants.contains(type)) {
-            throw new MMException("constant " + type + " has not been declared");
-        }
-        if (this.globalLabels.contains(label)) {
-            throw new MMException("label " + label + " is already declared");
-        }
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
-            Hypothesis hyp = scope.getVarHypsByVar().get(var);
-            if (hyp != null) {
-                String activeType = hyp.getType();
-                if (type.equals(activeType)) {
-                    System.out.format(
-                            "warning: variable %s is already defined as type %s in the active "
-                            + "scope%n", var, type);
-                    this.incWarnings();
-                } else {
-                    throw new MMException("variable " + var + " is defined as the different type "
-                                          + activeType + " in the active scope");
-                }
-            }
-        }
-        //Scope scope = this.peek();
-//        Hypothesis hyp = scope.getVarHypsByVar().get(var);
-//        if (hyp != null) {
-//            String activeType = hyp.getType();
-//            if (type.equals(activeType)) {
-//                System.out.format(
-//                        "warning: variable %s is already defined as type %s in the active scope%n",
-//                        var, type);
-//                this.incWarnings();
-//            } else {
-//                throw new MMException("variable " + var + " is defined as the different type "
-//                                      + activeType + " in the active scope");
-//            }
-//        }
-    }
-
-    /**
-     * Checks that the variables in string array vars are unique.
-     *
-     * @param vars a string array of variables
-     * @throws MMException if the variables are not unique
-     */
-    private void checkDisjVars(String[] vars) throws MMException {
-        Set<String> set = new HashSet<>();
-        for (String var : vars) {
-            if (!set.add(var)) {
-                throw new MMException(
-                        "variable " + var + " is repeated in $d statement " + Arrays.toString(vars)
-                        + "; all variables in a $d statement must be unique");
-            }
-        }
-    }
-
-    /**
-     * Checks the validity of a label and type.
-     *
-     * @param label a statement's identifying label
-     * @param type  a statement type
-     * @throws MMException if the label is already in use, if the type is not
-     *                     active, or if the type is already declared as a variable
-     */
-    private void checkLabelAndType(String label, String type) throws MMException {
-        if (this.globalLabels.contains(label)) {
-            throw new MMException("label " + label + " is defined more than once");
-        }
-        if (!this.globalConstants.contains(type)) {
-            throw new MMException("constant " + type + " has not been declared");
-        }
-        if (this.globalVars.contains(type)) {
-            throw new MMException("constant " + type + " is already declared as a var");
-        }
-    }
-
-    /**
-     * Checks if a variable is in the active scope.
-     *
-     * @param var a variable
-     * @return true if var is in the active scope, false otherwise
-     */
-    private boolean isActiveVar(String var) {
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
-            if (scope.getVariables().contains(var)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Checks if a hypothesis is a variable-type hypothesis.
      *
      * @param hyp a hypothesis
@@ -590,7 +464,7 @@ public class ScopeStack implements Iterable<Scope> {
      *
      * @param stmt a statement
      * @return true if the kind of the statement is either "$f" or "$e", false
-     *         otherwise.
+     * otherwise.
      */
     boolean isHypothesis(Statement stmt) {
         String kind = stmt.getKind();
@@ -605,9 +479,7 @@ public class ScopeStack implements Iterable<Scope> {
      * @return an active variable-type hypothesis or null
      */
     private Hypothesis getActiveVarHypByVar(String var) {
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
+        for (Scope scope : this) {
             Hypothesis hyp = scope.getVarHypsByVar().get(var);
             if (hyp != null) {
                 return hyp;
@@ -623,9 +495,7 @@ public class ScopeStack implements Iterable<Scope> {
      */
     private Set<DisjPair> getActiveDisjVarPairs() {
         Set<DisjPair> disjPairs = new HashSet<>();
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
+        for (Scope scope : this) {
             disjPairs.addAll(scope.getDisjVarPairs());
         }
         return disjPairs;
@@ -638,9 +508,7 @@ public class ScopeStack implements Iterable<Scope> {
      */
     private Set<Hypothesis> getActiveMandLogHyps() {
         Set<Hypothesis> logHyps = new HashSet<>();
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
+        for (Scope scope : this) {
             logHyps.addAll(scope.getMandLogHyps());
         }
         return logHyps;
@@ -654,9 +522,7 @@ public class ScopeStack implements Iterable<Scope> {
      */
     private Set<Hypothesis> getActiveMandVarHyps() {
         Set<Hypothesis> varHyps = new HashSet<>();
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
+        for (Scope scope : this) {
             varHyps.addAll(scope.getMandVarHyps());
         }
         return varHyps;
@@ -670,9 +536,7 @@ public class ScopeStack implements Iterable<Scope> {
      * @return an active statement or null
      */
     Statement getActiveStmtByLabel(String label) {
-        Iterator<Scope> iter = this.iterator();
-        while (iter.hasNext()) {
-            Scope scope = iter.next();
+        for (Scope scope : this) {
             Statement stmt = scope.getStmtsByLabel().get(label);
             if (stmt != null) {
                 return stmt;
@@ -681,4 +545,154 @@ public class ScopeStack implements Iterable<Scope> {
         return null;
     }
 
+    /**
+     * Inner class that supplies the checking code.
+     */
+    class Check {
+
+        /**
+         * Checks if a variable is in the active scope.
+         *
+         * @param var a variable
+         * @return true if var is in the active scope, false otherwise
+         */
+        boolean isActiveVar(String var) {
+            for (Scope scope : ScopeStack.this) {
+                if (scope.getVariables().contains(var)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Checks the validity of a new constant.
+         *
+         * @param cn a constant
+         * @throws MMException if the constant is already declared as a
+         *                     variable
+         */
+        void checkNewConstant(String cn) throws MMException {
+            if (globalVars.contains(cn)) {
+                throw new MMException("constant " + cn + " is already declared as a var");
+            }
+            if (globalLabels.contains(cn)) {
+                System.out.format("warning: %s is already declared as a statement label%n", cn);
+                incWarnings();
+            }
+            if (globalConstants.contains(cn)) {
+                System.out.format("warning: %s is already declared as a constant%n", cn);
+                incWarnings();
+            }
+        }
+
+        /**
+         * Checks the validity of a new variable.
+         *
+         * @param var a variable
+         * @throws MMException if the variable is already declared as a
+         *                     constant
+         */
+        void checkNewVar(String var) throws MMException {
+            if (globalConstants.contains(var)) {
+                throw new MMException("variable " + var + " is already declared as a constant");
+            }
+            if (globalLabels.contains(var)) {
+                System.out.format("warning: %s is already declared as a statement label%n", var);
+                incWarnings();
+            }
+            if (isActiveVar(var)) {
+                System.out.format("warning: %s is already a variable in the active scope%n", var);
+                incWarnings();
+            }
+        }
+
+        /**
+         * Checks the validity of a new statement label.
+         *
+         * @param label the identifying label of the statement
+         * @throws MMException if the label is already in use
+         */
+        void checkNewLabel(String label) throws MMException {
+            if (globalLabels.contains(label)) {
+                throw new MMException("label " + label + " is defined more than once");
+            }
+            if (globalVars.contains(label)) {
+                System.out.format("warning: %s is already declared as a variable%n", label);
+                incWarnings();
+            }
+            if (globalConstants.contains(label)) {
+                System.out.format("warning: %s is already declared as a constant%n", label);
+                incWarnings();
+            }
+        }
+
+        /**
+         * Checks the validity of a label and type.
+         *
+         * @param label the identifying label of the statement
+         * @param type  the type of the statement
+         * @throws MMException if the label is already in use, or if the type
+         *                     is either not declared or is already declared as
+         *                     a variable
+         */
+        void checkLabelAndType(String label, String type) throws MMException {
+            if (!globalConstants.contains(type)) {
+                throw new MMException("constant " + type + " has not been declared");
+            }
+            checker.checkNewLabel(label);
+        }
+
+        /**
+         * Checks the components of a variable-type hypothesis.
+         *
+         * @param label the identifying label of the hypothesis
+         * @param type  the type of the hypothesis
+         * @param var   the variable of the hypothesis
+         * @throws MMException if the label is already in use, if the variable
+         *                     is not declared, or if the type is either not
+         *                     declared or is already declared as a variable
+         */
+        void checkNewVarHyp(String label, String type, String var) throws MMException {
+            if (!isActiveVar(var)) {
+                throw new MMException("variable " + var + " is not declared in the active scope");
+            }
+            this.checkLabelAndType(label, type);
+            for (Scope scope : ScopeStack.this) {
+                Hypothesis hyp = scope.getVarHypsByVar().get(var);
+                if (hyp != null) {
+                    String activeType = hyp.getType();
+                    if (type.equals(activeType)) {
+                        System.out.format(
+                                "warning: duplicate variable-type hypothesis in the active "
+                                + "scope; variable is %s, type is %s%n", var, type);
+                        incWarnings();
+                    } else {
+                        throw new MMException("variable " + var + " is defined as the different "
+                                              + "type " + activeType + " in the active scope");
+                    }
+                }
+            }
+        }
+
+        /**
+         * Checks that the variables in string array are unique.
+         *
+         * @param vars a string array of variables
+         * @throws MMException if the variables are not unique
+         */
+        void checkDisjVars(String[] vars) throws MMException {
+            Set<String> set = new HashSet<>();
+            for (String var : vars) {
+                if (!set.add(var)) {
+                    throw new MMException(
+                            "variable " + var + " is repeated in $d statement "
+                            + Arrays.toString(vars) + "; all variables in a $d statement must be "
+                            + "unique");
+                }
+            }
+        }
+
+
+    }
 }
