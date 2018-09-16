@@ -140,15 +140,6 @@ public class ScopeStack implements Iterable<Scope> {
         return this.globalConstants;
     }
 
-    //    /**
-    //     * Returns the number of hypotheses.
-    //     *
-    //     * @return the hypCount
-    //     */
-    //    public int getHypCount() {
-    //        return hypCount;
-    //    }
-
     /**
      * Returns the number of errors.
      *
@@ -246,7 +237,6 @@ public class ScopeStack implements Iterable<Scope> {
         return getToplevel().getStmtsByLabel();
     }
 
-
     /**
      * Adds a string array of symbols to the global set of constants. Issues a
      * warning, but does not abort the operation, if any of the symbols is
@@ -336,8 +326,8 @@ public class ScopeStack implements Iterable<Scope> {
 
     /**
      * Given an array of variables, checks that the variables are unique,
-     * creates all possible disjoint variable pairs (DisjPairs) from the array,
-     * and adds each pair to the local scope's DisjPair list. The parser
+     * creates all possible disjoint variable pairs from the array, and adds
+     * each pair to the local scope's {@code DisjPair} list. The parser
      * guarantees that the array will contain at least two variables.
      *
      * @param vars a string array of variables
@@ -408,7 +398,6 @@ public class ScopeStack implements Iterable<Scope> {
     private Mandatory getActiveMandatory(String[] stmt) throws MMException {
         Set<Hypothesis> logHypSet = getActiveMandLogHyps();
         Set<Hypothesis> varHypSet = getActiveMandVarHyps();
-        // checking the semantics of the stmt
         for (String sym : stmt) {
             if (this.globalConstants.contains(sym)) {
                 continue;
