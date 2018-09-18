@@ -668,7 +668,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
                     String activeType = hyp.getType();
                     if (type.equals(activeType)) {
                         System.out.format(
-                                "warning: duplicate active variable-type hypothesis $f %s %s $.",
+                                "warning: duplicate active variable-type hypothesis $f %s %s $.%n",
                                 var, type);
                         incWarnings();
                     } else {
