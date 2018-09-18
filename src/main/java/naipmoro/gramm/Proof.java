@@ -46,6 +46,8 @@ public class Proof {
      */
     private final Mandatory mand;
 
+    private int CHARSTACK_CAPACITY = 5;
+
     /**
      * Map used in translating from compressed-proof uppercase letters to
      * base 20 numbers.
@@ -222,7 +224,7 @@ public class Proof {
         ProofStack proofStack = new ProofStack(totalChars);
         int refSize = reference.size();
         //Deque<Character> charStack = new ArrayDeque<>();
-        CharStack charStack = new CharStack(5);
+        CharStack charStack = new CharStack(CHARSTACK_CAPACITY);
         for (int i = alphaStart; i < this.proof.length; ++i) {
             String alphas = this.proof[i];
             CharacterIterator charIter = new StringCharacterIterator(alphas);
@@ -536,7 +538,7 @@ public class Proof {
         }
         int refSize = reference.size();
         //Deque<Character> charStack = new ArrayDeque<>();
-        CharStack charStack = new CharStack(5);
+        CharStack charStack = new CharStack(CHARSTACK_CAPACITY);
         for (int j = alphaStart; j < compressedProof.length; ++j) {
             String alphas = compressedProof[j];
             CharacterIterator charIter = new StringCharacterIterator(alphas);

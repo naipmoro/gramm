@@ -1,20 +1,19 @@
 package naipmoro.gramm;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
  * A class representing the global scope stack and scope environment.
  */
-public class ScopeStack implements Iterable<Scope> {
+public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
 
     private static final long serialVersionUID = 1L;
 
@@ -66,75 +65,88 @@ public class ScopeStack implements Iterable<Scope> {
     private int verifiedProofs = 0;
 
     /**
-     * This implementation of the scope stack uses a deque.
+     * The initial capacity of a {@code ScopeStack}.
      */
-    private Deque<Scope> scopeStack = new ArrayDeque<>();
+    int STACK_CAPACITY = 10;
 
     /**
-     * Pushes a {@code Scope} onto the stack.
-     *
-     * @param scope the {@code Scope} pushed to the stack
+     * Initializes an empty {@code ScopeStack} with an initial capacity of
+     * {@code STACK_CAPACITY}.
      */
+    ScopeStack() {
+        stack = new Scope[STACK_CAPACITY];
+    }
+
+    /**
+     * Adds a {@code Scope} to the stack, doubling the capacity of the stack if
+     * it is too small to contain the new item.
+     *
+     * @param scope the {@code Scope} added to the stack
+     */
+    @Override
     void push(Scope scope) {
-        scopeStack.push(scope);
+        if (ptr == STACK_CAPACITY - 1) {
+            stack = Arrays.copyOf(stack, STACK_CAPACITY * 2);
+            STACK_CAPACITY = stack.length;
+        }
+        stack[++ptr] = scope;
     }
 
     /**
-     * Removes the {@code Scope} at the top of the stack and returns it.
-     *
-     * @return the {@code Scope} at the top of the stack
-     */
-    public Scope pop() {
-        return scopeStack.pop();
-    }
-
-    /**
-     * Removes the {@code Scope} at the top of the stack.
-     */
-    public void remove() {
-        scopeStack.remove();
-    }
-
-    /**
-     * Returns the {@code Scope} at the top of the stack.
-     *
-     * @return the {@code Scope} at the top of the stack
-     */
-    Scope peek() {
-        return scopeStack.peek();
-    }
-
-    /**
-     * Returns the first {@code Scope} that was pushed to the stack.
-     *
-     * @return the first {@code Scope} that was pushed to the stack
-     */
-    Scope peekLast() {
-        return scopeStack.peekLast();
-    }
-
-    /**
-     * Returns the size of the stack.
-     *
-     * @return the size of the stack
-     */
-    public int size() {
-        return scopeStack.size();
-    }
-
-    /**
-     * Returns the stack iterator.
-     *
-     * @return the stack iterator
+     * Returns a reverse iterator.
+     * @return a reverse iterator
      */
     public Iterator<Scope> iterator() {
-        return scopeStack.iterator();
+        return new ReverseIterator();
     }
 
     /**
-     * Returns the set of global globalConstants.
+     * An iterator that iterates in reverse order. For use on an array that is
+     * intended to represent a stack. Does not implement the {@code remove()}
+     * method.
+     */
+    class ReverseIterator implements Iterator<Scope> {
+        int index;
+
+        /**
+         * Constructor.
+         */
+        ReverseIterator() {
+            index = ptr;
+        }
+
+        /**
+         * Checks if the scope array has a next item.
+         *
+         * @return true if the scope array has a next item, false otherwise
+         */
+        public boolean hasNext() {
+            return index >= 0;
+        }
+
+        /**
+         * Unimplemented method.
+         */
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * Returns the next {@code Scope} in the stack.
+         * @return the next {@code Scope} in the stack
+         */
+        public Scope next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return stack[index--];
+        }
+    }
+
+    /**
+     * Returns the set of global constants.
      *
-     * @return the globalConstants
+     * @return the set of global constants
      */
     public Set<String> getConstants() {
         return this.globalConstants;
@@ -161,7 +173,7 @@ public class ScopeStack implements Iterable<Scope> {
     /**
      * Returns the number of attempted proofs.
      *
-     * @return the attemptedProofs
+     * @return the number of attempted proofs
      */
     int getAttemptedProofs() {
         return attemptedProofs;
@@ -170,7 +182,7 @@ public class ScopeStack implements Iterable<Scope> {
     /**
      * Returns the number of verified proofs.
      *
-     * @return the verifiedProofs
+     * @return the number of verified proofs
      */
     int getVerifiedProofs() {
         return verifiedProofs;
