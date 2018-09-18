@@ -21,12 +21,12 @@ $ mvn package -DskipTests=false
 
 Note: in place of `set.mm`, you can substitute any metamath database.
 ```console
-$ java -jar -Xmx1g gramm-0.1.1.jar set.mm
+$ java -jar -Xmx1g gramm-0.1.2.jar set.mm
 reading source file set.mm ...
 0 errors
 0 warnings
 30838 of 30838 proofs were verified
-time: 10.45 sec
+time: 9.54 sec
 ```
 
 ## License
