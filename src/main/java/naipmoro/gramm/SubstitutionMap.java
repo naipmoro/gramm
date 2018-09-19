@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A class to represent substitution maps used in metamath proof verification.
+ * A substitution map used in Metamath proof verification.
  */
 public class SubstitutionMap {
     private Map<String, String[]> substsByVar;

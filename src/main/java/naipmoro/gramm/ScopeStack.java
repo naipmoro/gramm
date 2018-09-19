@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
- * A class representing the global scope stack and scope environment.
+ * The global scope stack and scope manager.
  */
 public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
 

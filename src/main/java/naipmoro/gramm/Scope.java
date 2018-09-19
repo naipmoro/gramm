@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A class to represent a metamath scope.
+ * A Metamath scope.
  */
 public class Scope {
 

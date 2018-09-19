@@ -1,5 +1,8 @@
 package naipmoro.gramm;
 
+/**
+ * A stack of {@code Charcter} objects used in compressed-proof verification.
+ */
 public class CharStack extends MMStack<Character> {
 
     /**
@@ -8,7 +11,7 @@ public class CharStack extends MMStack<Character> {
     int CHARSTACK_CAPACITY = 5;
 
     /**
-     * Initializes an empty stack of capacity {@code CHARSTACK_CAPACITY}.
+     * Initializes an empty stack with capacity {@code CHARSTACK_CAPACITY}.
      */
     CharStack() {
         stack = new Character[CHARSTACK_CAPACITY];

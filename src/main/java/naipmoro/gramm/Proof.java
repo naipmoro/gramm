@@ -14,7 +14,7 @@ import java.util.Set;
 //import java.util.Stack;
 
 /**
- * This class represents a metamath proof.
+ * A Metamath proof.
  */
 public class Proof {
 

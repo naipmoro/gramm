@@ -3,8 +3,8 @@ package naipmoro.gramm;
 import java.util.List;
 
 /**
- * This class represents the essential elements of a statement, its type and
- * its body. It is used by the proof verifer to skip the extraneous elements.
+ * The essential elements of a statement, its type and its body, used by the
+ * proof verifer.
  */
 public class StatementCore {
     private final String type;

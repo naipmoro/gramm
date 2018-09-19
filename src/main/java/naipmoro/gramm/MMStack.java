@@ -1,7 +1,7 @@
 package naipmoro.gramm;
 
 /**
- * An generic Metamath stack class.
+ * A generic Metamath stack class based on an array.
  *
  * @param <T> type of item on the stack
  */

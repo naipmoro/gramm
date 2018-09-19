@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A class to represent a metamath disjoint variable pair.
+ * A Metamath disjoint variable pair.
  */
 public class DisjPair {
 

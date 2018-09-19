@@ -1,7 +1,7 @@
 package naipmoro.gramm;
 
 /**
- * A class to represent metamath assertions, either axioms or theorems.
+ * A Metamath assertion, either an axiom or a theorem.
  */
 public class Assertion implements Statement {
     private final String label;

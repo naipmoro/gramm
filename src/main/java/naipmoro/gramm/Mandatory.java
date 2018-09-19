@@ -4,10 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A class to represent the 'mandatory' elements of an assertion. This is not
- * quite the same as metamath's mandatory elements. According to the metamath
- * specification, an assertion's disjoint variable pairs are considered a
- * separate structure, whereas here we include them in Mandatory.
+ * The mandatory elements of a Metamath assertion.
  */
 public class Mandatory {
     private final List<Hypothesis> hyps;

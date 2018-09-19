@@ -3,7 +3,7 @@ package naipmoro.gramm;
 import java.util.Arrays;
 
 /**
- * A class to represent metamath hypotheses, either variable-type or logical.
+ * A Metamath hypothesis, either variable-type or logical.
  */
 public class Hypothesis implements Statement, Comparable<Hypothesis> {
     private final String label;

@@ -7,7 +7,7 @@ package naipmoro.gramm;
 public class MMIncludeParseTreeListener extends MMParseTreeListener {
 
     /**
-     * Prints a message re reading the included file. Notably, it does not
+     * Prints a message on reading the included file. Notably, it does not
      * initialize a new {@code ScopeStack}.
      *
      * @param ctx a {@code db} parse tree node
