@@ -18,16 +18,16 @@ public class MMStack<T> {
     int ptr = -1;
 
     /**
-     * Pushes an item onto the stack.
+     * Adds an item to the stack.
      *
-     * @param item the item pushed to stack
+     * @param item the item added to stack
      */
     void push(T item) {
         stack[++ptr] = item;
     }
 
     /**
-     * Pops the item from the stack and returns it.
+     * Removes the item from the top of the stack and returns it.
      *
      * @return the item at the top of the stack
      */
@@ -52,9 +52,9 @@ public class MMStack<T> {
     }
 
     /**
-     * Returns the first item that was pushed to the stack.
+     * Returns the first item that was added to the stack.
      *
-     * @return the first item that was pushed to the stack
+     * @return the first item that was added to the stack
      */
     T peekLast() {
         return stack[0];

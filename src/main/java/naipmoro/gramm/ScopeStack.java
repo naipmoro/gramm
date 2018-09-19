@@ -67,10 +67,10 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     /**
      * The initial capacity of a {@code ScopeStack}.
      */
-    int STACK_CAPACITY = 10;
+    private int STACK_CAPACITY = 10;
 
     /**
-     * Initializes an empty {@code ScopeStack} with an initial capacity of
+     * Initializes an empty {@code ScopeStack} with an initial size of
      * {@code STACK_CAPACITY}.
      */
     ScopeStack() {
@@ -155,7 +155,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     /**
      * Returns the number of errors.
      *
-     * @return the errors
+     * @return the number of errors
      */
     private int getErrors() {
         return errors;
@@ -164,7 +164,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     /**
      * Returns the number of warnings.
      *
-     * @return the warnings
+     * @return the number of warnings
      */
     private int getWarnings() {
         return warnings;
@@ -245,7 +245,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      *
      * @return the toplevel scope's {@code Scope#stmtsByLabel} hashmap
      */
-    Map<String, Statement> getToplevelStmtsByLabel() {
+    private Map<String, Statement> getToplevelStmtsByLabel() {
         return getToplevel().getStmtsByLabel();
     }
 

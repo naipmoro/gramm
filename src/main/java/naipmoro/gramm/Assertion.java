@@ -64,7 +64,7 @@ public class Assertion implements Statement {
     /**
      * Returns the {@code Mandatory} object associated with the assertion.
      *
-     * @return a {@code Mandatory} object
+     * @return the {@code Mandatory} object associated with the assertion
      */
     public Mandatory getMandatory() {
         return this.mand;

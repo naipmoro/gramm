@@ -8,10 +8,11 @@ public class CharStack extends MMStack<Character> {
     /**
      * The capacity of the {@code CharStack}.
      */
-    int CHARSTACK_CAPACITY = 5;
+    private int CHARSTACK_CAPACITY = 5;
 
     /**
-     * Initializes an empty stack with capacity {@code CHARSTACK_CAPACITY}.
+     * Initializes an empty {@code Character} stack of size
+     * {@code CHARSTACK_CAPACITY}.
      */
     CharStack() {
         stack = new Character[CHARSTACK_CAPACITY];
