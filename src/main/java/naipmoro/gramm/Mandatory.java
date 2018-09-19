@@ -13,8 +13,8 @@ public class Mandatory {
     /**
      * Mandatory constructor.
      *
-     * @param hyps the list of mandatory hypotheses, assumed to be ordered
-     *             according to the hypotheses' order field
+     * @param hyps the list of mandatory hypotheses, <emph>assumed to be
+     *             ordered</emph> according to their order field
      * @param disj the set of mandatory disjoint variable pairs
      */
 
@@ -24,19 +24,19 @@ public class Mandatory {
     }
 
     /**
-     * Returns a list of mandatory hypotheses, which are expected to be sorted
-     * according to their order field.
+     * Returns the list of mandatory hypotheses, <emph>assumed to be
+     * ordered</emph> according to their order field.
      *
-     * @return a list of ordered hypotheses
+     * @return the list of ordered mandatory hypotheses
      */
     List<Hypothesis> getHyps() {
         return this.hyps;
     }
 
     /**
-     * Returns Mandatory's set of disjoint variable pairs
+     * Returns the set of mandatory disjoint variable pairs.
      *
-     * @return a set of disjoint variable pairs
+     * @return the set of mandatory disjoint variable pairs
      */
     public Set<DisjPair> getDisj() {
         return this.disj;

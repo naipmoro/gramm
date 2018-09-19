@@ -22,11 +22,11 @@ public interface Statement {
     String getKind();
 
     /**
-     * Returns the type of statement. This could be any metamath constant
+     * Returns the type of statement. This could be any Metamath constant
      * string, but in practice it is usually either "wff" to represent
      * syntactic statements or "|-" to represent assertions.
      *
-     * @return a metamath constant representing the type of statement
+     * @return a Metamath constant representing the type of statement
      */
     String getType();
 
@@ -48,9 +48,10 @@ public interface Statement {
     Mandatory getMandatory();
 
     /**
-     * Returns the core elements of a statement, namely its type and its body.
+     * Returns the core elements of the statement, namely its type and its
+     * body.
      *
-     * @return the statement's statement core
+     * @return the core elements of a statement: its type and its body
      */
     StatementCore getStmtCore();
 

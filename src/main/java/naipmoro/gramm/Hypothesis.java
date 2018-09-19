@@ -18,11 +18,11 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
      * @param label the identifying label of the hypothesis
      * @param kind  the kind of hypothesis, either "$f" for a variable-type
      *              hypothesis or "$e" for a logical hypothesis
-     * @param type  a metamath constant
+     * @param type  a Metamath constant representing the type of hypothesis
      * @param body  a string array containing the body of the hypothesis
      * @param order an integer N specifying that the hypothesis was the Nth
-     *              hypothesis in the metamath database, using 1-indexing.
-     *              Typically this is calculated by a method.
+     *              hypothesis in the Metamath database, using 1-indexing.
+     *              Typically this parameter is calculated by a method.
      */
     public Hypothesis(String label, String kind, String type, String[] body, int order) {
         this.label = label;
@@ -33,7 +33,9 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the identifying label of the hypothesis.
+     *
+     * @return the identifying label of the hypothesis
      */
     public String getLabel() {
         return this.label;
@@ -43,15 +45,17 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
      * Returns the kind of hypothesis, either "$f" for a variable-type
      * hypothesis or "$e" for a logical hypothesis.
      *
-     * @return the kind of hypothesis, either "$f" (variable-type hypothsis) or
-     *         "$e" (logical hypothesis)
+     * @return the kind of hypothesis, either "$f" for a variable-type
+     * hypothesis or "$e" for a logical hypothesis
      */
     public String getKind() {
         return this.kind;
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the Metamath constant representing the type of hypothesis.
+     *
+     * @return the Metamath constant representing the type of hypothesis
      */
     public String getType() {
         return this.type;
@@ -59,7 +63,7 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
 
     /**
      * Returns the body of the hypothesis as a string array. In the case of a
-     * logical hypothesis, a (possibly empty) string array of metamath
+     * logical hypothesis, a (possibly empty) string array of Metamath
      * constants and variables is returned. In the case of a variable-type
      * hypothesis, a string array with exactly one variable is returned.
      *
@@ -71,16 +75,19 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
 
 
     /**
-     * Hypotheses lack a {@code Mandatory} field.
+     * Unimplemented method. Hypotheses lack a {@code Mandatory} field.
      *
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException if method is used
      */
     public Mandatory getMandatory() {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the core elements of the hypothesis, namely its type and its
+     * body.
+     *
+     * @return the core elements of a hypothesis: its type and its body
      */
     public StatementCore getStmtCore() {
         return new StatementCore(this.type, this.body);
@@ -120,7 +127,13 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     }
 
     /**
-     * {@inheritDoc}
+     * Determines if an object is equal to the hypothesis. Note that the
+     * {@code order} field is irrelevant: two otherwise identical hypotheses
+     * that differ only in their order of appearance in a database are
+     * considered equal.
+     *
+     * @param obj the object being compared to the hypothesis
+     * @return true if the object is equal to the hypothesis, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -166,7 +179,9 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the string representation of the hypothesis.
+     *
+     * @return the string representation of the hypothesis
      */
     @Override
     public String toString() {

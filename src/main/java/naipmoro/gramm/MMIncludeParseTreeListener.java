@@ -18,13 +18,13 @@ public class MMIncludeParseTreeListener extends MMParseTreeListener {
     }
 
     /**
-     * Pops the current file when exiting it.
+     * Removes the current file from the stack when exiting it.
      *
      * @param ctx a {@code db} parse tree node
      */
     @Override
     public void exitDb(MMParser.DbContext ctx) {
-        MMFile.popInclude();
+        MMFile.removeInclude();
     }
 
 }

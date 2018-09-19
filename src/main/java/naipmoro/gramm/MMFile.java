@@ -64,12 +64,10 @@ class MMFile {
     }
 
     /**
-     * Returns the current Metamath file and removes it from the stack.
-     *
-     * @return the current Metamath {@code File}
+     * Removes the current Metamath file from the top of the stack.
      */
-    static File popInclude() {
-        return includeStack.pop();
+    static void removeInclude() {
+        includeStack.remove();
     }
 
     /**

@@ -10,6 +10,11 @@ import java.util.Map;
  * A substitution map used in Metamath proof verification.
  */
 public class SubstitutionMap {
+
+    /**
+     * A hashmap to represent substitutions, where each variable maps to a
+     * string array of Metamath symbols.
+     */
     private Map<String, String[]> substsByVar;
 
     /**
@@ -22,8 +27,8 @@ public class SubstitutionMap {
     /**
      * Adds a new substitution to the substitution map.
      *
-     * @param var         as variable as the key
-     * @param replacement a string array as he value
+     * @param var         a variable as the key
+     * @param replacement a string array as the value
      */
     void addSubstitution(String var, String[] replacement) {
         this.substsByVar.put(var, replacement);
@@ -35,18 +40,18 @@ public class SubstitutionMap {
      *
      * @param var a variable
      * @return the string array that is the map's value for the given variable,
-     *         or null if the variable is not a key.
+     * or null if the variable is not a key.
      */
     String[] getSubst(String var) {
         return this.substsByVar.get(var);
     }
 
     /**
-     * Applies a substitution map to a string array representing a metamath
+     * Applies a substitution map to a string array representing a Metamath
      * statement. The substitutions are applied simultaneously to the elements
      * of the array. Elements that are not keys of the map remain unchanged.
      *
-     * @param orig a string array
+     * @param orig a string array representing a Metamath statement
      * @return the result of applying the substitution map to the array
      */
     List<String> applySubstitution(String[] orig) {
@@ -60,7 +65,7 @@ public class SubstitutionMap {
      *
      * @param list a string array
      * @return the string array resulting from applying the substitution map to
-     *         each element of the original array
+     * each element of the original array
      */
     private List<String> replaceList(String[] list) {
         List<String> result = new ArrayList<>();
@@ -77,7 +82,8 @@ public class SubstitutionMap {
 
     /**
      * Returns the size of the substitution map.
-     * @return the size of the hashmap
+     *
+     * @return the size of the substitution map
      */
     public int size() {
         return this.substsByVar.size();
