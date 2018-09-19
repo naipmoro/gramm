@@ -1,7 +1,7 @@
 package naipmoro.gramm;
 
 /**
- * A stack holding the {@code StatementCores} of a proof verification.
+ * The stack of {@code StatementCores} used in proof verification.
  */
 public class ProofStack extends MMStack<StatementCore> {
 

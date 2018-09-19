@@ -12,7 +12,7 @@ public class ProofTest {
     @Test
     public void charsToNum_ConvertDequeCharactersToInteger_Integer() {
         //Deque<Character> charStack = new ArrayDeque<>();
-        CharStack charStack = new CharStack(5);
+        CharStack charStack = new CharStack();
 
         charStack.push('U');
         charStack.push('V');

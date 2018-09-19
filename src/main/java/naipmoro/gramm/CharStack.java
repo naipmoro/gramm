@@ -3,12 +3,15 @@ package naipmoro.gramm;
 public class CharStack extends MMStack<Character> {
 
     /**
-     * Initializes an empty stack of size {@code n}.
-     *
-     * @param n the capacity of the stack
+     * The capacity of the {@code CharStack}.
      */
-    CharStack(int n) {
-        stack = new Character[n];
+    int CHARSTACK_CAPACITY = 5;
+
+    /**
+     * Initializes an empty stack of capacity {@code CHARSTACK_CAPACITY}.
+     */
+    CharStack() {
+        stack = new Character[CHARSTACK_CAPACITY];
     }
 
     /**
