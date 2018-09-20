@@ -1,8 +1,9 @@
 package naipmoro.gramm;
 
 /**
- * An exception that is usually fatal, leading to the termination of the
- * application.
+ * An exception that terminates the application. It is typically thrown in
+ * response to syntactic errors or other serious errors from which recovery is
+ * not an option.
  */
 public class MMException extends Exception {
 

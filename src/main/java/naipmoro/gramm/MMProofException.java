@@ -1,17 +1,17 @@
 package naipmoro.gramm;
 
 /**
- * An exception that halts a proof verification, but does not typically
- * terminate the application.
+ * An exception thrown in response to a proof error that does not terminate the
+ * application.
  */
-class MMProofException extends MMException {
+public class MMProofException extends MMException {
 
     /**
-     * Constructor.
+     * Exception constructor.
      *
      * @param msg exception message
      */
-    MMProofException(String msg) {
+    public MMProofException(String msg) {
         super(msg);
     }
 }
