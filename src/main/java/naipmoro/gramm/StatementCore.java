@@ -16,7 +16,7 @@ public class StatementCore {
      * @param type a Metamath constant representing the type of statement
      * @param body a string array containing the body of the statement
      */
-    public StatementCore(String type, String[] body) {
+    StatementCore(String type, String[] body) {
         this.type = type;
         this.body = body;
     }
@@ -27,7 +27,7 @@ public class StatementCore {
      * @param type a Metamath constant representing the type of statement
      * @param body a {@code List} containing the body of a statement
      */
-    public StatementCore(String type, List<String> body) {
+    StatementCore(String type, List<String> body) {
         this.type = type;
         String[] arr = new String[body.size()];
         arr = body.toArray(arr);
@@ -50,7 +50,7 @@ public class StatementCore {
      *
      * @return the body of the statement as a string array
      */
-    public String[] getBody() {
+    String[] getBody() {
         return this.body;
     }
 

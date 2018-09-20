@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * The main class that iniiates the verification of a Metamath source file.
+ * The main class that initiates the verification of a Metamath source file.
  */
 public class Verifier {
 
@@ -22,7 +22,7 @@ public class Verifier {
      * @param dbFile the Metamath source file
      * @throws IOException if the file doesn't exist or can't be processed
      */
-    public static void mmVerify(File dbFile) throws IOException {
+    static void mmVerify(File dbFile) throws IOException {
         dbFile = dbFile.getCanonicalFile();
         try (InputStream is = new FileInputStream(dbFile)) {
             CharStream input = CharStreams.fromStream(is);

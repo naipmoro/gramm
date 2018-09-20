@@ -17,12 +17,12 @@ import java.util.List;
 /** A class to keep track of the Metamath source file and any subsequent
  * included files.
  */
-public class MMFile {
+class MMFile {
 
     /**
      * The Metamath source file.
      */
-    public static File dbFile;
+    static File dbFile;
 
     /**
      * The list of included files, including the source file.
@@ -40,7 +40,7 @@ public class MMFile {
      *
      * @param file the Metamath source {@code File}
      */
-    public static void setDbFile(File file) {
+    static void setDbFile(File file) {
         MMFile.dbFile = file;
     }
 
@@ -49,7 +49,7 @@ public class MMFile {
      *
      * @param file the {@code File} added to the list of included files
      */
-    public static void addInclude(File file) {
+    static void addInclude(File file) {
         includeFiles.add(file);
     }
 
@@ -59,14 +59,14 @@ public class MMFile {
      *
      * @param file a {@code File} pushed onto the included file stack
      */
-    public static void pushInclude(File file) {
+    static void pushInclude(File file) {
         includeStack.push(file);
     }
 
     /**
      * Removes the current Metamath file from the top of the stack.
      */
-    public static void removeInclude() {
+    static void removeInclude() {
         includeStack.remove();
     }
 
@@ -75,7 +75,7 @@ public class MMFile {
      *
      * @return the current Metamath {@code File}
      */
-    public static File getCurrentFile() {
+    static File getCurrentFile() {
         return includeStack.peek();
     }
 
@@ -86,7 +86,7 @@ public class MMFile {
      * @return true if the file is in the list of included files, false
      * otherwise
      */
-    public static boolean containsInclude(File file) {
+    static boolean containsInclude(File file) {
         return includeFiles.contains(file);
     }
 
@@ -100,7 +100,7 @@ public class MMFile {
      * @throws IOException if the file doesn't exist or can't be properly
      *                     processed
      */
-    public static void walkInclude(String includePath, ScopeStack ss) throws IOException {
+    static void walkInclude(String includePath, ScopeStack ss) throws IOException {
         try(InputStream is = new FileInputStream(includePath)) {
             File includeFile = (new File(includePath)).getCanonicalFile();
             if (includeFile.equals(MMFile.dbFile)) {

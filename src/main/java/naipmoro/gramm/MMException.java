@@ -5,16 +5,16 @@ package naipmoro.gramm;
  * response to syntactic errors or other serious errors from which recovery is
  * not an option.
  */
-public class MMException extends Exception {
+class MMException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
     /**
      * Exception constructor.
      *
-     * @param msg exception message
+     * @param msg the exception message
      */
-    public MMException(String msg) {
+    MMException(String msg) {
         super(msg);
     }
 

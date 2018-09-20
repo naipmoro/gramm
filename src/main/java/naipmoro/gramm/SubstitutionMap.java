@@ -20,7 +20,7 @@ public class SubstitutionMap {
     /**
      * A SubstitutionMap constructor.
      */
-    public SubstitutionMap() {
+    SubstitutionMap() {
         this.substsByVar = new HashMap<>();
     }
 
@@ -30,7 +30,7 @@ public class SubstitutionMap {
      * @param var         a variable as the key
      * @param replacement a string array as the value
      */
-    public void addSubstitution(String var, String[] replacement) {
+    void addSubstitution(String var, String[] replacement) {
         this.substsByVar.put(var, replacement);
     }
 
@@ -42,7 +42,7 @@ public class SubstitutionMap {
      * @return the string array that is the map's value for the given variable,
      * or null if the variable is not a key.
      */
-    public String[] getSubst(String var) {
+    String[] getSubst(String var) {
         return this.substsByVar.get(var);
     }
 
@@ -54,7 +54,7 @@ public class SubstitutionMap {
      * @param orig a string array representing a Metamath statement
      * @return the result of applying the substitution map to the array
      */
-    public List<String> applySubstitution(String[] orig) {
+    List<String> applySubstitution(String[] orig) {
         return this.replaceList(orig);
     }
 

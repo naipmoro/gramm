@@ -16,7 +16,7 @@ public class CharStack extends MMStack<Character> {
      * Initializes an empty {@code Character} stack of size
      * {@code CHARSTACK_CAPACITY}.
      */
-    public CharStack() {
+    CharStack() {
         stack = new Character[CHARSTACK_CAPACITY];
     }
 

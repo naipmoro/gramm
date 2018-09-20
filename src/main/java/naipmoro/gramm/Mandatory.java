@@ -18,7 +18,7 @@ public class Mandatory {
      * @param disj the set of mandatory disjoint variable pairs
      */
 
-    public Mandatory(List<Hypothesis> hyps, Set<DisjPair> disj) {
+    Mandatory(List<Hypothesis> hyps, Set<DisjPair> disj) {
         this.hyps = hyps;
         this.disj = disj;
     }
@@ -29,7 +29,7 @@ public class Mandatory {
      *
      * @return the list of ordered mandatory hypotheses
      */
-    public List<Hypothesis> getHyps() {
+    List<Hypothesis> getHyps() {
         return this.hyps;
     }
 

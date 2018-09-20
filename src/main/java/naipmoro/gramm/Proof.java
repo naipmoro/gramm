@@ -144,7 +144,7 @@ public class Proof {
      *
      * @return true if the proof is verified, otherwise false
      */
-    public boolean verifyNormal() {
+    boolean verifyNormal() {
 
         // the proof stack will hold the statements (more precisely,
         // the statement cores) referenced by the proof labels
@@ -201,7 +201,7 @@ public class Proof {
      *
      * @return true if the proof is verified, otherwise false
      */
-    public boolean verifyCompressed() {
+    boolean verifyCompressed() {
         //ProofStack proofStack = new ProofStack(proof.length);
         List<StatementCore> tags = new ArrayList<>();
         List<Statement> reference = new ArrayList<Statement>(this.mand.getHyps());

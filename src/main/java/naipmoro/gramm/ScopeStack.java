@@ -73,7 +73,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * Initializes an empty {@code ScopeStack} with an initial size of
      * {@code STACK_CAPACITY}.
      */
-    public ScopeStack() {
+    ScopeStack() {
         stack = new Scope[STACK_CAPACITY];
     }
 
@@ -221,7 +221,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      *
      * @return a string to be displayed at the end of database verification
      */
-    public String endMessage() {
+    String endMessage() {
         int errs = getErrors();
         int warns = getWarnings();
         int attempted = getAttemptedProofs();
@@ -236,7 +236,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      *
      * @return a {@code Scope}
      */
-    public Scope getToplevel() {
+    Scope getToplevel() {
         return this.peekLast();
     }
 
@@ -245,7 +245,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      *
      * @return the toplevel scope's {@code Scope#stmtsByLabel} hashmap
      */
-    public Map<String, Statement> getToplevelStmtsByLabel() {
+    Map<String, Statement> getToplevelStmtsByLabel() {
         return getToplevel().getStmtsByLabel();
     }
 
@@ -258,7 +258,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @throws MMException if a symbol being added is already declared as a
      *                     variable
      */
-    public void addConstants(String[] cns) throws MMException {
+    void addConstants(String[] cns) throws MMException {
         for (String cn : cns) {
             checker.checkNewConstant(cn);
             globalConstants.add(cn);
@@ -274,7 +274,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @param vars a string array of variables
      * @throws MMException if a variable is already declared as a constant
      */
-    public void addVars(String[] vars) throws MMException {
+    void addVars(String[] vars) throws MMException {
         Scope scope = this.peek();
         for (String var : vars) {
             checker.checkNewVar(var);
@@ -292,7 +292,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @param var   an active variable
      * @throws MMException if the hypothesis fails the validity check
      */
-    public void addVarHyp(String label, String type, String var) throws MMException {
+    void addVarHyp(String label, String type, String var) throws MMException {
         checker.checkNewVarHyp(label, type, var);
         Hypothesis hyp = new Hypothesis(label, "$f", type, new String[]{var}, ++hypCount);
         Scope scope = this.peek();
@@ -312,7 +312,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      *                     is a variable, if that variable is not assigned a
      *                     type in the active scope
      */
-    public void addLogHyp(String label, String type, String[] stmt) throws MMException {
+    void addLogHyp(String label, String type, String[] stmt) throws MMException {
         checker.checkLabelAndType(label, type);
         Scope scope = this.peek();
         for (String sym : stmt) {
@@ -345,7 +345,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @param vars a string array of variables
      * @throws MMException if the uniqueness check fails
      */
-    public void addDisjVars(String[] vars) throws MMException {
+    void addDisjVars(String[] vars) throws MMException {
         checker.checkDisjVars(vars);
         Scope scope = this.peek();
         int vsize = vars.length;
@@ -364,7 +364,8 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
 
     /**
      * The elements of a proposed theorem are checked and passed to the
-     * {@link #addAssertion} method.
+     * {@link #addAssertion(String, String, String, String[], Mandatory)
+     * addAssertion} method.
      *
      * @param label     the identifying label of the theorem
      * @param type      a metatamath constant
@@ -373,7 +374,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @throws MMException if the theorem is an improperly constructed
      *                     statement
      */
-    public void addTheorem(String label, String type, String[] stmt, String[] proofList)
+    void addTheorem(String label, String type, String[] stmt, String[] proofList)
             throws MMException {
         checker.checkLabelAndType(label, type);
         Mandatory mand = getActiveMandatory(stmt);
@@ -386,14 +387,15 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
 
     /**
      * The elements of a proposed axiom are checked and passed to the
-     * {@link #addAssertion} method.
+     * {@link #addAssertion(String, String, String, String[], Mandatory)
+     * addAssertion} method.
      *
      * @param label the identifying label of the axiom
      * @param type  a metatamath constant
      * @param stmt  a string array containing the axiom body
      * @throws MMException if the axiom is an improperly constructed statement
      */
-    public void addAxiom(String label, String type, String[] stmt) throws MMException {
+    void addAxiom(String label, String type, String[] stmt) throws MMException {
         checker.checkLabelAndType(label, type);
         Mandatory mand = getActiveMandatory(stmt);
         addAssertion(label, "$a", type, stmt, mand);
@@ -407,7 +409,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @return the assertion's associated {@code Mandatory} object
      * @throws MMException if stmt is not a valid assertion body
      */
-    public Mandatory getActiveMandatory(String[] stmt) throws MMException {
+    Mandatory getActiveMandatory(String[] stmt) throws MMException {
         Set<Hypothesis> logHypSet = getActiveMandLogHyps();
         Set<Hypothesis> varHypSet = getActiveMandVarHyps();
         for (String sym : stmt) {
@@ -446,7 +448,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @param stmt  a string array conatining the body of the assertion
      * @param mand  the {@code Mandatory} object associated with the assertion
      */
-    public void addAssertion(String label, String kind, String type, String[] stmt,
+    void addAssertion(String label, String kind, String type, String[] stmt,
                               Mandatory mand) {
         Map<String, Statement> TopStmtsByLabel = getToplevelStmtsByLabel();
         TopStmtsByLabel.put(label, new Assertion(label, kind, type, stmt, mand));
@@ -459,7 +461,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @param hyp a hypothesis
      * @return true if the kind of the hypothesis is "$f", false otherwise.
      */
-    public boolean isVarTypeHyp(Hypothesis hyp) {
+    boolean isVarTypeHyp(Hypothesis hyp) {
         return hyp.getKind().equals("$f");
     }
 
@@ -470,7 +472,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @return true if the kind of the statement is either "$f" or "$e", false
      * otherwise.
      */
-    public boolean isHypothesis(Statement stmt) {
+    boolean isHypothesis(Statement stmt) {
         String kind = stmt.getKind();
         return (kind.equals("$f") || kind.equals("$e"));
     }
@@ -482,7 +484,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @param var a variable
      * @return an active variable-type hypothesis or null
      */
-    public Hypothesis getActiveVarHypByVar(String var) {
+    Hypothesis getActiveVarHypByVar(String var) {
         for (Scope scope : this) {
             Hypothesis hyp = scope.getVarHypsByVar().get(var);
             if (hyp != null) {
@@ -497,7 +499,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      *
      * @return a set of disjoint variable pairs
      */
-    public Set<DisjPair> getActiveDisjVarPairs() {
+    Set<DisjPair> getActiveDisjVarPairs() {
         Set<DisjPair> disjPairs = new HashSet<>();
         for (Scope scope : this) {
             disjPairs.addAll(scope.getDisjVarPairs());
@@ -510,7 +512,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      *
      * @return a set of hypotheses
      */
-    public Set<Hypothesis> getActiveMandLogHyps() {
+    Set<Hypothesis> getActiveMandLogHyps() {
         Set<Hypothesis> logHyps = new HashSet<>();
         for (Scope scope : this) {
             logHyps.addAll(scope.getMandLogHyps());
@@ -524,7 +526,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      *
      * @return a set of hypotheses
      */
-    public Set<Hypothesis> getActiveMandVarHyps() {
+    Set<Hypothesis> getActiveMandVarHyps() {
         Set<Hypothesis> varHyps = new HashSet<>();
         for (Scope scope : this) {
             varHyps.addAll(scope.getMandVarHyps());
@@ -539,7 +541,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @param label the identifying label of a statement
      * @return an active statement or null
      */
-    public Statement getActiveStmtByLabel(String label) {
+    Statement getActiveStmtByLabel(String label) {
         for (Scope scope : this) {
             Statement stmt = scope.getStmtsByLabel().get(label);
             if (stmt != null) {
