@@ -1,7 +1,7 @@
 package naipmoro.gramm;
 
 /**
- * An exception thrown in response to a proof error that does not terminate the
+ * An exception thrown in response to a proof error, it does not terminate the
  * application.
  */
 class MMProofException extends MMException {
