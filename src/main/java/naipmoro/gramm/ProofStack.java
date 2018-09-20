@@ -10,7 +10,7 @@ class ProofStack extends MMStack<StatementCore> {
      *
      * @param n the capacity of the stack
      */
-    ProofStack(int n) {
+    public ProofStack(int n) {
         stack = new StatementCore[n];
     }
 
@@ -21,7 +21,7 @@ class ProofStack extends MMStack<StatementCore> {
      * @param n index of the object being returned
      * @return the {@code StatementCore} at the given index of the stack
      */
-    StatementCore getIndex(int n) {
+    public StatementCore getIndex(int n) {
         return stack[n];
     }
 }

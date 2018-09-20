@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-//import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * The main class that parses and walks the parse tree of a Metamath source
- * file.
+ * The main class that iniiates the verification of a Metamath source file.
  */
 public class Verifier {
 
@@ -24,7 +22,7 @@ public class Verifier {
      * @param dbFile the Metamath source file
      * @throws IOException if the file doesn't exist or can't be processed
      */
-    static void mmVerify(File dbFile) throws IOException {
+    public static void mmVerify(File dbFile) throws IOException {
         dbFile = dbFile.getCanonicalFile();
         try (InputStream is = new FileInputStream(dbFile)) {
             CharStream input = CharStreams.fromStream(is);

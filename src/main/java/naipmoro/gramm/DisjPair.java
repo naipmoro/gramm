@@ -78,7 +78,9 @@ public class DisjPair {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the string representation of the disjoint variable pair.
+     *
+     * @return the string representation of the disjoint variable pair
      */
     public String toString() {
         return "<" + left + ", " + right + ">";
@@ -113,7 +115,7 @@ public class DisjPair {
      * @param vars2 a set of variables, none of whose elements are in vars1
      * @return the cartesian product of sets vars1 and vars2 as DisjPairs
      */
-    static Set<DisjPair> toDisjProduct(Set<String> vars1, Set<String> vars2) {
+    public static Set<DisjPair> toDisjProduct(Set<String> vars1, Set<String> vars2) {
         Set<DisjPair> product = new HashSet<>();
         for (String var1 : vars1) {
             for (String var2 : vars2) {

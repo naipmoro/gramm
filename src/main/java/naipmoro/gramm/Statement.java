@@ -1,7 +1,7 @@
 package naipmoro.gramm;
 
 /**
- * An interface to cover all metamath statements: assertions (axioms and
+ * An interface to cover all Metamath statements: assertions (axioms and
  * theorems) and hypotheses (variable-type and logical).
  */
 public interface Statement {
@@ -32,7 +32,7 @@ public interface Statement {
 
     /**
      * Returns the body of the statement as a (possibly empty) string array of
-     * metamath constants and variables. If the statement is a variable-type
+     * Metamath constants and variables. If the statement is a variable-type
      * hypothesis, an array of exactly one variable is returned.
      *
      * @return the body of the statement

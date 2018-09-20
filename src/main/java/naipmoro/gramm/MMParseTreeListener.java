@@ -3,15 +3,17 @@ package naipmoro.gramm;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.LexerNoViableAltException;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.SyntaxTree;
 
 
 /**
- * A class that walks the parse tree of a Metamath file and produces effects at
- * specified nodes. Extends the Antlr-provided empty base listener.
+ * A listener that walks the parse tree of a Metamath file and produces effects
+ * at specified nodes. Extends the Antlr-provided empty base listener.
  */
 public class MMParseTreeListener extends MMBaseListener {
 
@@ -50,7 +52,7 @@ public class MMParseTreeListener extends MMBaseListener {
      * while the {@code SyntaxTree} provides the error location.
      *
      * @param e   a {@code MMException}
-     * @param ctx the syntax node in which the error occurred
+     * @param ctx the syntax node in which the exception was caught
      */
     void exceptionMessage(MMException e, SyntaxTree ctx) {
         long difference = System.nanoTime() - startTime;

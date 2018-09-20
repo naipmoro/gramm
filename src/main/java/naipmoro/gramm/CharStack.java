@@ -6,15 +6,17 @@ package naipmoro.gramm;
 public class CharStack extends MMStack<Character> {
 
     /**
-     * The capacity of the {@code CharStack}.
+     * The capacity of the {@code CharStack}. A capacity of 4 would allow
+     * referencing collections of over 60,000 items, while a capacity of 5 can
+     * reference over 300,000.
      */
-    private int CHARSTACK_CAPACITY = 5;
+    private final int CHARSTACK_CAPACITY = 5;
 
     /**
      * Initializes an empty {@code Character} stack of size
      * {@code CHARSTACK_CAPACITY}.
      */
-    CharStack() {
+    public CharStack() {
         stack = new Character[CHARSTACK_CAPACITY];
     }
 

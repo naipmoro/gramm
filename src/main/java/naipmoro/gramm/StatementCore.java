@@ -3,8 +3,8 @@ package naipmoro.gramm;
 import java.util.List;
 
 /**
- * The essential elements of a statement, namely its type and its body, used by
- * the proof verifer.
+ * The essential elements of a statement (its type and its body) used by the
+ * proof verifer.
  */
 public class StatementCore {
     private final String type;
@@ -16,7 +16,7 @@ public class StatementCore {
      * @param type a Metamath constant representing the type of statement
      * @param body a string array containing the body of the statement
      */
-    StatementCore(String type, String[] body) {
+    public StatementCore(String type, String[] body) {
         this.type = type;
         this.body = body;
     }
@@ -27,7 +27,7 @@ public class StatementCore {
      * @param type a Metamath constant representing the type of statement
      * @param body a {@code List} containing the body of a statement
      */
-    StatementCore(String type, List<String> body) {
+    public StatementCore(String type, List<String> body) {
         this.type = type;
         String[] arr = new String[body.size()];
         arr = body.toArray(arr);
@@ -50,7 +50,7 @@ public class StatementCore {
      *
      * @return the body of the statement as a string array
      */
-    String[] getBody() {
+    public String[] getBody() {
         return this.body;
     }
 
