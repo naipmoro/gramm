@@ -288,7 +288,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * the hypothesis is valid and then adds it to the active scope.
      *
      * @param label the identifying label of the variable-type hypothesis
-     * @param type  a previously declared metamath constant
+     * @param type  an active Metamath constant
      * @param var   an active variable
      * @throws MMException if the hypothesis fails the validity check
      */
@@ -306,7 +306,8 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * hypothesis is valid and then adds it to the active scope.
      *
      * @param label the identifying label of the logical hypothesis
-     * @param type  a metamath constant
+     * @param type  a Metamath constant representing the type of logical
+     *              hypothesis
      * @param stmt  a string array containing the body of the hypothesis
      * @throws MMException if an element of stmt is not active or, in case it
      *                     is a variable, if that variable is not assigned a
@@ -368,7 +369,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * addAssertion} method.
      *
      * @param label     the identifying label of the theorem
-     * @param type      a metatamath constant
+     * @param type      a Metamath constant representing the type of theorem
      * @param stmt      a string array containing the theorem body
      * @param proofList a string array containing the proof of the theorem
      * @throws MMException if the theorem is an improperly constructed
@@ -391,7 +392,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * addAssertion} method.
      *
      * @param label the identifying label of the axiom
-     * @param type  a metatamath constant
+     * @param type  a Metamath constant representing the type of axiom
      * @param stmt  a string array containing the axiom body
      * @throws MMException if the axiom is an improperly constructed statement
      */
@@ -444,7 +445,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * @param label the identifying label of the assertion
      * @param kind  the kind of assertion, either "$a" for axioms or "$p" for
      *              theorems
-     * @param type  a metamath constant
+     * @param type  a Metamath constant representing the type of assertion
      * @param stmt  a string array conatining the body of the assertion
      * @param mand  the {@code Mandatory} object associated with the assertion
      */
@@ -482,7 +483,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * hypothesis if it is in the active scope, otherwise returns null.
      *
      * @param var a variable
-     * @return an active variable-type hypothesis or null
+     * @return the hypothesis if it is active, otherwise null
      */
     Hypothesis getActiveVarHypByVar(String var) {
         for (Scope scope : this) {
@@ -497,7 +498,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     /**
      * Returns the set of all disjoint variable pairs in the active scope.
      *
-     * @return a set of disjoint variable pairs
+     * @return the set of all disjoint variable pairs in the active scope
      */
     Set<DisjPair> getActiveDisjVarPairs() {
         Set<DisjPair> disjPairs = new HashSet<>();
@@ -510,7 +511,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     /**
      * Returns the set of all mandatory logical hypotheses in the active scope.
      *
-     * @return a set of hypotheses
+     * @return the set of all mandatory logical hypotheses in the active scope
      */
     Set<Hypothesis> getActiveMandLogHyps() {
         Set<Hypothesis> logHyps = new HashSet<>();
@@ -524,7 +525,8 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * Returns the set of all mandatory variable-type hypotheses in the active
      * scope.
      *
-     * @return a set of hypotheses
+     * @return the set of all mandatory variable-type hypotheses in the active
+     * scope
      */
     Set<Hypothesis> getActiveMandVarHyps() {
         Set<Hypothesis> varHyps = new HashSet<>();
@@ -539,7 +541,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * active scope, otherwise returns null.
      *
      * @param label the identifying label of a statement
-     * @return an active statement or null
+     * @return the statement if it is active, otherwise null
      */
     Statement getActiveStmtByLabel(String label) {
         for (Scope scope : this) {

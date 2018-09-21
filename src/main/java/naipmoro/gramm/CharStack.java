@@ -1,7 +1,7 @@
 package naipmoro.gramm;
 
 /**
- * A stack of {@code Charcter} objects used in compressed-proof verification.
+ * A stack of characters used in compressed-proof verification.
  */
 public class CharStack extends MMStack<Character> {
 
