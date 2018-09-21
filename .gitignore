@@ -19,6 +19,10 @@ gen/
 # target files
 target/
 
+# javadoc files
+src/main/java/naipmoro/gramm/doc-files/
+src/main/java/naipmoro/gramm/package-info.java
+
 # testing file
 src/main/java/naipmoro/gramm/Example.java
 
