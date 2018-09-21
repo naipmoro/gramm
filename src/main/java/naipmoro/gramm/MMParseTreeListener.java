@@ -307,13 +307,4 @@ public class MMParseTreeListener extends MMBaseListener {
         }
     }
 
-    // @Override public void visitErrorNode(ErrorNode node) {
-    // Token sym = node.getSymbol();
-    // int line = sym.getLine();
-    // int pos = sym.getCharPositionInLine();
-    // String tok = sym.getText();
-    // throw new RuntimeException(String.format("token %s error at line %d col
-    // %d", tok, line, pos));
-    // }
-
 }

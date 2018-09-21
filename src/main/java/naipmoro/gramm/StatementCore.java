@@ -11,7 +11,7 @@ public class StatementCore {
     private final String body[];
 
     /**
-     * A StatementCore constructor.
+     * StatementCore constructor, where the statement is a string array.
      *
      * @param type a Metamath constant representing the type of statement
      * @param body a string array containing the body of the statement
@@ -22,7 +22,7 @@ public class StatementCore {
     }
 
     /**
-     * A StatementCore constructor.
+     * StatementCore constructor, where the statement is a list of strings.
      *
      * @param type a Metamath constant representing the type of statement
      * @param body a {@code List} containing the body of a statement

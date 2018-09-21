@@ -3,7 +3,6 @@ package naipmoro.gramm;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-//import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -87,6 +86,23 @@ public class DisjPair {
     }
 
     /**
+     * Given two disjoint sets, generates their cartesian product as DisjPairs.
+     *
+     * @param vars1 a set of variables, none of whose elements are in vars2
+     * @param vars2 a set of variables, none of whose elements are in vars1
+     * @return the cartesian product of sets vars1 and vars2 as DisjPairs
+     */
+    static Set<DisjPair> toDisjProduct(Set<String> vars1, Set<String> vars2) {
+        Set<DisjPair> product = new HashSet<>();
+        for (String var1 : vars1) {
+            for (String var2 : vars2) {
+                product.add(new DisjPair(var1, var2));
+            }
+        }
+        return product;
+    }
+
+    /**
      * Given a set of string variables, generates the set of all possible
      * DisjPairs from the variables. This method is not used and is included
      * only for reference.
@@ -106,22 +122,5 @@ public class DisjPair {
             }
         }
         return allDisjPairs;
-    }
-
-    /**
-     * Given two disjoint sets, generates their cartesian product as DisjPairs.
-     *
-     * @param vars1 a set of variables, none of whose elements are in vars2
-     * @param vars2 a set of variables, none of whose elements are in vars1
-     * @return the cartesian product of sets vars1 and vars2 as DisjPairs
-     */
-    static Set<DisjPair> toDisjProduct(Set<String> vars1, Set<String> vars2) {
-        Set<DisjPair> product = new HashSet<>();
-        for (String var1 : vars1) {
-            for (String var2 : vars2) {
-                product.add(new DisjPair(var1, var2));
-            }
-        }
-        return product;
     }
 }

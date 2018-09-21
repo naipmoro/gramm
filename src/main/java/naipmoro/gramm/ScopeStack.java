@@ -17,24 +17,16 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * The global set of constants.
-     */
+    /** The global set of constants. */
     private Set<String> globalConstants = new HashSet<>();
 
-    /**
-     * The global set of all variables, both active and inactive.
-     */
+    /** The global set of all variables, both active and inactive. */
     private Set<String> globalVars = new HashSet<>();
 
-    /**
-     * The global set of statement id labels.
-     */
+    /** The global set of statement id labels. */
     private Set<String> globalLabels = new HashSet<>();
 
-    /**
-     * An inner class of checking methods.
-     */
+    /** An inner class of checking methods. */
     private ScopeStack.Check checker = new Check();
 
     /**
@@ -44,37 +36,31 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      */
     private int hypCount = 0;
 
-    /**
-     * The current total number of errors.
-     */
+    /** The current total number of errors. */
     private int errors = 0;
 
-    /**
-     * The current total number of warnings.
-     */
+    /** The current total number of warnings. */
     private int warnings = 0;
 
-    /**
-     * The current total number of attempted proofs.
-     */
+    /** The current total number of attempted proofs. */
     private int attemptedProofs = 0;
 
-    /**
-     * The current total number of verified proofs.
-     */
+    /** The current total number of verified proofs. */
     private int verifiedProofs = 0;
 
-    /**
-     * The initial capacity of a {@code ScopeStack}.
-     */
-    private int STACK_CAPACITY = 10;
+    /** The capacity of the {@code ScopeStack}. */
+    int SCOPESTACK_CAPACITY;
+
+    /** The initial capacity of the {@code ScopeStack}. */
+    private int INTIAL_CAPACITY = 10;
 
     /**
      * Initializes an empty {@code ScopeStack} with an initial size of
-     * {@code STACK_CAPACITY}.
+     * {@code SCOPESTACK_CAPACITY}.
      */
     ScopeStack() {
-        stack = new Scope[STACK_CAPACITY];
+        SCOPESTACK_CAPACITY = INTIAL_CAPACITY;
+        stack = new Scope[SCOPESTACK_CAPACITY];
     }
 
     /**
@@ -85,9 +71,9 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      */
     @Override
     public void push(Scope scope) {
-        if (ptr == STACK_CAPACITY - 1) {
-            stack = Arrays.copyOf(stack, STACK_CAPACITY * 2);
-            STACK_CAPACITY = stack.length;
+        if (ptr == SCOPESTACK_CAPACITY - 1) {
+            stack = Arrays.copyOf(stack, SCOPESTACK_CAPACITY * 2);
+            SCOPESTACK_CAPACITY = stack.length;
         }
         stack[++ptr] = scope;
     }
@@ -109,7 +95,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
         int index;
 
         /**
-         * Constructor.
+         * ReverseIterator constructor.
          */
         ReverseIterator() {
             index = ptr;
@@ -124,9 +110,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
             return index >= 0;
         }
 
-        /**
-         * Unimplemented method.
-         */
+        /** Unimplemented method. */
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -188,30 +172,22 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
         return verifiedProofs;
     }
 
-    /**
-     * Increases the number of errors by one.
-     */
+    /** Increases the number of errors by one. */
     void incErrors() {
         this.errors++;
     }
 
-    /**
-     * Increases the number of warnings by one.
-     */
+    /** Increases the number of warnings by one. */
     void incWarnings() {
         this.warnings++;
     }
 
-    /**
-     * Increases the number of attempted proofs by one.
-     */
+    /** Increases the number of attempted proofs by one. */
     void incAttemptedProofs() {
         this.attemptedProofs++;
     }
 
-    /**
-     * Increases the number of verified proofs by one.
-     */
+    /** Increases the number of verified proofs by one. */
     void incVerifiedProofs() {
         this.verifiedProofs++;
     }

@@ -19,19 +19,13 @@ import java.util.List;
  */
 class MMFile {
 
-    /**
-     * The Metamath source file.
-     */
+    /** The Metamath source file. */
     static File dbFile;
 
-    /**
-     * The list of included files, including the source file.
-     */
+    /** The list of included files, including the source file. */
     private static List<File> includeFiles = new ArrayList<>();
 
-    /**
-     * A stack to keep track of the current file.
-     */
+    /** A stack to keep track of the current file. */
     private static Deque<File> includeStack = new ArrayDeque<>();
 
 
@@ -63,9 +57,7 @@ class MMFile {
         includeStack.push(file);
     }
 
-    /**
-     * Removes the current Metamath file from the top of the stack.
-     */
+    /** Removes the current Metamath file from the top of the stack. */
     static void removeInclude() {
         includeStack.remove();
     }

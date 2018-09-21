@@ -12,36 +12,23 @@ import java.util.Set;
  */
 public class Scope {
 
-    /**
-     * The scope's list of variables.
-     */
+    /** The scope's list of variables. */
     private List<String> variables = new ArrayList<>();
 
-    /**
-     * The scope's set of disjoint variable pairs.
-     */
+    /** The scope's set of disjoint variable pairs. */
     private Set<DisjPair> disjVarPairs = new HashSet<>();
 
-    /**
-     * The scope's set of mandatory variable-type hypotheses.
-     */
+    /** The scope's set of mandatory variable-type hypotheses. */
     private Set<Hypothesis> mandVarHyps = new HashSet<>();
 
-    /**
-     * The scope's set of mandatory logical hypotheses.
-     */
+    /** The scope's set of mandatory logical hypotheses. */
     private Set<Hypothesis> mandLogHyps = new HashSet<>();
 
-    /**
-     * The scope's label->statement hashmap.
-     */
+    /** The scope's label-to-statement hashmap. */
     private Map<String, Statement> stmtsByLabel = new HashMap<>();
 
-    /**
-     * The scope's variable->var-type-hypothesis hashmap.
-     */
+    /** The scope's variable-to-var-type-hypothesis hashmap. */
     private Map<String, Hypothesis> varHypsByVar = new HashMap<>();
-
 
     /**
      * Returns the scope's list of variables.

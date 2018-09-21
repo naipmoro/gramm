@@ -7,14 +7,10 @@ package naipmoro.gramm;
  */
 class MMStack<T> {
 
-    /**
-     * The stack is an array of items.
-     */
+    /** The stack is an array of items. */
     T[] stack;
 
-    /**
-     * Stack pointer, points to the top of the stack.
-     */
+    /** Stack pointer, points to the top of the stack. */
     int ptr = -1;
 
     /**
@@ -35,9 +31,7 @@ class MMStack<T> {
         return stack[ptr--];
     }
 
-    /**
-     * Removes the item from the top of the stack.
-     */
+    /** Removes the item from the top of the stack. */
     void remove() {
         ptr--;
     }

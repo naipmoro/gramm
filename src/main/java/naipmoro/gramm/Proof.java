@@ -2,48 +2,42 @@ package naipmoro.gramm;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-//import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-//import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-//import java.util.Stack;
 
 /**
  * A Metamath proof.
  */
 public class Proof {
 
-    /**
-     * The scope stack environment in which the proof takes place.
-     */
+    /** The scope stack environment in which the proof takes place. */
     private final ScopeStack ss;
-    /**
-     * The identifying label of the theorem being verified.
-     */
+
+    /** The identifying label of the theorem being verified. */
     private final String label;
-    /**
-     * The metamath constant representing the type of theorem.
-     */
+
+    /** The metamath constant representing the type of theorem. */
     private final String type;
+
     /**
      * The body of the theorem as a string array of metamath constants and
      * variables.
      */
     private final String[] stmt;
+
     /**
      * The proof of the theorem as a string array of i) labels, in the case of
      * a normal proof, or ii) labels in parentheses followed by uppercase
      * letters, in the case of a compressed proof.
      */
     private final String[] proof;
-    /**
-     * The theorem's associated {@code Mandatory} object.
-     */
+
+    /** The theorem's associated {@code Mandatory} object. */
     private final Mandatory mand;
 
     /**
@@ -292,17 +286,6 @@ public class Proof {
         return true;
     }
 
-//    String[] decompressHelp(List normal, Deque countStack, int ptr, int startIdx) {
-//        outList List<String> = new ArrayList<>();
-//        int normalSize = normal.size();
-//        String statLabel = normal.get(startIdx);
-//        Statement stat = this.ss.getActiveStmtByLabel(statLabel);
-//        if (this.ss.isHypothesis()) {
-//            return decompressHelp(normal.add(statLabel), countStack,)
-//        }
-//        int hypsSize = stat.getMandatory().getHyps().size();
-//    }
-
     /**
      * Given a stack of characters from a compressed proof and a starting
      * value n, calculates a numerical value for the stack. If the stack is
@@ -535,7 +518,6 @@ public class Proof {
             }
         }
         int refSize = reference.size();
-        //Deque<Character> charStack = new ArrayDeque<>();
         CharStack charStack = new CharStack();
         for (int j = alphaStart; j < compressedProof.length; ++j) {
             String alphas = compressedProof[j];

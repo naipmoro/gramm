@@ -17,9 +17,7 @@ public class SubstitutionMap {
      */
     private Map<String, String[]> substsByVar;
 
-    /**
-     * A SubstitutionMap constructor.
-     */
+    /** SubstitutionMap constructor. */
     SubstitutionMap() {
         this.substsByVar = new HashMap<>();
     }
