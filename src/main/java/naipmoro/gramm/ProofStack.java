@@ -15,8 +15,8 @@ class ProofStack extends MMStack<StatementCore> {
     }
 
     /**
-     * Returns the (n+1)th {@code StatementCore} in the stack, counting <emph>
-     * from the bottom</emph> of the stack.
+     * Returns the (n+1)th {@code StatementCore} in the stack, counting
+     * <i>from the bottom</i> of the stack.
      *
      * @param n index of the object being returned
      * @return the {@code StatementCore} at the given index of the stack

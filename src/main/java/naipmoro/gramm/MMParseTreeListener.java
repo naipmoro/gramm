@@ -67,9 +67,9 @@ public class MMParseTreeListener extends MMBaseListener {
 
     /**
      * A lexer that bails out at the first lexical error. Used in conjunction
-     * with {@code BailErrorStrategy} to prevent recovery attempts from any
-     * lexical or parsing errors. See Terence Parr's <emph>The Definitive
-     * ANTLR 4 Reference</emph>, pp. 174-176, for details.
+     * with Antlr's {@code BailErrorStrategy} to prevent recovery attempts from
+     * any lexical or parsing errors. See Terence Parr's <i>The Definitive
+     * ANTLR 4 Reference</i>, pp. 174-176, for details.
      */
     public static class MMBailLexer extends MMLexer {
         MMBailLexer(CharStream input) {
@@ -107,8 +107,8 @@ public class MMParseTreeListener extends MMBaseListener {
 
     /**
      * On exiting an {@code includeStat} node, this method passes the path of
-     * the included file to {@link MMFile#walkInclude} for parsing and tree
-     * walking.
+     * the included file to {@link MMFile#walkInclude(String, ScopeStack)} for
+     * parsing and tree walking.
      *
      * @param ctx an {@code includeStat} parse tree node
      */

@@ -500,7 +500,7 @@ public class Proof {
      * @return a string array containing the proof in normal format
      * @throws MMException if the compressed proof is invalidly structured
      */
-    private String[] decompress(String[] compressedProof) throws MMException {
+    String[] decompress(String[] compressedProof) throws MMException {
         List<String> reference = new ArrayList<>();
         List<String[]> tagged = new ArrayList<>();
         List<String> normalProof = new ArrayList<>();

@@ -1,4 +1,4 @@
-# User-specific stuff
+# User-specific Intellij stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
@@ -7,9 +7,6 @@
 .idea/**/vcs.xml
 .idea/**/uiDesigner.xml
 .idea/codeStyles/
-
-# jars
-out/
 
 # Antlr-generated source
 gen/
@@ -21,8 +18,8 @@ gen/
 target/
 
 # javadoc files
-src/main/java/naipmoro/gramm/doc-files/
-src/main/java/naipmoro/gramm/package-info.java
+# src/main/java/naipmoro/gramm/doc-files/
+# src/main/java/naipmoro/gramm/package-info.java
 
 # testing file
 src/main/java/naipmoro/gramm/Example.java

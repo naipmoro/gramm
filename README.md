@@ -2,7 +2,15 @@
 
 Gramm is an Antlr4-based Metamath proof verifier. From the supplied Metamath
 grammar ([MM.g4]), Antlr4 creates a lexer and a parser and provides support
-code for walking the generated parse trees.
+code for walking the generated parse trees. Here's a small branch from set.mm's
+tree:  
+
+![a small branch of set.mm][setbranch]
+
+We walk the tree by extending an Antlr4-provided empty base listener. At
+particular terminal nodes of the tree, tokens are gathered and sent to the
+global scope manager for processing. The most important processing occurs via
+the `proof` nodes and involves calls to the proof verifier.
 
 ## Maven build
 
@@ -44,8 +52,8 @@ for full details. Many of these files were copied from David Wheeler's github
 project: <https://github.com/david-a-wheeler/metamath-test>.
 
 [MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
+[setbranch]: ./doc/naipmoro/gramm/doc-files/setbranch.png
 [MIT License]: ./LICENSE
-[source code]: ./src/main/java/naipmoro/gramm/MMBailErrorStrategy.java
 [BSD 3-Clause License]: https://github.com/antlr/antlr4/blob/master/LICENSE.txt
 [CC0 1.0 Universal License]: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 [GPL License]: https://opensource.org/licenses/gpl-license

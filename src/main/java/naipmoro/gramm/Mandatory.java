@@ -13,8 +13,8 @@ public class Mandatory {
     /**
      * Mandatory constructor.
      *
-     * @param hyps the list of mandatory hypotheses, <emph>assumed to be
-     *             ordered</emph> according to their order field
+     * @param hyps the list of mandatory hypotheses, <i>assumed to be
+     *             ordered</i> according to their order field
      * @param disj the set of mandatory disjoint variable pairs
      */
 
@@ -24,8 +24,8 @@ public class Mandatory {
     }
 
     /**
-     * Returns the list of mandatory hypotheses, <emph>assumed to be
-     * ordered</emph> according to their order field.
+     * Returns the list of mandatory hypotheses, <i>assumed to be
+     * ordered</i> according to their order field.
      *
      * @return the list of ordered mandatory hypotheses
      */
