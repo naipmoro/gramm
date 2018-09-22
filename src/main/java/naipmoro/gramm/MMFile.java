@@ -14,7 +14,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-/** A class to keep track of the Metamath source file and any subsequent
+/**
+ * A class to keep track of the Metamath source file and any subsequent
  * included files.
  */
 class MMFile {
