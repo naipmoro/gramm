@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * The mandatory elements of a Metamath assertion.
+ * The mandatory elements of a Metamath assertion: its mandatory hypotheses and
+ * its mandatory disjoint variable pairs.
  */
 public class Mandatory {
     private final List<Hypothesis> hyps;
@@ -13,8 +14,8 @@ public class Mandatory {
     /**
      * Mandatory constructor.
      *
-     * @param hyps the list of mandatory hypotheses, <i>assumed to be
-     *             ordered</i> according to their order field
+     * @param hyps the list of mandatory hypotheses, assumed to be ordered
+     *             according to their order field
      * @param disj the set of mandatory disjoint variable pairs
      */
 
@@ -24,8 +25,8 @@ public class Mandatory {
     }
 
     /**
-     * Returns the list of mandatory hypotheses, <i>assumed to be
-     * ordered</i> according to their order field.
+     * Returns the list of mandatory hypotheses, assumed to be ordered
+     * according to their order field.
      *
      * @return the list of ordered mandatory hypotheses
      */
