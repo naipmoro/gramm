@@ -56,12 +56,33 @@ public class MMParseTreeListener extends MMBaseListener {
      */
     void exceptionMessage(MMException e, SyntaxTree ctx) {
         long difference = System.nanoTime() - startTime;
+        ss.incErrors();
         Token tok = tokens.get(ctx.getSourceInterval().a);
-        System.out.format("error: %s%n", e.getMessage());
+        System.out.format("fatal error: %s%n", e.getMessage());
         System.out.format("line: %d, col: %d, token: %s%n",
                 tok.getLine(), tok.getCharPositionInLine(), tok.getText());
+        System.out.println(ss.endMessage());
         System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
-        System.out.println("exiting...");
+        System.exit(1);
+    }
+
+    /**
+     * Given an error message and a syntax node, prints the (fatal) message and
+     * exits the application. The {@code SyntaxTree} provides the error
+     * location.
+     *
+     * @param msg the error message
+     * @param ctx the syntax node in which the error occurred
+     */
+    void exceptionMessage(String msg, SyntaxTree ctx) {
+        long difference = System.nanoTime() - startTime;
+        ss.incErrors();
+        Token tok = tokens.get(ctx.getSourceInterval().a);
+        System.out.format("fatal error: %s%n", msg);
+        System.out.format("line: %d, col: %d, token: %s%n",
+                tok.getLine(), tok.getCharPositionInLine(), tok.getText());
+        System.out.println(ss.endMessage());
+        System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
         System.exit(1);
     }
 
@@ -134,6 +155,7 @@ public class MMParseTreeListener extends MMBaseListener {
      */
     public void enterScopeStat(MMParser.ScopeStatContext ctx) {
         ss.push(new Scope());
+        ss.incScopeDepth();
     }
 
     /**
@@ -144,6 +166,7 @@ public class MMParseTreeListener extends MMBaseListener {
      */
     public void exitScopeStat(MMParser.ScopeStatContext ctx) {
         ss.remove();
+        ss.decScopeDepth();
     }
 
     /**
@@ -155,16 +178,20 @@ public class MMParseTreeListener extends MMBaseListener {
      * @param ctx a {@code constants} parse tree node
      */
     public void exitConstants(MMParser.ConstantsContext ctx) {
-        int count = ctx.getChildCount();
-        String[] constants = new String[count];
-        for (int i = 0; i < count; ++i) {
-            String child = ctx.getChild(i).getText();
-            constants[i] = child;
-        }
-        try {
-            ss.addConstants(constants);
-        } catch (MMException e) {
-            exceptionMessage(e, ctx);
+        if (ss.getScopeDepth() == 0) {
+            int count = ctx.getChildCount();
+            String[] constants = new String[count];
+            for (int i = 0; i < count; ++i) {
+                String child = ctx.getChild(i).getText();
+                constants[i] = child;
+            }
+            try {
+                ss.addConstants(constants);
+            } catch (MMException e) {
+                exceptionMessage(e, ctx);
+            }
+        } else {
+            exceptionMessage("constants can only be declared in the toplevel scope", ctx);
         }
     }
 

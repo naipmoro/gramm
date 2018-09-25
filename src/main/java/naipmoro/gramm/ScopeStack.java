@@ -54,6 +54,9 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     /** The initial capacity of the {@code ScopeStack}. */
     private int INTIAL_CAPACITY = 10;
 
+    /** The scope depth. */
+    private int scopeDepth = 0;
+
     /**
      * Initializes an empty {@code ScopeStack} with an initial size of
      * {@code SCOPESTACK_CAPACITY}.
@@ -172,6 +175,15 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
         return verifiedProofs;
     }
 
+    /**
+     * Returns the scope depth.
+     *
+     * @return the scope depth
+     */
+    int getScopeDepth() {
+        return scopeDepth;
+    }
+
     /** Increases the number of errors by one. */
     void incErrors() {
         this.errors++;
@@ -190,6 +202,16 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     /** Increases the number of verified proofs by one. */
     void incVerifiedProofs() {
         this.verifiedProofs++;
+    }
+
+    /** Increases the scope depth by one. */
+    void incScopeDepth() {
+        this.scopeDepth++;
+    }
+
+    /** Decreases the scope depth by one. */
+    void decScopeDepth() {
+        this.scopeDepth--;
     }
 
     /**
