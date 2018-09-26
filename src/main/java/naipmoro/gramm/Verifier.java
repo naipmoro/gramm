@@ -22,7 +22,7 @@ public class Verifier {
      * @param dbFile the Metamath source file
      * @throws IOException if the file doesn't exist or can't be processed
      */
-    static void mmVerify(File dbFile) throws IOException {
+    static void verifyMM(File dbFile) throws IOException {
         dbFile = dbFile.getCanonicalFile();
         try (InputStream is = new FileInputStream(dbFile)) {
             CharStream input = CharStreams.fromStream(is);
@@ -41,23 +41,92 @@ public class Verifier {
             ParseTree tree = parser.db();
             ParseTreeWalker.DEFAULT.walk(listener, tree);
         } catch (ParseCancellationException pce) {
-            System.out.format("syntax error in file %s%n",
-                    MMFile.getCurrentFile().getName());
             RecognitionException e = (RecognitionException)pce.getCause();
-            int col = e.getOffendingToken().getCharPositionInLine();
-            int line = e.getOffendingToken().getLine();
-            String token = e.getOffendingToken().getText();
-            System.out.format("line: %d, col: %d, token: %s%n", line, col, token);
-            System.exit(1);
+            parserExceptionMessage(e);
         } catch (RecognitionException re) {
-            int col = re.getOffendingToken().getCharPositionInLine();
-            int line = re.getOffendingToken().getLine();
-            String token = re.getOffendingToken().getText();
-            System.out.format("line: %d, col: %d, token: %s%n", line, col, token);
-            System.exit(1);
+            parserExceptionMessage(re);
         }
 
+    }
 
+    /**
+     * Parses and walks the parse tree of an included file in the context of a
+     * global {@code ScopeStack}. Note that a special extended listener,
+     * {@link MMIncludeParseTreeListener}, is deployed to walk the parse tree.
+     *
+     * @param includePath the {@code String} path of the included file
+     * @param ss          the global {@code ScopeStack}
+     * @throws IOException if the file doesn't exist or can't be properly
+     *                     processed
+     */
+    static void verifyInclude(String includePath, ScopeStack ss) throws IOException {
+        try(InputStream is = new FileInputStream(includePath)) {
+            File includeFile = (new File(includePath)).getCanonicalFile();
+            if (includeFile.equals(MMFile.dbFile)) {
+                System.out.format("warning: the original source file %s cannot be included%n",
+                        MMFile.dbFile.getName());
+                ss.incWarnings();
+                return;
+            }
+            if (MMFile.containsInclude(includeFile)) {
+                System.out.format("info: ignoring duplicate include of %s%n",
+                        includeFile.getName());
+                return;
+            }
+            CharStream input = CharStreams.fromStream(is);
+            MMParseTreeListener.MMBailLexer lexer = new MMParseTreeListener.MMBailLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            MMParser parser = new MMParser(tokens);
+            parser.setErrorHandler(new BailErrorStrategy());
+            MMIncludeParseTreeListener listener = new MMIncludeParseTreeListener();
+            listener.setScopeStack(ss);
+            listener.setTokenStream(tokens);
+            ParseTree tree = parser.db();
+            MMFile.pushInclude(includeFile);
+            MMFile.addInclude(includeFile);
+            //System.out.format("reading included file %s ...%n", includeFile.getName());
+            ParseTreeWalker.DEFAULT.walk(listener, tree);
+        } catch (ParseCancellationException pce) {
+            RecognitionException e = (RecognitionException)pce.getCause();
+            parserExceptionMessage(e, ss);
+        } catch (RecognitionException re) {
+            parserExceptionMessage(re, ss);
+        }
+    }
+
+    /**
+     * Given a parsing exception, an error message, and a scope stack, prints
+     * the message and exits the application.
+     *
+     * @param re  an Antlr parsing {@code RecognitionException}
+     * @param ss  the current {@code ScopeStack}
+     */
+    static void parserExceptionMessage(RecognitionException re, ScopeStack ss) {
+        long difference = System.nanoTime() - MMFile.startTime;
+        ss.incErrors();
+        Token tok = re.getOffendingToken();
+        int col = tok.getCharPositionInLine();
+        int line = tok.getLine();
+        System.out.format("syntax error in file %s%n", MMFile.getCurrentFileName());
+        System.out.format("line: %d, col: %d, token: %s%n", line, col, tok.getText());
+        System.out.println(ss.endMessage());
+        System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
+        System.exit(1);
+    }
+
+    /**
+     * Given a parsing exception, prints an error message and exits the
+     * application.
+     *
+     * @param re an Antlr parsing {@code RecognitionException}
+     */
+    static void parserExceptionMessage(RecognitionException re) {
+        Token tok = re.getOffendingToken();
+        int col = tok.getCharPositionInLine();
+        int line = tok.getLine();
+        System.out.format("syntax error in file %s%n", MMFile.getCurrentFileName());
+        System.out.format("line: %d, col: %d, token: %s%n", line, col, tok.getText());
+        System.exit(1);
     }
 
     /**
@@ -71,7 +140,7 @@ public class Verifier {
         String filename = args[0];
         File dbFile = new File(filename);
         try {
-            mmVerify(dbFile);
+            verifyMM(dbFile);
         } catch (FileNotFoundException fnfe) {
             System.out.println("error: file " + filename + " was not found");
             System.exit(1);

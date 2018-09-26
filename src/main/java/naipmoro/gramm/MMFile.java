@@ -70,12 +70,12 @@ class MMFile {
     }
 
     /**
-     * Returns the current Metamath file.
+     * Returns the current Metamath filename
      *
-     * @return the current Metamath {@code File}
+     * @return the current Metamath filename
      */
-    static File getCurrentFile() {
-        return includeStack.peek();
+    static String getCurrentFileName() {
+        return includeStack.peek().getName();
     }
 
     /**
@@ -89,72 +89,4 @@ class MMFile {
         return includeFiles.contains(file);
     }
 
-    /**
-     * Given a parsing exception, an error message, and a scope stack, prints
-     * the message and exits the application.
-     *
-     * @param re  an Antlr parsing {@code RecognitionException}
-     * @param msg an error message
-     * @param ss  the current {@code ScopeStack}
-     */
-    static void parseExceptionMessage(RecognitionException re, String msg, ScopeStack ss) {
-        long difference = System.nanoTime() - MMFile.startTime;
-        ss.incErrors();
-        Token tok = re.getOffendingToken();
-        int col = tok.getCharPositionInLine();
-        int line = tok.getLine();
-        System.out.println(msg);
-        System.out.format("line: %d, col: %d, token: %s%n", line, col, tok.getText());
-        System.out.println(ss.endMessage());
-        System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
-        System.exit(1);
-    }
-
-    /**
-     * Parses and walks the parse tree of an included file in the context of a
-     * global {@code ScopeStack}. Note that a special extended listener,
-     * {@link MMIncludeParseTreeListener}, is deployed to walk the parse tree.
-     *
-     * @param includePath the {@code String} path of the included file
-     * @param ss          the global {@code ScopeStack}
-     * @throws IOException if the file doesn't exist or can't be properly
-     *                     processed
-     */
-    static void walkInclude(String includePath, ScopeStack ss) throws IOException {
-        try(InputStream is = new FileInputStream(includePath)) {
-            File includeFile = (new File(includePath)).getCanonicalFile();
-            if (includeFile.equals(MMFile.dbFile)) {
-                System.out.format("warning: the original source file %s cannot be included%n",
-                        MMFile.dbFile.getName());
-                ss.incWarnings();
-                return;
-            }
-            if (MMFile.containsInclude(includeFile)) {
-                System.out.format("info: ignoring duplicate include of %s%n", includeFile.getName());
-                return;
-            }
-            CharStream input = CharStreams.fromStream(is);
-            MMParseTreeListener.MMBailLexer lexer = new MMParseTreeListener.MMBailLexer(input);
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            MMParser parser = new MMParser(tokens);
-            parser.setErrorHandler(new BailErrorStrategy());
-            MMIncludeParseTreeListener listener = new MMIncludeParseTreeListener();
-            listener.setScopeStack(ss);
-            listener.setTokenStream(tokens);
-            ParseTree tree = parser.db();
-            MMFile.pushInclude(includeFile);
-            MMFile.addInclude(includeFile);
-            //System.out.format("reading included file %s ...%n", includeFile.getName());
-            ParseTreeWalker.DEFAULT.walk(listener, tree);
-        } catch (ParseCancellationException pce) {
-            RecognitionException e = (RecognitionException)pce.getCause();
-            String msg = String.format("syntax error in file %s",
-                    MMFile.getCurrentFile().getName());
-            parseExceptionMessage(e, msg, ss);
-        } catch (RecognitionException re) {
-            String msg = String.format("syntax error in file %s",
-                    MMFile.getCurrentFile().getName());
-            parseExceptionMessage(re, msg, ss);
-        }
-    }
 }

@@ -14,7 +14,7 @@ public class MMIncludeParseTreeListener extends MMParseTreeListener {
      */
     @Override
     public void enterDb(MMParser.DbContext ctx) {
-        System.out.format("reading included file %s ...%n", MMFile.getCurrentFile().getName());
+        System.out.format("reading included file %s ...%n", MMFile.getCurrentFileName());
     }
 
     /**

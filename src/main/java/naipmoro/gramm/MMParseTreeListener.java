@@ -127,7 +127,7 @@ public class MMParseTreeListener extends MMBaseListener {
 
     /**
      * On exiting an {@code includeStat} node, this method passes the path of
-     * the included file to {@link MMFile#walkInclude(String, ScopeStack)} for
+     * the included file to {@link Verifier#verifyInclude(String, ScopeStack)} for
      * parsing and tree walking.
      *
      * @param ctx an {@code includeStat} parse tree node
@@ -136,7 +136,7 @@ public class MMParseTreeListener extends MMBaseListener {
         //System.out.println(ctx.getParent().getStop().getLine()); //TESTING
         String includePath = ctx.getChild(0).getText();
         try {
-            MMFile.walkInclude(includePath, ss);
+            Verifier.verifyInclude(includePath, ss);
         } catch (FileNotFoundException fnfe) {
             String msg = String.format("included file %s could not be found", includePath);
             exceptionMessage(msg, ctx);
