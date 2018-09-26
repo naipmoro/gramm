@@ -83,6 +83,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
 
     /**
      * Returns a reverse iterator.
+     *
      * @return a reverse iterator
      */
     public Iterator<Scope> iterator() {
@@ -120,6 +121,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
 
         /**
          * Returns the next {@code Scope} in the stack.
+         *
          * @return the next {@code Scope} in the stack
          */
         public Scope next() {
@@ -401,8 +403,8 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     }
 
     /**
-     * Given a string array representing the body of a theorem or axiom, returns
-     * the {@code Mandatory} object associated with the statement.
+     * Given a string array representing the body of a theorem or axiom,
+     * returns the {@code Mandatory} object associated with the statement.
      *
      * @param stmt a string array representing the body of the assertion
      * @return the assertion's associated {@code Mandatory} object
@@ -428,8 +430,8 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
         // combine the varHyps with the logHyps into a list...
         logHypSet.addAll(varHypSet);
         List<Hypothesis> hypList = new ArrayList<>(logHypSet);
-        // ...and sort the hypotheses according to their order of appearance in the
-        // database
+        // ...and sort the hypotheses according to their order of appearance in
+        // the database
         Collections.sort(hypList);
         //System.out.println(hypList); // TESTING
         Set<DisjPair> disjPairs = getActiveDisjVarPairs();
@@ -698,7 +700,5 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
                 }
             }
         }
-
-
     }
 }

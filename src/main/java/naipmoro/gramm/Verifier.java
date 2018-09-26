@@ -73,10 +73,10 @@ public class Verifier {
         try {
             mmVerify(dbFile);
         } catch (FileNotFoundException fnfe) {
-            System.out.println("file not found error: " + filename);
+            System.out.println("error: file " + filename + " was not found");
             System.exit(1);
         } catch (IOException ioe) {
-            System.out.println("file i/o error: " + filename);
+            System.out.println("error: file " + filename + " could not be processed");
             System.exit(1);
         }
     }

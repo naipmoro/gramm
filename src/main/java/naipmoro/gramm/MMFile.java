@@ -29,6 +29,7 @@ class MMFile {
     /** A stack to keep track of the current file. */
     private static Deque<File> includeStack = new ArrayDeque<>();
 
+    static long startTime;
 
     /**
      * Sets the Metamath source file.
@@ -37,6 +38,11 @@ class MMFile {
      */
     static void setDbFile(File file) {
         MMFile.dbFile = file;
+    }
+
+    /** Sets the source file's start time. */
+    static void setStartTime(long st) {
+        startTime = st;
     }
 
     /**
@@ -49,10 +55,10 @@ class MMFile {
     }
 
     /**
-     * Pushes a file onto the stack of included files, making it the current
+     * Pushes a file to the stack of included files, making it the current
      * Metamath file.
      *
-     * @param file a {@code File} pushed onto the included file stack
+     * @param file a {@code File} pushed to the included file stack
      */
     static void pushInclude(File file) {
         includeStack.push(file);
@@ -81,6 +87,27 @@ class MMFile {
      */
     static boolean containsInclude(File file) {
         return includeFiles.contains(file);
+    }
+
+    /**
+     * Given a parsing exception, an error message, and a scope stack, prints
+     * the message and exits the application.
+     *
+     * @param re  an Antlr parsing {@code RecognitionException}
+     * @param msg an error message
+     * @param ss  the current {@code ScopeStack}
+     */
+    static void parseExceptionMessage(RecognitionException re, String msg, ScopeStack ss) {
+        long difference = System.nanoTime() - MMFile.startTime;
+        ss.incErrors();
+        Token tok = re.getOffendingToken();
+        int col = tok.getCharPositionInLine();
+        int line = tok.getLine();
+        System.out.println(msg);
+        System.out.format("line: %d, col: %d, token: %s%n", line, col, tok.getText());
+        System.out.println(ss.endMessage());
+        System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
+        System.exit(1);
     }
 
     /**
@@ -120,20 +147,14 @@ class MMFile {
             //System.out.format("reading included file %s ...%n", includeFile.getName());
             ParseTreeWalker.DEFAULT.walk(listener, tree);
         } catch (ParseCancellationException pce) {
-            System.out.format("syntax error in file %s%n", MMFile.getCurrentFile().getName());
             RecognitionException e = (RecognitionException)pce.getCause();
-            int col = e.getOffendingToken().getCharPositionInLine();
-            int line = e.getOffendingToken().getLine();
-            String token = e.getOffendingToken().getText();
-            System.out.format("line: %d, col: %d, token: %s%n", line, col, token);
-            System.exit(1);
+            String msg = String.format("syntax error in file %s",
+                    MMFile.getCurrentFile().getName());
+            parseExceptionMessage(e, msg, ss);
         } catch (RecognitionException re) {
-            System.out.format("syntax error in file %s%n", MMFile.getCurrentFile().getName());
-            int col = re.getOffendingToken().getCharPositionInLine();
-            int line = re.getOffendingToken().getLine();
-            String token = re.getOffendingToken().getText();
-            System.out.format("line: %d, col: %d, token: %s%n", line, col, token);
-            System.exit(1);
+            String msg = String.format("syntax error in file %s",
+                    MMFile.getCurrentFile().getName());
+            parseExceptionMessage(re, msg, ss);
         }
     }
 }

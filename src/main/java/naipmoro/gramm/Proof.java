@@ -323,7 +323,7 @@ public class Proof {
             throws MMProofException {
         StatementCore statCore = stat.getStmtCore();
         // continue to push hypotheses (actually the statement cores of
-        // hypotheses) onto the stack...
+        // hypotheses) to the stack...
         if (ss.isHypothesis(stat)) {
             proofStack.push(statCore);
             return;
@@ -345,7 +345,7 @@ public class Proof {
         }
         // if the assertion has no mandatory hypotheses (meaning it's
         // composed entirely of constants), then it's simply pushed as is
-        // onto the stack and we go on to the next label...
+        // to the stack and we go on to the next label...
         if (hypsSize == 0) {
             proofStack.push(statCore);
             return;
@@ -392,7 +392,7 @@ public class Proof {
         // point we check whether stat's mandatory disj var pairs set is
         // empty; if empty, apply the SM to the assertion, pop off as
         // many statements from the stack as there were hypotheses,
-        // and push the substituted assertion onto the stack...
+        // and push the substituted assertion to the stack...
         if (assertDisjPairs.isEmpty()) {
             List<String> newStatBody = sm.applySubstitution(stat.getBody());
             for (int i = 0; i < hypsSize; ++i) {

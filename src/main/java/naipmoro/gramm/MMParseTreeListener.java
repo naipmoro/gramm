@@ -20,7 +20,6 @@ public class MMParseTreeListener extends MMBaseListener {
     private ScopeStack ss;
     private CommonTokenStream tokens;
 
-    private long startTime;
     private static final int LABEL = 0;
     private static final int KIND = 1; // one of "$f", "$e", "$a", or "$p"
     private static final int TYPE = 2; // e.g. "wff" or "|-"
@@ -47,15 +46,15 @@ public class MMParseTreeListener extends MMBaseListener {
     }
 
     /**
-     * Given an exception and a syntax node, prints a fatal error message and
-     * exits the application. The {@code MMException} provides the message,
-     * while the {@code SyntaxTree} provides the error location.
+     * Given an exception and a syntax node, prints an error message and exits
+     * the application. The {@code MMException} provides the message, while the
+     * {@code SyntaxTree} provides the error location.
      *
      * @param e   a {@code MMException}
      * @param ctx the syntax node in which the exception was caught
      */
     void exceptionMessage(MMException e, SyntaxTree ctx) {
-        long difference = System.nanoTime() - startTime;
+        long difference = System.nanoTime() - MMFile.startTime;
         ss.incErrors();
         Token tok = tokens.get(ctx.getSourceInterval().a);
         System.out.format("fatal error: %s%n", e.getMessage());
@@ -67,15 +66,14 @@ public class MMParseTreeListener extends MMBaseListener {
     }
 
     /**
-     * Given an error message and a syntax node, prints the (fatal) message and
-     * exits the application. The {@code SyntaxTree} provides the error
-     * location.
+     * Given an error message and a syntax node, prints the message and exits
+     * the application. The {@code SyntaxTree} provides the error location.
      *
      * @param msg the error message
      * @param ctx the syntax node in which the error occurred
      */
     void exceptionMessage(String msg, SyntaxTree ctx) {
-        long difference = System.nanoTime() - startTime;
+        long difference = System.nanoTime() - MMFile.startTime;
         ss.incErrors();
         Token tok = tokens.get(ctx.getSourceInterval().a);
         System.out.format("fatal error: %s%n", msg);
@@ -110,7 +108,8 @@ public class MMParseTreeListener extends MMBaseListener {
      */
     public void enterDb(MMParser.DbContext ctx) {
         System.out.format("reading source file %s ...%n", MMFile.dbFile.getName());
-        startTime = System.nanoTime();
+        //startTime = System.nanoTime();
+        MMFile.setStartTime(System.nanoTime());
         ss.push(new Scope());
     }
 
@@ -121,7 +120,7 @@ public class MMParseTreeListener extends MMBaseListener {
      * @param ctx a {@code db} parse tree node
      */
     public void exitDb(MMParser.DbContext ctx) {
-        long difference = System.nanoTime() - startTime;
+        long difference = System.nanoTime() - MMFile.startTime;
         System.out.println(ss.endMessage());
         System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
     }
@@ -139,17 +138,17 @@ public class MMParseTreeListener extends MMBaseListener {
         try {
             MMFile.walkInclude(includePath, ss);
         } catch (FileNotFoundException fnfe) {
-            System.out.format("error: included file %s could not be found%n", includePath);
-            System.exit(1);
+            String msg = String.format("included file %s could not be found", includePath);
+            exceptionMessage(msg, ctx);
         } catch (IOException ioe) {
-            System.out.format("error: there was an i/o error when reading included file %s%n",
+            String msg = String.format("there was an i/o error when reading included file %s",
                     includePath);
-            System.exit(1);
+            exceptionMessage(msg, ctx);
         }
     }
     /**
      * On entering a {@code scopeStat} node, this method pushes a new
-     * scope onto the {@code ScopeStack}.
+     * scope onto the {@code ScopeStack} and increases the scope depth count.
      *
      * @param ctx a {@code scopeStat} parse tree node
      */
@@ -160,7 +159,7 @@ public class MMParseTreeListener extends MMBaseListener {
 
     /**
      * On exiting a {@code scopeStat} node, this method removes a scope from
-     * the top of the {@code ScopeStack}.
+     * the top of the {@code ScopeStack} and decreses the scope depth count.
      *
      * @param ctx a {@code scopeStat} parse tree node
      */
