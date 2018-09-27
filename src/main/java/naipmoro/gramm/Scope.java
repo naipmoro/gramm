@@ -33,17 +33,17 @@ public class Scope {
     /**
      * Returns the scope's list of variables.
      *
-     * @return the scope's {@code variables} list
+     * @return the scope's list of variables
      */
     public List<String> getVariables() {
         return variables;
     }
 
     /**
-     * Adds a variable to the scope's variables list.
+     * Adds a variable to the scope's list of variables.
      *
      * @param var the {@code String} variable being added to the scope's
-     *            {@code variables} list
+     *            list of variables
      */
     void addToVariables(String var) {
         this.variables.add(var);

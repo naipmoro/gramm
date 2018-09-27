@@ -126,6 +126,7 @@ public class Verifier {
         int line = tok.getLine();
         System.out.format("syntax error in file %s%n", MMFile.getCurrentFileName());
         System.out.format("line: %d, col: %d, token: %s%n", line, col, tok.getText());
+        System.out.println("1 error");
         System.exit(1);
     }
 
@@ -142,10 +143,10 @@ public class Verifier {
         try {
             verifyMM(dbFile);
         } catch (FileNotFoundException fnfe) {
-            System.out.println("error: file " + filename + " was not found");
+            System.out.println("1 error: file " + filename + " was not found");
             System.exit(1);
         } catch (IOException ioe) {
-            System.out.println("error: file " + filename + " could not be processed");
+            System.out.println("1 error: file " + filename + " could not be processed");
             System.exit(1);
         }
     }

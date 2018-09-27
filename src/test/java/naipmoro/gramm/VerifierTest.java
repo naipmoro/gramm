@@ -17,7 +17,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class VerifierTest {
-    private Pattern failRegex = Pattern.compile("^.*[1-9][0-9]* errors.*", Pattern.DOTALL);
+    private Pattern failRegex = Pattern.compile("^.*[1-9][0-9]* error.*", Pattern.DOTALL);
 
     private static void assertSuccess(String reason) {
         assertThat(reason, allOf(containsString("0 errors"), not(containsString("Exception"))));

@@ -25,7 +25,7 @@ prefer to run tests prior to building the jar, run:
 $ mvn package -DskipTests=false
 ```
 
-Or you can use the pre-built executable in the `jar` directory.
+...Or you can use the pre-built executable located in the `jar` directory.
 
 ## Usage
 

@@ -22,7 +22,8 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
      * @param body  a string array containing the body of the hypothesis
      * @param order an integer N specifying that the hypothesis was the Nth
      *              hypothesis in the Metamath database, using 1-indexing.
-     *              Typically this parameter is calculated by a method.
+     *              This parameter is supplied to the constructor by
+     *              {@link ScopeStack#hypCount}.
      */
     public Hypothesis(String label, String kind, String type, String[] body, int order) {
         this.label = label;
@@ -92,11 +93,6 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
     public StatementCore getStmtCore() {
         return new StatementCore(this.type, this.body);
     }
-
-    //    @Override
-    //    public int compareTo(Hypothesis o) {
-    //        return Integer.valueOf(this.order).compareTo(Integer.valueOf(o.order));
-    //    }
 
     /**
      * {@inheritDoc}
