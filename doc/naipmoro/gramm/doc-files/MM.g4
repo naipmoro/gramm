@@ -1,28 +1,19 @@
 grammar MM ;
 
-db : (axiom
-   | theorem
-   | comment
-   | constStat
-   | varStat
-   | disjointStat
-   | varTypeHyp
-   | logicalHyp
-   | scopeStat
-   | includeStat)* EOF ;
+db   : stat* EOF ;
 
-scopeStat :
-   '${'
-     (axiom
-   | theorem
-   | comment
-   | varStat
-   | disjointStat
-   | varTypeHyp
-   | logicalHyp
-   | scopeStat
-   | includeStat)*
-   '$}' ;
+stat : (axiom
+     | theorem
+     | comment
+     | constStat
+     | varStat
+     | disjointStat
+     | varTypeHyp
+     | logicalHyp
+     | scopeStat
+     | includeStat) ;
+
+scopeStat : '${' stat* '$}' ;
 
 includeStat : '$[' comment* includeFile comment* '$]' ;
 includeFile : LABEL | MATHWORD ;
@@ -63,3 +54,4 @@ LABEL : [A-Za-z0-9._-]+ ;
 MATHWORD : ~[ \t\r\n$]+ ;
 COMMENT : '$(' .*? '$)' -> channel(HIDDEN) ;
 WS : [ \t\r\n]+ -> skip ;
+
