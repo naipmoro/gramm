@@ -390,10 +390,8 @@ public class Proof {
             proofStack.push(new StatementCore(stat.getType(), newStatBody));
         } else {
             // otherwise, we get the theorem's DisjPairs
-            //Set<DisjPair> thmDisjPairs = this.mand.getDisj();
             // and iterate thru the assertion's DisjPairs
             for (DisjPair dpair : assertDisjPairs) {
-                //DisjPair dpair = assertDisjPairIter.next();
                 String leftVar = dpair.getLeft();
                 String rightVar = dpair.getRight();
                 String[] sub1 = sm.getSubst(leftVar);
