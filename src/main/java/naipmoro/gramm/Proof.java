@@ -98,9 +98,8 @@ public class Proof {
      *              mandatory hypotheses and disjoint variable pairs of the
      *              assertion
      */
-    public Proof(
-            ScopeStack ss, String label, String type, String[] stmt, String[] proof,
-            Mandatory mand) {
+    public Proof(ScopeStack ss, String label, String type, String[] stmt, String[] proof,
+                 Mandatory mand) {
         this.ss = ss;
         this.label = label;
         this.type = type;
