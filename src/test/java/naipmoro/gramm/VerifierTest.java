@@ -39,8 +39,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Anatomy() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "anatomy.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/anatomy.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -51,10 +51,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_AnatomyBad1_Fail() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "anatomy-bad1.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/anatomy-bad1.mm").getFile());
             Verifier.verifyMM(file);
             assertTrue(failRegex.matcher(outContent.toString()).matches());
         } catch (IOException e) {
@@ -65,10 +63,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_AnatomyBad2_Fail() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "anatomy-bad2.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/anatomy-bad2.mm").getFile());
             Verifier.verifyMM(file);
             assertTrue(failRegex.matcher(outContent.toString()).matches());
         } catch (IOException e) {
@@ -79,10 +75,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_AnatomyBad3_Fail() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "anatomy-bad3.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/anatomy-bad3.mm").getFile());
             Verifier.verifyMM(file);
             assertTrue(failRegex.matcher(outContent.toString()).matches());
         } catch (IOException e) {
@@ -93,9 +87,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_BigUnifier() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "big-unifier.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/big-unifier.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -106,10 +99,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_BigUnifierBad1_Fail() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "big-unifier-bad1.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/big-unifier-bad1.mm").getFile());
             Verifier.verifyMM(file);
             assertTrue(failRegex.matcher(outContent.toString()).matches());
         } catch (IOException e) {
@@ -120,10 +111,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_BigUnifierBad2_Fail() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "big-unifier-bad2.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/big-unifier-bad2.mm").getFile());
             Verifier.verifyMM(file);
             assertTrue(failRegex.matcher(outContent.toString()).matches());
         } catch (IOException e) {
@@ -134,10 +123,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_BigUnifierBad3_Fail() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "big-unifier-bad3.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/big-unifier-bad3.mm").getFile());
             Verifier.verifyMM(file);
             assertTrue(failRegex.matcher(outContent.toString()).matches());
         } catch (IOException e) {
@@ -148,8 +135,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Demo0() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "demo0.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/demo0.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -160,9 +147,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Demo0Bad1_Fail() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "demo0-bad1.mm")
-                    .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/demo0-bad1.mm").getFile());
             Verifier.verifyMM(file);
             assertTrue(failRegex.matcher(outContent.toString()).matches());
         } catch (IOException e) {
@@ -173,10 +159,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Demo0Includee() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "demo0-includee.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/demo0-includee.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -187,10 +171,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Demo0Includer() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "demo0-includer.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/demo0-includer.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -201,9 +183,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Emptyline() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "emptyline.mm")
-                    .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/emptyline.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -214,8 +195,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Hol() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "hol.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/hol.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -226,8 +207,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Iset() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "iset.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/iset.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -238,8 +219,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Miu() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "miu.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/miu.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -250,8 +231,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Nf() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "nf.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/nf.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -262,9 +243,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_PeanoFixed() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "peano-fixed.mm")
-                    .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/peano-fixed.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -275,8 +255,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Ql() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "ql.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/ql.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -287,10 +267,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Set20100829() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                     + "set.2010-08-29.mm")
-                            .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/set.2010-08-29.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -301,9 +279,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_SetDist() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("metamath-test/"
-                                                                         + "set-dist.mm")
-                    .getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("metamath-test/set-dist.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -314,7 +291,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_Set02N() {
         try {
-            File file = new File(getClass().getClassLoader().getResource("set02N.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("set02N.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
@@ -325,9 +303,8 @@ public class VerifierTest {
     @Test
     public void verifyMM_SplitFile() {
         try {
-            File file =
-                    new File(getClass().getClassLoader().getResource("split-file/"
-                                                                     + "set.mm").getFile());
+            File file = new File(getClass().getClassLoader()
+                            .getResource("split-file/set.mm").getFile());
             Verifier.verifyMM(file);
             assertSuccess(outContent.toString());
         } catch (IOException e) {
