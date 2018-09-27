@@ -108,7 +108,7 @@ public class Verifier {
         int col = tok.getCharPositionInLine();
         int line = tok.getLine();
         System.out.format("syntax error in file %s%n", MMFile.getCurrentFileName());
-        System.out.format("line: %d, col: %d, token: %s%n", line, col, tok.getText());
+        System.out.format("line: %d, col: %d, symbol: %s%n", line, col, tok.getText());
         System.out.println(ss.endMessage());
         System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
         System.exit(1);
@@ -125,7 +125,7 @@ public class Verifier {
         int col = tok.getCharPositionInLine();
         int line = tok.getLine();
         System.out.format("syntax error in file %s%n", MMFile.getCurrentFileName());
-        System.out.format("line: %d, col: %d, token: %s%n", line, col, tok.getText());
+        System.out.format("line: %d, col: %d, symbol: %s%n", line, col, tok.getText());
         System.out.println("1 error");
         System.exit(1);
     }

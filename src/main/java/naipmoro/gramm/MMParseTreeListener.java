@@ -58,7 +58,7 @@ public class MMParseTreeListener extends MMBaseListener {
         ss.incErrors();
         Token tok = tokens.get(ctx.getSourceInterval().a);
         System.out.format("fatal error: %s%n", e.getMessage());
-        System.out.format("line: %d, col: %d, token: %s%n",
+        System.out.format("line: %d, col: %d, symbol: %s%n",
                 tok.getLine(), tok.getCharPositionInLine(), tok.getText());
         System.out.println(ss.endMessage());
         System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
@@ -77,7 +77,7 @@ public class MMParseTreeListener extends MMBaseListener {
         ss.incErrors();
         Token tok = tokens.get(ctx.getSourceInterval().a);
         System.out.format("fatal error: %s%n", msg);
-        System.out.format("line: %d, col: %d, token: %s%n",
+        System.out.format("line: %d, col: %d, symbol: %s%n",
                 tok.getLine(), tok.getCharPositionInLine(), tok.getText());
         System.out.println(ss.endMessage());
         System.out.println("time: " + String.format("%.2f sec", (difference / 1E9)));
