@@ -1,8 +1,5 @@
 package naipmoro.gramm;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -11,7 +8,6 @@ public class ProofTest {
 
     @Test
     public void charsToNum_ConvertDequeCharactersToInteger_Integer() {
-        //Deque<Character> charStack = new ArrayDeque<>();
         CharStack charStack = new CharStack();
 
         charStack.push('U');
