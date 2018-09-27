@@ -37,7 +37,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Anatomy() {
+    public void verifyMM_Anatomy() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "anatomy.mm").getFile());
@@ -49,7 +49,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_AnatomyBad1_Fail() {
+    public void verifyMM_AnatomyBad1_Fail() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -63,7 +63,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_AnatomyBad2_Fail() {
+    public void verifyMM_AnatomyBad2_Fail() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -77,7 +77,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_AnatomyBad3_Fail() {
+    public void verifyMM_AnatomyBad3_Fail() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -91,7 +91,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_BigUnifier() {
+    public void verifyMM_BigUnifier() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -104,7 +104,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_BigUnifierBad1_Fail() {
+    public void verifyMM_BigUnifierBad1_Fail() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -118,7 +118,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_BigUnifierBad2_Fail() {
+    public void verifyMM_BigUnifierBad2_Fail() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -132,7 +132,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_BigUnifierBad3_Fail() {
+    public void verifyMM_BigUnifierBad3_Fail() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -146,7 +146,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Demo0() {
+    public void verifyMM_Demo0() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "demo0.mm").getFile());
@@ -158,7 +158,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Demo0Bad1_Fail() {
+    public void verifyMM_Demo0Bad1_Fail() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "demo0-bad1.mm")
@@ -171,7 +171,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Demo0Includee() {
+    public void verifyMM_Demo0Includee() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -185,7 +185,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Demo0Includer() {
+    public void verifyMM_Demo0Includer() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -199,7 +199,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Emptyline() {
+    public void verifyMM_Emptyline() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "emptyline.mm")
@@ -212,7 +212,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Hol() {
+    public void verifyMM_Hol() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "hol.mm").getFile());
@@ -224,7 +224,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Iset() {
+    public void verifyMM_Iset() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "iset.mm").getFile());
@@ -236,7 +236,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Miu() {
+    public void verifyMM_Miu() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "miu.mm").getFile());
@@ -248,7 +248,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Nf() {
+    public void verifyMM_Nf() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "nf.mm").getFile());
@@ -260,7 +260,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_PeanoFixed() {
+    public void verifyMM_PeanoFixed() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "peano-fixed.mm")
@@ -273,7 +273,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Ql() {
+    public void verifyMM_Ql() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "ql.mm").getFile());
@@ -285,7 +285,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Set20100829() {
+    public void verifyMM_Set20100829() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("metamath-test/"
@@ -299,7 +299,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_SetDist() {
+    public void verifyMM_SetDist() {
         try {
             File file = new File(getClass().getClassLoader().getResource("metamath-test/"
                                                                          + "set-dist.mm")
@@ -312,18 +312,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_Set02() {
-        try {
-            File file = new File(getClass().getClassLoader().getResource("set02.mm").getFile());
-            Verifier.verifyMM(file);
-            assertSuccess(outContent.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void mmVerify_Set02N() {
+    public void verifyMM_Set02N() {
         try {
             File file = new File(getClass().getClassLoader().getResource("set02N.mm").getFile());
             Verifier.verifyMM(file);
@@ -334,7 +323,7 @@ public class VerifierTest {
     }
 
     @Test
-    public void mmVerify_SplitFile() {
+    public void verifyMM_SplitFile() {
         try {
             File file =
                     new File(getClass().getClassLoader().getResource("split-file/"

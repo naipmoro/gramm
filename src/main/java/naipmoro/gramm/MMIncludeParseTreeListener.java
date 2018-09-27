@@ -1,5 +1,7 @@
 package naipmoro.gramm;
 
+import java.io.File;
+
 /**
  * A listener that walks the parse trees of included files. Extends
  * {@code MMParseTreeListener}.
@@ -18,13 +20,13 @@ public class MMIncludeParseTreeListener extends MMParseTreeListener {
     }
 
     /**
-     * Removes the current file from the stack when exiting it.
+     * Pops the current file from the stack when exiting it.
      *
      * @param ctx a {@code db} parse tree node
      */
     @Override
     public void exitDb(MMParser.DbContext ctx) {
-        MMFile.removeInclude();
+        MMFile.popInclude();
     }
 
 }

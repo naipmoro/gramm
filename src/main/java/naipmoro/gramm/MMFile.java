@@ -1,14 +1,6 @@
 package naipmoro.gramm;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -64,9 +56,9 @@ class MMFile {
         includeStack.push(file);
     }
 
-    /** Removes the current Metamath file from the top of the stack. */
-    static void removeInclude() {
-        includeStack.remove();
+    /** Pops the current Metamath file from the top of the stack. */
+    static File popInclude() {
+        return includeStack.pop();
     }
 
     /**
