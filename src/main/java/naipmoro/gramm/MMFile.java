@@ -21,6 +21,7 @@ class MMFile {
     /** A stack to keep track of the current file. */
     private static Deque<File> includeStack = new ArrayDeque<>();
 
+    /** The time when verification of the source file began. */
     static long startTime;
 
     /**
@@ -56,7 +57,11 @@ class MMFile {
         includeStack.push(file);
     }
 
-    /** Pops the current Metamath file from the top of the stack. */
+    /**
+     * Pops the current Metamath file from the top of the stack.
+     *
+     * @return the current Metamath file
+     */
     static File popInclude() {
         return includeStack.pop();
     }
