@@ -182,10 +182,6 @@ public class Proof {
         }
         ss.incAttemptedProofs();
         ss.incVerifiedProofs();
-//        if (ss.getAttemptedProofs() % 2000 == 0) {
-//            System.out.print("*");
-//        }
-        //System.out.format("verified: %d  %s%n", ss.getVerifiedProofs(), this.label); //TESTING
         return true;
     }
 
@@ -214,7 +210,6 @@ public class Proof {
         }
         ProofStack proofStack = new ProofStack(totalChars);
         int refSize = reference.size();
-        //Deque<Character> charStack = new ArrayDeque<>();
         CharStack charStack = new CharStack();
         for (int i = alphaStart; i < this.proof.length; ++i) {
             String alphas = this.proof[i];
@@ -256,7 +251,6 @@ public class Proof {
                 }
                 if (c == 'Z') {
                     tags.add(proofStack.peek());
-                    //charStack.clear();
                     continue;
                 }
                 System.out.format(
@@ -278,10 +272,6 @@ public class Proof {
         }
         ss.incAttemptedProofs();
         ss.incVerifiedProofs();
-//        if (ss.getAttemptedProofs() % 2000 == 0) {
-//            System.out.print("*");
-//        }
-        //System.out.format("verified: %d  %s%n", ss.getVerifiedProofs(), this.label); //TESTING
         return true;
     }
 
