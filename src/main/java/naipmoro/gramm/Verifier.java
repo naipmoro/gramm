@@ -37,7 +37,6 @@ public class Verifier {
             listener.setScopeStack(ss);
             listener.setTokenStream(tokens);
             parser.setErrorHandler(new BailErrorStrategy());
-            //parser.addParseListener(listener);
             System.out.format("reading source file %s ...%n", MMFile.dbFile.getName());
             MMFile.setStartTime(System.nanoTime());
             ParseTree tree = parser.db();

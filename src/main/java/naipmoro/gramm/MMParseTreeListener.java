@@ -108,8 +108,6 @@ public class MMParseTreeListener extends MMBaseListener {
      */
     public void enterDb(MMParser.DbContext ctx) {
         System.out.format("verifying source file %s ...%n", MMFile.dbFile.getName());
-        //startTime = System.nanoTime();
-        //MMFile.setStartTime(System.nanoTime());
         ss.push(new Scope());
     }
 
