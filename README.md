@@ -25,6 +25,8 @@ prefer to run tests prior to building the jar, run:
 $ mvn package -DskipTests=false
 ```
 
+...Or you can just [download][grammjar] the pre-built executable.
+
 ## Usage
 
 Note: in place of `set.mm`, you can substitute any Metamath database.
@@ -42,17 +44,18 @@ time: 10.59 sec
 * Gramm is distributed under the [MIT License].
 
 * Although Gramm does not bundle any third party libraries, it depends on the
-  Antlr4 runtime, and the executable jar (if you choose to build it) will contain
-  Antlr class files. Antlr4 is distributed under the [BSD 3-Clause License].
+  Antlr4 runtime, and the executable jar will contain Antlr class files. Antlr4
+  is distributed under the [BSD 3-Clause License].
 
 * The Metamath files in the `test/resources` directory are in the public domain
-or available under the [CC0 1.0 Universal License], with the exception of
-`peano-fixed.mm`, which is distributed under the [GPL License]. See each file
-for full details. Many of these files were copied from David Wheeler's github
-project: <https://github.com/david-a-wheeler/metamath-test>.
+  or available under the [CC0 1.0 Universal License], with the exception of
+  `peano-fixed.mm`, which is distributed under the [GPL License]. See each file
+  for full details. Many of these files were copied from David Wheeler's github
+  project: <https://github.com/david-a-wheeler/metamath-test>.
 
 [MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
 [setbranch]: ./doc/naipmoro/gramm/doc-files/setbranch.png
+[grammjar]: https://github.com/naipmoro/gramm/releases/download/v0.1.5/gramm-0.1.5.jar
 [MIT License]: ./LICENSE
 [BSD 3-Clause License]: https://github.com/antlr/antlr4/blob/master/LICENSE.txt
 [CC0 1.0 Universal License]: https://creativecommons.org/publicdomain/zero/1.0/legalcode
