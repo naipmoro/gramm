@@ -25,8 +25,6 @@ prefer to run tests prior to building the jar, run:
 $ mvn package -DskipTests=false
 ```
 
-...Or you can use the pre-built executable located in the `jar` directory.
-
 ## Usage
 
 Note: in place of `set.mm`, you can substitute any Metamath database.
@@ -44,8 +42,8 @@ time: 10.59 sec
 * Gramm is distributed under the [MIT License].
 
 * Although Gramm does not bundle any third party libraries, it depends on the
-Antlr4 runtime, and the executable jar will contain Antlr class files. Antlr4
-is distributed under the [BSD 3-Clause License].
+  Antlr4 runtime, and the executable jar (if you choose to build it) will contain
+  Antlr class files. Antlr4 is distributed under the [BSD 3-Clause License].
 
 * The Metamath files in the `test/resources` directory are in the public domain
 or available under the [CC0 1.0 Universal License], with the exception of
