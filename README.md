@@ -25,7 +25,7 @@ prefer to run tests prior to building the jar, run:
 $ mvn package -DskipTests=false
 ```
 
-...Or you can just [download][grammjar] the pre-built executable.
+...or you can just [download][grammjar] the pre-built executable.
 
 ## Usage
 
@@ -54,7 +54,7 @@ time: 10.59 sec
   project: <https://github.com/david-a-wheeler/metamath-test>.
 
 [MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
-[setbranch]: ./doc/naipmoro/gramm/doc-files/setbranch.png
+[setbranch]: docs/naipmoro/gramm/doc-files/setbranch.png
 [grammjar]: https://github.com/naipmoro/gramm/releases/download/v0.1.5/gramm-0.1.5.jar
 [MIT License]: ./LICENSE
 [BSD 3-Clause License]: https://github.com/antlr/antlr4/blob/master/LICENSE.txt
