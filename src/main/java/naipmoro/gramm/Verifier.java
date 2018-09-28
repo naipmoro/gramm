@@ -38,6 +38,8 @@ public class Verifier {
             listener.setTokenStream(tokens);
             parser.setErrorHandler(new BailErrorStrategy());
             //parser.addParseListener(listener);
+            System.out.format("reading source file %s ...%n", MMFile.dbFile.getName());
+            MMFile.setStartTime(System.nanoTime());
             ParseTree tree = parser.db();
             ParseTreeWalker.DEFAULT.walk(listener, tree);
         } catch (ParseCancellationException pce) {
