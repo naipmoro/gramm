@@ -58,7 +58,7 @@ time: 14.58 sec
 [MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
 [setbranch]: docs/naipmoro/gramm/doc-files/setbranch.png
 [javadocs]: https://naipmoro.github.io/gramm/
-[grammjar]: https://github.com/naipmoro/gramm/releases/download/v0.1.5/gramm-0.1.5.jar
+[grammjar]: https://github.com/naipmoro/gramm/releases/download/v0.1.6/gramm-0.1.6.jar
 [MIT License]: ./LICENSE
 [BSD 3-Clause License]: https://github.com/antlr/antlr4/blob/master/LICENSE.txt
 [CC0 1.0 Universal License]: https://creativecommons.org/publicdomain/zero/1.0/legalcode
