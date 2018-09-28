@@ -37,8 +37,8 @@ reading source file set.mm ...
 verifying source file set.mm ...
 0 errors
 0 warnings
-30838 of 30838 proofs were verified
-time: 14.58 sec
+31143 of 31143 proofs were verified
+time: 9.91 sec
 ```
 
 ## License
