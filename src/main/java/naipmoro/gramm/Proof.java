@@ -565,8 +565,8 @@ public class Proof {
     }
 
     /**
-     * To test the decompress() method, rename verify() to verifyOLD() and this
-     * method to verify().
+     * Tests the decompress() method. To run the test, rename verify() to
+     * verifyOLD() and this method to verify().
      */
     boolean decompressTester() throws MMException {
         if (isCompressedProof()) {
