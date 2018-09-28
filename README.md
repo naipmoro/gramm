@@ -10,7 +10,8 @@ tree:
 We walk the tree by extending an Antlr4-provided empty base listener. At
 particular terminal nodes of the tree, tokens are gathered and sent to the
 global scope manager for processing. The most important processing occurs via
-the `proof` nodes and involves calls to the proof verifier.
+the `proof` nodes and involves calls to the proof verifier. A bit more detail
+can be found [here][javadocs].
 
 ## Maven build
 
@@ -55,6 +56,7 @@ time: 10.59 sec
 
 [MM.g4]: ./src/main/antlr4/naipmoro/gramm/MM.g4
 [setbranch]: docs/naipmoro/gramm/doc-files/setbranch.png
+[javadocs]: https://naipmoro.github.io/gramm/
 [grammjar]: https://github.com/naipmoro/gramm/releases/download/v0.1.5/gramm-0.1.5.jar
 [MIT License]: ./LICENSE
 [BSD 3-Clause License]: https://github.com/antlr/antlr4/blob/master/LICENSE.txt
