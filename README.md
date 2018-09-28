@@ -29,7 +29,7 @@ $ mvn package -DskipTests=false
 
 Note: in place of `set.mm`, you can substitute any Metamath database.
 ```console
-$ java -jar -Xmx1g gramm-0.1.3.jar set.mm
+$ java -jar -Xmx1g gramm-0.1.5.jar set.mm
 reading source file set.mm ...
 0 errors
 0 warnings
