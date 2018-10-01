@@ -166,6 +166,12 @@ implements Iterable&lt;<a href="../../naipmoro/gramm/Scope.html" title="class in
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>(package private) int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../naipmoro/gramm/ScopeStack.html#hypCount">hypCount</a></span></code>
+<div class="block">The current total number of hypotheses.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>(package private) int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../naipmoro/gramm/ScopeStack.html#SCOPESTACK_CAPACITY">SCOPESTACK_CAPACITY</a></span></code>
 <div class="block">The capacity of the <code>ScopeStack</code>.</div>
 </td>
@@ -460,6 +466,18 @@ implements Iterable&lt;<a href="../../naipmoro/gramm/Scope.html" title="class in
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="hypCount">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hypCount</h4>
+<pre>int hypCount</pre>
+<div class="block">The current total number of hypotheses. Incremented and added to each
+ new hypothesis as a construction parameter. Used to sort hypotheses by
+ order of appearance.</div>
+</li>
+</ul>
 <a name="SCOPESTACK_CAPACITY">
 <!--   -->
 </a>

@@ -34,7 +34,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * new hypothesis as a construction parameter. Used to sort hypotheses by
      * order of appearance.
      */
-    private int hypCount = 0;
+    int hypCount = 0;
 
     /** The current total number of errors. */
     private int errors = 0;
