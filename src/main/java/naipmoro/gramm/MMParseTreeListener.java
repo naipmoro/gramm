@@ -144,6 +144,7 @@ public class MMParseTreeListener extends MMBaseListener {
             exceptionMessage(msg, ctx);
         }
     }
+
     /**
      * On entering a {@code scopeStat} node, this method pushes a new
      * scope onto the {@code ScopeStack} and increases the scope depth count.
@@ -169,8 +170,7 @@ public class MMParseTreeListener extends MMBaseListener {
     /**
      * On exiting a {@code constants} node (main child of a {@code constStat}
      * node), this method passes the constants as a string array to the
-     * {@code ScopeStack} for further processing. Our grammar guarantees that
-     * all constants are from the toplevel scope.
+     * {@code ScopeStack} for further processing.
      *
      * @param ctx a {@code constants} parse tree node
      */

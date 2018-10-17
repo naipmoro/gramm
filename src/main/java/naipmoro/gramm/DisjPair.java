@@ -16,8 +16,8 @@ public class DisjPair {
     /**
      * DisjPair constructor.
      *
-     * @param left  the left side of he pair
-     * @param right the right side of he pair
+     * @param left  the left side of the pair
+     * @param right the right side of the pair
      */
     DisjPair(String left, String right) {
         this.left = left;
