@@ -29,7 +29,7 @@ theoremConst : LABEL | MATHWORD ;
 theoremStat : (LABEL | MATHWORD)* ;
 proof : (LABEL | MATHWORD)+ ;
 
-comment : '$(' (LABEL | MATHWORD)* '$)' ;
+comment : COMMENT ;
 
 constStat : '$c' constants '$.' ;
 constants : (LABEL | MATHWORD)+ ;
