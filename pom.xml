@@ -6,7 +6,7 @@
 
     <groupId>naipmoro</groupId>
     <artifactId>gramm</artifactId>
-    <version>0.1.6</version>
+    <version>0.1.7</version>
     <name>Gramm</name>
     <description>An Antlr-based Metamath proof verifier</description>
     <url>https://github.com/naipmoro/gramm</url>
