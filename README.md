@@ -26,7 +26,7 @@ prefer to run tests prior to building the jar, run:
 $ mvn package -DskipTests=false
 ```
 
-Or skip the cloning and building and just [download][grammjar] the pre-built
+Then again, you can skip the cloning/building and just [download][grammjar] the pre-built
 executable.
 
 ## Usage
