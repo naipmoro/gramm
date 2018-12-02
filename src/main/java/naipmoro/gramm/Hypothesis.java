@@ -98,14 +98,7 @@ public class Hypothesis implements Statement, Comparable<Hypothesis> {
      * {@inheritDoc}
      */
     public int compareTo(Hypothesis o) {
-        if (this.order < o.order) {
-            return -1;
-        }
-        if (this.order > o.order) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return Integer.compare(this.order, o.order);
     }
 
     /**
