@@ -10,8 +10,15 @@ class MMStack<T> {
     /** The stack is an array of items. */
     T[] stack;
 
+    //int INITIAL_CAPACITY = 10;
+
     /** Stack pointer, points to the top of the stack. */
     int ptr = -1;
+
+//    @SuppressWarnings("unchecked")
+//    MMStack() {
+//        this.stack = (T[]) new Object[INITIAL_CAPACITY];
+//    }
 
     /**
      * Adds an item to the stack.
@@ -28,12 +35,14 @@ class MMStack<T> {
      * @return the item at the top of the stack
      */
     T pop() {
-        return stack[ptr--];
+        T item = stack[ptr];
+        stack[ptr--] = null;
+        return item;
     }
 
     /** Removes the item from the top of the stack. */
     void remove() {
-        ptr--;
+        stack[ptr--] = null;
     }
 
     /**

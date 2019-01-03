@@ -49,10 +49,10 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     private int verifiedProofs = 0;
 
     /** The capacity of the {@code ScopeStack}. */
-    int SCOPESTACK_CAPACITY;
+    //int SCOPESTACK_CAPACITY;
 
     /** The initial capacity of the {@code ScopeStack}. */
-    private int INTIAL_CAPACITY = 10;
+    private final int INTIAL_CAPACITY = 10;
 
     /** The scope depth. */
     private int scopeDepth = 0;
@@ -62,8 +62,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      * {@code SCOPESTACK_CAPACITY}.
      */
     ScopeStack() {
-        SCOPESTACK_CAPACITY = INTIAL_CAPACITY;
-        stack = new Scope[SCOPESTACK_CAPACITY];
+        stack = new Scope[INTIAL_CAPACITY];
     }
 
     /**
@@ -74,9 +73,8 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
      */
     @Override
     public void push(Scope scope) {
-        if (ptr == SCOPESTACK_CAPACITY - 1) {
-            stack = Arrays.copyOf(stack, SCOPESTACK_CAPACITY * 2);
-            SCOPESTACK_CAPACITY = stack.length;
+        if (ptr == stack.length - 1) {
+            stack = Arrays.copyOf(stack, (ptr + 1) * 2);
         }
         stack[++ptr] = scope;
     }

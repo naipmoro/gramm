@@ -6,7 +6,7 @@ package naipmoro.gramm;
 public class CharStack extends MMStack<Character> {
 
     /** The fixed capacity of the {@code CharStack}. */
-    final int CHARSTACK_CAPACITY;
+    //final int CHARSTACK_CAPACITY;
 
     /**
      * The assigned capacity of the {@code CharStack}. A capacity of 4 would
@@ -20,12 +20,15 @@ public class CharStack extends MMStack<Character> {
      * {@code CHARSTACK_CAPACITY}.
      */
     CharStack() {
-        CHARSTACK_CAPACITY = INITIAL_CAPACITY;
-        stack = new Character[CHARSTACK_CAPACITY];
+        //CHARSTACK_CAPACITY = INITIAL_CAPACITY;
+        stack = new Character[INITIAL_CAPACITY];
     }
 
     /** Empties the stack. */
     public void clear() {
+        for (int i = 0; i < ptr + 1; i++) {
+            stack[i] = null;
+        }
         ptr = -1;
     }
 }
