@@ -58,8 +58,7 @@ public class ScopeStack extends MMStack<Scope> implements Iterable<Scope> {
     private int scopeDepth = 0;
 
     /**
-     * Initializes an empty {@code ScopeStack} with an initial size of
-     * {@code SCOPESTACK_CAPACITY}.
+     * Initializes an empty {@code ScopeStack} with an initial default size.
      */
     ScopeStack() {
         stack = new Scope[INTIAL_CAPACITY];
